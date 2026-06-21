@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -31,7 +31,7 @@ namespace Watermelon.LevelSystem
         private GUIStyle centeredLabelStyle;
         private bool stylesInited;
 
-        [MenuItem("Assets/Add into Level Editor", priority = 100)]
+        [MenuItem("Assets/Đăng ký vào Level Editor", priority = 100)]
         public static void OpenWindow()
         {
             refList = new List<GameObject>();
@@ -43,13 +43,13 @@ namespace Watermelon.LevelSystem
         }
 
             window = EditorWindow.GetWindow(typeof(AddItemWindow));
-            window.titleContent = new GUIContent("Adding new level items");
+            window.titleContent = new GUIContent("Thêm vật phẩm vào Level Editor");
             window.maxSize = new Vector2(300, 300);
             window.minSize = new Vector2(300, 300);
             window.Show();
         }
 
-        [MenuItem("Assets/Add into Level Editor", true, 0)]
+        [MenuItem("Assets/Đăng ký vào Level Editor", true, 0)]
         public static bool ValidateOpenWindow()
         {
             return Selection.activeGameObject != null;
@@ -120,8 +120,8 @@ namespace Watermelon.LevelSystem
             textureRect.Set(layoutRect.x + layoutRect.width/2f - PREVIEW_SIZE/2f, layoutRect.y, PREVIEW_SIZE, PREVIEW_SIZE);
             GUI.DrawTexture(textureRect, AssetPreview.GetAssetPreview(refList[selectedIndex]));
 
-            selectedWorld = EditorGUILayout.Popup("World:",selectedWorld, worldSelection);
-            selectedType = EditorGUILayout.Popup("Type:", selectedType, levelItemTypeSelection);
+            selectedWorld = EditorGUILayout.Popup("Thế giới (World):",selectedWorld, worldSelection);
+            selectedType = EditorGUILayout.Popup("Loại (Type):", selectedType, levelItemTypeSelection);
             validationMessage = GetValidationMessage();
 
             if(status == ValidataionStatus.PrefabInvalid)
@@ -139,14 +139,14 @@ namespace Watermelon.LevelSystem
 
             EditorGUILayout.BeginHorizontal();
 
-            if (GUILayout.Button("Cancel", WatermelonEditor.Styles.button_03))
+            if (GUILayout.Button("Hủy", WatermelonEditor.Styles.button_03))
             {
                 Close();
             }
 
             EditorGUI.BeginDisabledGroup(status != ValidataionStatus.PrefabValid);
 
-            if(GUILayout.Button("Add", WatermelonEditor.Styles.button_02))
+            if(GUILayout.Button("Thêm", WatermelonEditor.Styles.button_02))
             {
                 AddNewElement();
             }
@@ -201,7 +201,7 @@ namespace Watermelon.LevelSystem
             if((selectedWorld == -1) || (selectedType == -1))
             {
                 status = ValidataionStatus.FieldsNotSet;
-                return "Please set values to World and Type popups.";
+                return "Vui lòng chọn Thế giới (World) và Loại (Type).";
             }
 
 
@@ -211,24 +211,24 @@ namespace Watermelon.LevelSystem
             {
                 if (refList[i].GetComponent<Collider>() == null)
                 {
-                    return $"Prefab #{i + 1} doesn't have a Collider.";
+                    return $"Prefab #{i + 1} không có Collider.";
                 }
 
                 if (selectedType == (int)LevelItemType.Obstacle)
                 {
                     if (refList[i].GetComponent<NavMeshObstacle>() == null)
                     {
-                        return $"Prefab #{i + 1} doesn't have a NavMeshObstacle.";
+                        return $"Prefab #{i + 1} không có NavMeshObstacle.";
                     }
 
                     if (refList[i].GetComponent<NavMeshModifier>() == null)
                     {
-                        return $"Prefab #{i + 1} doesn't have a NavMeshModifier.";
+                        return $"Prefab #{i + 1} không có NavMeshModifier.";
                     }
 
                     if (refList[i].layer != LayerMask.NameToLayer("Obstacle"))
                     {
-                        return $"Prefab #{i + 1} assigned to incorrect layer. Obstacle is the only correct layer for Obstacle type items..";
+                        return $"Prefab #{i + 1} sai layer. Layer chính xác cho Obstacle phải là 'Obstacle'.";
                     }
 
                 }
@@ -236,14 +236,14 @@ namespace Watermelon.LevelSystem
                 {
                     if (!((refList[i].layer == LayerMask.NameToLayer("Obstacle")) || (refList[i].layer == LayerMask.NameToLayer("Ground"))))
                     {
-                        return $"Prefab #{i + 1} assigned to incorrect layer. Obstacle or Ground can be assigned as correct layers for Environment type items.";
+                        return $"Prefab #{i + 1} sai layer. Layer chính xác cho Environment phải là 'Obstacle' hoặc 'Ground'.";
                     }
                 }
 
             }
 
             status = ValidataionStatus.PrefabValid;
-            return "All prefabs passed validation.";
+            return "Tất cả các prefab đã xác minh hợp lệ.";
         }
 
         private enum ValidataionStatus

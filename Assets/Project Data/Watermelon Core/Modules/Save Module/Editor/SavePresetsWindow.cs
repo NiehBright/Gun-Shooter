@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -123,7 +123,7 @@ namespace Watermelon
 
         private void RemoveCallback(ReorderableList list)
         {
-            if (EditorUtility.DisplayDialog("This preset will be removed!", "Are you sure?", "Remove", "Cancel"))
+            if (EditorUtility.DisplayDialog("Preset này sẽ bị xóa!", "Bạn có chắc chắn muốn xóa?", "Xóa", "Hủy"))
             {
                 RemovePreset(savePresetsList.index);
                 savePresetsList.ClearSelection();
@@ -137,9 +137,9 @@ namespace Watermelon
             workRect.x -= UPDATE_BUTTON_WIDTH + DEFAULT_SPACE;
             workRect.width = UPDATE_BUTTON_WIDTH;
 
-            if (GUI.Button(workRect, "Update"))
+            if (GUI.Button(workRect, "Cập nhật"))
             {
-                if (EditorUtility.DisplayDialog("This preset will rewrited!", "Are you sure?", "Rewrite", "Cancel"))
+                if (EditorUtility.DisplayDialog("Preset này sẽ bị ghi đè!", "Bạn có chắc chắn?", "Ghi đè", "Hủy"))
                 {
                     UpdatePreset(savePresets[index]);
                 }
@@ -148,7 +148,7 @@ namespace Watermelon
             workRect.x -= ACTIVATE_BUTTON_WIDTH + DEFAULT_SPACE;
             workRect.width = ACTIVATE_BUTTON_WIDTH;
 
-            if (GUI.Button(workRect, "Activate", WatermelonEditor.Styles.button_03))
+            if (GUI.Button(workRect, "Kích hoạt", WatermelonEditor.Styles.button_03))
             {
                 ActivatePreset(savePresets[index].name);
             }
@@ -179,7 +179,7 @@ namespace Watermelon
         {
             EditorGUILayout.BeginVertical(WatermelonEditor.Styles.Skin.box);
 
-            EditorGUILayoutCustom.Header("PRESETS");
+            EditorGUILayoutCustom.Header("CÁC BẢN LƯU PRESETS");
 
             scrollView = EditorGUILayoutCustom.BeginScrollView(scrollView);
             savePresetsList.DoLayoutList();
@@ -190,7 +190,7 @@ namespace Watermelon
             EditorGUILayout.BeginHorizontal(WatermelonEditor.Styles.Skin.box);
             tempPresetName = EditorGUILayout.TextField(tempPresetName);
 
-            if (GUILayout.Button("Add"))
+            if (GUILayout.Button("Thêm"))
             {
                 AddNewPreset(tempPresetName);
 

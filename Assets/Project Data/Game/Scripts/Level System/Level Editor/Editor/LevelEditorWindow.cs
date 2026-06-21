@@ -1,4 +1,4 @@
-﻿#pragma warning disable 649
+#pragma warning disable 649
 
 using UnityEngine;
 using UnityEditor;
@@ -39,18 +39,18 @@ namespace Watermelon.SquadShooter
         //sidebar
         private LevelRepresentation selectedLevelRepresentation;
         private const int SIDEBAR_WIDTH = 140;
-        private const string OPEN_GAME_SCENE_LABEL = "Open \"Game\" scene";
+        private const string OPEN_GAME_SCENE_LABEL = "Mở Scene \"Game\"";
 
-        private const string REMOVE_SELECTION = "Remove selection";
+        private const string REMOVE_SELECTION = "Bỏ chọn đối tượng";
 
         //rest of levels tab
-        private const string OBJECT_MANAGEMENT = "Object management:";
-        private const string CLEAR_SCENE = "Clear scene";
-        private const string SAVE = "Save";
-        private const string LOAD = "Load";
+        private const string OBJECT_MANAGEMENT = "Quản lý đối tượng:";
+        private const string CLEAR_SCENE = "Xóa sạch Scene";
+        private const string SAVE = "Lưu";
+        private const string LOAD = "Tải";
 
-        private const string ITEM_ASSIGNED = "This buttton spawns item.";
-        private const string TEST_LEVEL = "Test level";
+        private const string ITEM_ASSIGNED = "Nút này sẽ sinh ra vật phẩm.";
+        private const string TEST_LEVEL = "Chơi thử màn này";
 
         private const float ITEMS_BUTTON_MAX_WIDTH = 120;
         private const float ITEMS_BUTTON_SPACE = 8;
@@ -99,7 +99,7 @@ namespace Watermelon.SquadShooter
         SerializedProperty exitPointPrefabProperty;
         CatchedEnemyRefs[] enemies;
         CatchedPrefabRefs[] chests;
-        string[] toolbarTab = { "Obstacles", "Enemies", "Environments" };
+        string[] toolbarTab = { "Vật cản", "Kẻ địch", "Môi trường" };
         int selectedToolbarTab = 0;
         private Rect itemsListWidthRect;
         int tempRoomTabIndex;
@@ -167,11 +167,11 @@ namespace Watermelon.SquadShooter
 
 
             tabHandler = new TabHandler();
-            tabHandler.AddTab(new TabHandler.Tab("Levels Creation", DisplayLevelsCreationTab));
-            tabHandler.AddTab(new TabHandler.Tab("World Settings", DisplayWorldSettingsTab, InitStuffForWorldSettingsTab));
+            tabHandler.AddTab(new TabHandler.Tab("Tạo màn chơi (Levels Creation)", DisplayLevelsCreationTab));
+            tabHandler.AddTab(new TabHandler.Tab("Cài đặt thế giới (World Settings)", DisplayWorldSettingsTab, InitStuffForWorldSettingsTab));
 
-            previewSprite = new GUIContent("Preview Sprite:");
-            presetType = new GUIContent("Preset type:");
+            previewSprite = new GUIContent("Ảnh xem trước (Preview Sprite):");
+            presetType = new GUIContent("Loại Preset (Preset Type):");
 
             PrepareStyles();
             RemoveUnnesesaryComponensFromPrefabs();
@@ -286,14 +286,14 @@ namespace Watermelon.SquadShooter
 
         private void DisplayLevelFields()
         {
-            EditorGUILayout.PropertyField(selectedLevelRepresentation.levelTypeProperty);
-            EditorGUILayout.PropertyField(selectedLevelRepresentation.xpAmountProperty);
-            EditorGUILayout.PropertyField(selectedLevelRepresentation.requiredUpgProperty);
-            EditorGUILayout.PropertyField(selectedLevelRepresentation.enemiesLevelProperty);
-            EditorGUILayout.PropertyField(selectedLevelRepresentation.hasCharacterSuggestionProperty);
-            EditorGUILayout.PropertyField(selectedLevelRepresentation.healSpawnPercentProperty);
-            EditorGUILayout.PropertyField(selectedLevelRepresentation.dropDataProperty);
-            EditorGUILayout.PropertyField(selectedLevelRepresentation.specialBehavioursProperty);
+            EditorGUILayout.PropertyField(selectedLevelRepresentation.levelTypeProperty, new GUIContent("Loại màn chơi (Level Type)"));
+            EditorGUILayout.PropertyField(selectedLevelRepresentation.xpAmountProperty, new GUIContent("Điểm XP nhận được (XP Amount)"));
+            EditorGUILayout.PropertyField(selectedLevelRepresentation.requiredUpgProperty, new GUIContent("Cấp độ súng yêu cầu (Required Upgrade)"));
+            EditorGUILayout.PropertyField(selectedLevelRepresentation.enemiesLevelProperty, new GUIContent("Cấp độ kẻ địch (Enemies Level)"));
+            EditorGUILayout.PropertyField(selectedLevelRepresentation.hasCharacterSuggestionProperty, new GUIContent("Có gợi ý nhân vật"));
+            EditorGUILayout.PropertyField(selectedLevelRepresentation.healSpawnPercentProperty, new GUIContent("Tỷ lệ rơi bình máu (%)"));
+            EditorGUILayout.PropertyField(selectedLevelRepresentation.dropDataProperty, new GUIContent("Vật phẩm rơi ra (Drop Data)"));
+            EditorGUILayout.PropertyField(selectedLevelRepresentation.specialBehavioursProperty, new GUIContent("Hành vi đặc biệt"));
         }
 
         private void CollectDataFromLevelsSettings()
@@ -453,7 +453,7 @@ namespace Watermelon.SquadShooter
 
         private void RemoveCallback(ReorderableList list)
         {
-            if (EditorUtility.DisplayDialog("Warning", "Are you sure you want to remove level #" + (list.index + 1) + "?", "Yes", "Cancel"))
+            if (EditorUtility.DisplayDialog("Cảnh báo", "Bạn có chắc chắn muốn xóa level #" + (list.index + 1) + " không?", "Có", "Hủy"))
             {
                 levelsProperty.DeleteArrayElementAtIndex(levelsList.index);
                 worldSerializedObject.ApplyModifiedProperties();
@@ -464,7 +464,7 @@ namespace Watermelon.SquadShooter
 
         private void HeaderCallback(Rect rect)
         {
-            GUI.Label(rect, "Levels amount: " + levelsProperty.arraySize);
+            GUI.Label(rect, "Số lượng level: " + levelsProperty.arraySize);
         }
 
 
@@ -526,9 +526,9 @@ namespace Watermelon.SquadShooter
             if (EditorApplication.isPlayingOrWillChangePlaymode)
             {
                 RemoveSelection();
-                EditorGUILayout.HelpBox("Level editor doens`t support play mode.", MessageType.Error, true);
+                EditorGUILayout.HelpBox("Level editor không hỗ trợ trong Play mode.", MessageType.Error, true);
 
-                if (GUILayout.Button("Exit play mode"))
+                if (GUILayout.Button("Thoát play mode"))
                 {
                     EditorApplication.ExitPlaymode();
                 }
@@ -555,9 +555,9 @@ namespace Watermelon.SquadShooter
         private void DrawOpenEditorScene()
         {
             EditorGUILayout.BeginVertical();
-            EditorGUILayout.HelpBox(EDITOR_SCENE_NAME + " scene required for level editor.", MessageType.Error, true);
+            EditorGUILayout.HelpBox("Cần mở scene " + EDITOR_SCENE_NAME + " để sử dụng Level Editor.", MessageType.Error, true);
 
-            if (GUILayout.Button("Open \"" + EDITOR_SCENE_NAME + "\" scene"))
+            if (GUILayout.Button("Mở scene \"" + EDITOR_SCENE_NAME + "\""))
             {
                 OpenScene(EDITOR_SCENE_PATH);
             }
@@ -725,7 +725,7 @@ namespace Watermelon.SquadShooter
             EditorGUILayout.BeginVertical(GUI.skin.box);
             EditorGUILayout.BeginHorizontal();
 
-            if (GUILayout.Toggle(selectedLevelRepresentation.selectedRoomindex == -1, "Settings", GUI.skin.button))
+            if (GUILayout.Toggle(selectedLevelRepresentation.selectedRoomindex == -1, "Cài đặt", GUI.skin.button))
             {
                 SaveRoom();
                 selectedLevelRepresentation.selectedRoomindex = -1;
@@ -750,20 +750,20 @@ namespace Watermelon.SquadShooter
 
             if (selectedLevelRepresentation.selectedRoomindex != -1)
             {
-                EditorGUILayout.PropertyField(selectedLevelRepresentation.spawnPointProperty, new GUIContent("Spawn Point (white wire sphere)"));
+                EditorGUILayout.PropertyField(selectedLevelRepresentation.spawnPointProperty, new GUIContent("Điểm xuất phát (vòng tròn lưới màu trắng)"));
                 EditorSceneController.Instance.SpawnPoint = selectedLevelRepresentation.spawnPointProperty.vector3Value;
 
                 EditorGUILayout.BeginHorizontal();
 
-                if (GUILayout.Button("Save as preset", WatermelonEditor.Styles.button_02))
+                if (GUILayout.Button("Lưu thành Preset", WatermelonEditor.Styles.button_02))
                 {
                     SaveLevelIfPosssible();
                     RoomPresetSaveWindow.CreateRoomPresetSaveWindow(CreateRoomPreset);
                 }
 
-                if (GUILayout.Button("Delete room", WatermelonEditor.Styles.button_04))
+                if (GUILayout.Button("Xóa phòng", WatermelonEditor.Styles.button_04))
                 {
-                    if (EditorUtility.DisplayDialog("Warning", "Are you sure that you want to delete this room?", "Yes", "Cancel"))
+                    if (EditorUtility.DisplayDialog("Cảnh báo", "Bạn có chắc chắn muốn xóa phòng này không?", "Có", "Hủy"))
                     {
                         selectedLevelRepresentation.roomsProperty.DeleteArrayElementAtIndex(selectedLevelRepresentation.selectedRoomindex);
                         worldSerializedObject.ApplyModifiedProperties();
@@ -899,7 +899,7 @@ namespace Watermelon.SquadShooter
 
         private void DisplayObstaclesListSection()
         {
-            EditorGUILayout.LabelField("Obstacles:");
+            EditorGUILayout.LabelField("Vật cản (Obstacles):");
             levelItemsScrollVector = EditorGUILayout.BeginScrollView(levelItemsScrollVector);
 
             itemsRect = EditorGUILayout.BeginVertical();
@@ -999,7 +999,7 @@ namespace Watermelon.SquadShooter
 
         private void DisplayEnemiesListSection()
         {
-            EditorGUILayout.LabelField("Enemies:");
+            EditorGUILayout.LabelField("Kẻ địch (Enemies):");
             levelItemsScrollVector = EditorGUILayout.BeginScrollView(levelItemsScrollVector);
 
             itemsRect = EditorGUILayout.BeginVertical();
@@ -1041,7 +1041,7 @@ namespace Watermelon.SquadShooter
 
         private void DisplayEnvironmentListSelection()
         {
-            EditorGUILayout.LabelField("Environments:");
+            EditorGUILayout.LabelField("Môi trường (Environments):");
             levelItemsScrollVector = EditorGUILayout.BeginScrollView(levelItemsScrollVector);
 
             itemsRect = EditorGUILayout.BeginVertical();
@@ -1484,9 +1484,9 @@ namespace Watermelon.SquadShooter
 
             if (invalidIndexesList.Contains(index))
             {
-                if (GUI.Button(elementButtonRect, "Error - Check Details"))
+                if (GUI.Button(elementButtonRect, "Lỗi - Xem chi tiết"))
                 {
-                    EditorUtility.DisplayDialog("Validation error", GetValidationMessage(index), "Ok");
+                    EditorUtility.DisplayDialog("Lỗi xác minh", GetValidationMessage(index), "Ok");
                 }
             }
 
@@ -1527,8 +1527,8 @@ namespace Watermelon.SquadShooter
         {
             worldSerializedObject.Update();
             EditorGUILayout.PropertyField(previewSpriteProperty, previewSprite);
-            EditorGUILayout.PropertyField(musicProperty);
-            EditorGUILayout.PropertyField(worldTypeProperty);
+            EditorGUILayout.PropertyField(musicProperty, new GUIContent("Nhạc nền (Music):"));
+            EditorGUILayout.PropertyField(worldTypeProperty, new GUIContent("Loại thế giới (World Type):"));
             itemsReordableList.DoLayoutList();
             worldSerializedObject.ApplyModifiedProperties();
             ValidateItems();
