@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd96672f8cbd27a46b31817bb19de697, type: 3}
+  m_Name: Game Settings
+  m_EditorClassIdentifier: 
+  levelsDatabase: {fileID: 11400000, guid: ebf0575738af97241b29945840a565db, type: 2}
+  playerPrefab: {fileID: 4402184686770468089, guid: 0a2969074fd41754aa55fcad338c7e27,
+    type: 3}
+  invulnerabilityAfrerReviveDuration: 5
+  useAttackButton: 0
+  navMeshData: {fileID: 23800000, guid: 6da5cd43ce95718498e92ebcd8685fea, type: 2}
+  backWallCollider: {fileID: 5784466898372011177, guid: f89e53484f467e948b370fd2bc196bbc,
+    type: 3}
+  chestData:
+  - prefab: {fileID: 8395617477764176360, guid: 699f9c9599f44d343a2e49b7c5a8ad77,
+      type: 3}
+    type: 0
+  - prefab: {fileID: 8395617477764176360, guid: be48155f0ba8301408fd8780be9837db,
+      type: 3}
+    type: 1
+  dropSettings: {fileID: 11400000, guid: f1de6312afd27b34bb09b3027a089a65, type: 2}
+  levelTypes:
+  - levelType: 0
+    previewObject: {fileID: 9218843257341585668, guid: 69c68ad4aac6e9f4fad0c56c81541365,
+      type: 3}
+  - levelType: 1
+    previewObject: {fileID: 8998117227198249967, guid: 1ae4082f8cb03244ea6d6eb81973e9b4,
+      type: 3}
+  defaultWorldSprite: {fileID: 21300000, guid: d5409f73f9a9eeb49836e183f8cfd36e, type: 3}
+  revivePrice:
+    currencyType: 0
+    price: 400

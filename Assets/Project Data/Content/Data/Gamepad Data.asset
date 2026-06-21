@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cccf3c865920624aa71fe9a3e4bf39b, type: 3}
+  m_Name: Gamepad Data
+  m_EditorClassIdentifier: 
+  data:
+  - button: 0
+    icon: {fileID: 21300000, guid: b490b229868f22b4991da84e71580e79, type: 3}
+  - button: 1
+    icon: {fileID: 21300000, guid: 2dff13154fe52a44abbe6d0ba2024058, type: 3}
+  - button: 2
+    icon: {fileID: 21300000, guid: 018bf07af28586648946f4471318d1f8, type: 3}
+  - button: 3
+    icon: {fileID: 21300000, guid: 1123b5b9667a24742a26f7a5a52bf12b, type: 3}
+  - button: 4
+    icon: {fileID: 21300000, guid: 4317721e53ee6124991c742b11c5d25a, type: 3}
+  - button: 9
+    icon: {fileID: 21300000, guid: 575aefe17b903d44996f1b572c3f0abf, type: 3}
+  - button: 10
+    icon: {fileID: 21300000, guid: 7d30779d8d6bf1243b28c007f5ef4676, type: 3}
+  - button: 11
+    icon: {fileID: 21300000, guid: 2c29ba670e933714784dce4eb4d2bf15, type: 3}
+  - button: 12
+    icon: {fileID: 21300000, guid: 9ab96a4f87d7f824dab7914d11e7bf65, type: 3}
+  - button: 5
+    icon: {fileID: 21300000, guid: ff45131046a2a07469a852d940ea0a27, type: 3}
+  - button: 6
+    icon: {fileID: 21300000, guid: 253b00183360c6f4dbcad8d781f65e47, type: 3}
+  - button: 7
+    icon: {fileID: 21300000, guid: df667a4874ca66b4885555dea8b92f6a, type: 3}
+  - button: 8
+    icon: {fileID: 21300000, guid: 6e44e6005b1238a498caf922c4981346, type: 3}
