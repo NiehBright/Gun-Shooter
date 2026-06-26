@@ -5,59 +5,131 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: -8679921383154817045, guid: 28cb3b417322f5a4d9dfad22e7c82fe4, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 28cb3b417322f5a4d9dfad22e7c82fe4,
+        type: 3}
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 28cb3b417322f5a4d9dfad22e7c82fe4, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 28cb3b417322f5a4d9dfad22e7c82fe4,
+        type: 3}
       propertyPath: m_LocalPosition.x
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 28cb3b417322f5a4d9dfad22e7c82fe4, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 28cb3b417322f5a4d9dfad22e7c82fe4,
+        type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 28cb3b417322f5a4d9dfad22e7c82fe4, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 28cb3b417322f5a4d9dfad22e7c82fe4,
+        type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 28cb3b417322f5a4d9dfad22e7c82fe4, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 28cb3b417322f5a4d9dfad22e7c82fe4,
+        type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 28cb3b417322f5a4d9dfad22e7c82fe4, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 28cb3b417322f5a4d9dfad22e7c82fe4,
+        type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 28cb3b417322f5a4d9dfad22e7c82fe4, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 28cb3b417322f5a4d9dfad22e7c82fe4,
+        type: 3}
       propertyPath: m_LocalRotation.y
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 28cb3b417322f5a4d9dfad22e7c82fe4, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 28cb3b417322f5a4d9dfad22e7c82fe4,
+        type: 3}
       propertyPath: m_LocalRotation.z
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 28cb3b417322f5a4d9dfad22e7c82fe4, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 28cb3b417322f5a4d9dfad22e7c82fe4,
+        type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 28cb3b417322f5a4d9dfad22e7c82fe4, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 28cb3b417322f5a4d9dfad22e7c82fe4,
+        type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 28cb3b417322f5a4d9dfad22e7c82fe4, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 28cb3b417322f5a4d9dfad22e7c82fe4,
+        type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -7511558181221131132, guid: 28cb3b417322f5a4d9dfad22e7c82fe4, type: 3}
-      propertyPath: m_Materials.Array.data[0]
+    - target: {fileID: -7511558181221131132, guid: 28cb3b417322f5a4d9dfad22e7c82fe4,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 0268d7d242e42b2468e56bb3a0b7e095, type: 2}
-    - target: {fileID: 919132149155446097, guid: 28cb3b417322f5a4d9dfad22e7c82fe4, type: 3}
+    - target: {fileID: 919132149155446097, guid: 28cb3b417322f5a4d9dfad22e7c82fe4,
+        type: 3}
       propertyPath: m_Name
       value: SM_Prop_Junk_Paper_04
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 28cb3b417322f5a4d9dfad22e7c82fe4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 28cb3b417322f5a4d9dfad22e7c82fe4,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -7202734604344318903}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 28cb3b417322f5a4d9dfad22e7c82fe4,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3874664720477623765}
   m_SourcePrefab: {fileID: 100100000, guid: 28cb3b417322f5a4d9dfad22e7c82fe4, type: 3}
+--- !u!1 &2089643620023854160 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 28cb3b417322f5a4d9dfad22e7c82fe4,
+    type: 3}
+  m_PrefabInstance: {fileID: 1170529208009742593}
+  m_PrefabAsset: {fileID: 0}
+--- !u!208 &-7202734604344318903
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2089643620023854160}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.74500006, y: 0.013, z: 0.72400004}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -0.147, y: 0.030000001, z: -0.007}
+  m_TimeToStationary: 0.5
+--- !u!114 &3874664720477623765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2089643620023854160}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 0
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 1
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
