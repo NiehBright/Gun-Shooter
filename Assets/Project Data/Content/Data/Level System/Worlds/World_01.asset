@@ -6205,6 +6205,24 @@ MonoBehaviour:
       type: 3}
     hash: 1245866400
     type: 1
+  - prefab: {fileID: 8024127888688535950, guid: 85d273f05a6c60e439cbd3c255a7a3c2,
+      type: 3}
+    hash: 912748188
+    type: 1
+  - prefab: {fileID: 22986541335106080, guid: 728adee24ac56294598390adacf8a193, type: 3}
+    hash: -965893777
+    type: 1
+  - prefab: {fileID: 6405730378633534765, guid: f76b34bbacdb7a844b30725620f05be2,
+      type: 3}
+    hash: -815161466
+    type: 1
+  - prefab: {fileID: 22986541335106080, guid: 728adee24ac56294598390adacf8a193, type: 3}
+    hash: -742360179
+    type: 1
+  - prefab: {fileID: 6441953742917436587, guid: 8cf378fac7894144fa4d5d4a8d302922,
+      type: 3}
+    hash: -715867360
+    type: 1
   roomEnvPresets:
   - name: Wide
     itemEntities:
