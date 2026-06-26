@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6325968132319266566}
   - component: {fileID: -1829360200690224657}
   - component: {fileID: 8811768267396266202}
+  - component: {fileID: 3620439370659554896}
   m_Layer: 8
   m_Name: SM_Prop_Billboard_Sign_Small_01
   m_TagString: Untagged
@@ -128,3 +129,24 @@ MonoBehaviour:
   m_IgnoreFromBuild: 1
   m_ApplyToChildren: 1
   m_AffectedAgents: ffffffff
+--- !u!65 &3620439370659554896
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5533417678988601043}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 7.8298445, y: 4.3764877, z: 0}
+  m_Center: {x: 0.00000035762787, y: -0.0000013113022, z: 0.066253014}

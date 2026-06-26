@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 5800668001187327738}
   - component: {fileID: 8603260233712540208}
   - component: {fileID: -4307176059849769087}
+  - component: {fileID: 983873486437186827}
+  - component: {fileID: -7156114687076609792}
   m_Layer: 3
   m_Name: SM_Bld_Block_12x2x2_01
   m_TagString: Untagged
@@ -112,3 +114,39 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 30, y: 180, z: 30}
   m_Center: {x: -15, y: 90, z: -15}
+--- !u!208 &983873486437186827
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7810393945577470949}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 15.000001, y: 90.00001, z: 15.000001}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -15.000001, y: 90.00001, z: -15.000001}
+  m_TimeToStationary: 0.5
+--- !u!114 &-7156114687076609792
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7810393945577470949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 0
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff

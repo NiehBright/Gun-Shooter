@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 1314685007853881873}
   - component: {fileID: 3880489094202621659}
   - component: {fileID: -2894196443407061861}
+  - component: {fileID: -1602326151325060686}
+  - component: {fileID: -5160563094465367536}
   m_Layer: 3
   m_Name: SM_Bld_Background_Building_04
   m_TagString: Untagged
@@ -113,3 +115,39 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 3946559277086509951, guid: e71ceffa1b165ea4abbd8f179b772cdf, type: 3}
+--- !u!208 &-1602326151325060686
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3376213409649843982}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 9.695001, y: 33.605003, z: 8.187}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 26.176, z: 0}
+  m_TimeToStationary: 0.5
+--- !u!114 &-5160563094465367536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3376213409649843982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 0
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff

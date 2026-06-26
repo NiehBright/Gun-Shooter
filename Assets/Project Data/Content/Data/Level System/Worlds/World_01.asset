@@ -135,6 +135,18 @@ MonoBehaviour:
         Position: {x: -7.91, y: -0.00000011920929, z: 14.83}
         Rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
         Scale: {x: 2, y: 2, z: 2}
+      - Hash: -1171706330
+        Position: {x: -5.3805, y: 2.6498, z: 14.69}
+        Rotation: {x: 0, y: 1, z: 0, w: 0}
+        Scale: {x: 0.5436361, y: 0.5616646, z: 1}
+      - Hash: 1117477001
+        Position: {x: 5.2553, y: 2.666, z: 14.72}
+        Rotation: {x: 0, y: 1, z: 0, w: 0}
+        Scale: {x: 0.5588212, y: 0.586, z: 1}
+      - Hash: -1540618697
+        Position: {x: 2.49, y: 0, z: 14.97}
+        Rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+        Scale: {x: 1, y: 1, z: 1}
       chestEntities: []
       roomCustomObjects: []
     xpAmount: 100
@@ -6237,6 +6249,34 @@ MonoBehaviour:
   - prefab: {fileID: 4935599454697759895, guid: fd025e585a9eb8b48a090553f64a1a27,
       type: 3}
     hash: -1540618697
+    type: 1
+  - prefab: {fileID: 6801703951649756103, guid: 7a13f717eddb1ce4b94423ff2a205c1b,
+      type: 3}
+    hash: -1221958597
+    type: 0
+  - prefab: {fileID: 7113420316313512585, guid: 1d956569594ccb14ab4a4c5253ad606d,
+      type: 3}
+    hash: -1174590624
+    type: 0
+  - prefab: {fileID: 7102573855128261321, guid: 09d209e004d451544b21925479fd330a,
+      type: 3}
+    hash: -1160573671
+    type: 0
+  - prefab: {fileID: 5533417678988601043, guid: 2ae2f78c169f3644d890635989a3d89f,
+      type: 3}
+    hash: -1171706330
+    type: 0
+  - prefab: {fileID: 3346661938532665754, guid: fe75853f22a3b2e4e87314848bbb5af6,
+      type: 3}
+    hash: 1117477001
+    type: 0
+  - prefab: {fileID: 2868395433873888775, guid: 94200ffdb61c0c642a2c56b7d50f6988,
+      type: 3}
+    hash: -741003546
+    type: 0
+  - prefab: {fileID: 3606492287996021589, guid: c5703f5dfc694014faa043656719689d,
+      type: 3}
+    hash: -1994382634
     type: 1
   roomEnvPresets:
   - name: Wide
