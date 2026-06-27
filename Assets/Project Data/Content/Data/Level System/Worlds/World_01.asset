@@ -915,6 +915,38 @@ MonoBehaviour:
         Position: {x: -7.24, y: -0.43, z: 4.72}
         Rotation: {x: 0, y: 0, z: 0, w: 1}
         Scale: {x: 8.8666, y: 8.8666, z: 8.8666}
+      - Hash: -1540618697
+        Position: {x: 2.63, y: 0, z: 15.16}
+        Rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+        Scale: {x: 1, y: 1, z: 1}
+      - Hash: -1540618697
+        Position: {x: -32.3, y: 0, z: 15.2}
+        Rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+        Scale: {x: 1, y: 1, z: 1}
+      - Hash: -1994382634
+        Position: {x: -2.22, y: 3.52, z: 15.32}
+        Rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+        Scale: {x: 0.081893414, y: 0.071960315, z: 0.2412}
+      - Hash: -2019089178
+        Position: {x: 2.2871, y: -0.62, z: 14.92}
+        Rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+        Scale: {x: 2.7492867, y: 2, z: 2}
+      - Hash: -2019089178
+        Position: {x: -9.57, y: -0.62, z: 14.92}
+        Rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+        Scale: {x: 2.909845, y: 2, z: 2}
+      - Hash: -1521230081
+        Position: {x: -2.6447868, y: 0, z: 14.015204}
+        Rotation: {x: -0, y: -1, z: -0, w: -0.00000032782552}
+        Scale: {x: 1, y: 1, z: 1}
+      - Hash: -1171706330
+        Position: {x: -5.9905, y: 1.9548, z: 14.94}
+        Rotation: {x: -0, y: -1, z: -0, w: -0.00000035762784}
+        Scale: {x: 0.8289952, y: 0.541404, z: 1}
+      - Hash: 1117477001
+        Position: {x: 5.6989, y: 1.9956, z: 14.95}
+        Rotation: {x: -0, y: -1, z: -0, w: 0.00000058114523}
+        Scale: {x: 0.8025023, y: 0.5615599, z: 1}
       chestEntities:
       - IsInited: 1
         ChestType: 0
