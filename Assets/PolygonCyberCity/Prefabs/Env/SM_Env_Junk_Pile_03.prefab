@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: -3198591843966866678}
   - component: {fileID: -6714976510881636451}
   - component: {fileID: 5867024304889586722}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Env_Junk_Pile_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
