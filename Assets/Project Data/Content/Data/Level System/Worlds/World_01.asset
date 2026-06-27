@@ -40,6 +40,26 @@ MonoBehaviour:
         Rotation: {x: -0, y: 0.38036934, z: -0, w: 0.9248347}
         Scale: {x: 2, y: 2, z: 2}
       - Hash: -1984709543
+        Position: {x: -7.865106, y: 0, z: -22.282444}
+        Rotation: {x: -0, y: 0.38036934, z: -0, w: 0.9248347}
+        Scale: {x: 2, y: 2, z: 2}
+      - Hash: -1984709543
+        Position: {x: 8.085428, y: 0, z: -21.734325}
+        Rotation: {x: -0, y: 0.38036934, z: -0, w: 0.9248347}
+        Scale: {x: 2, y: 2, z: 2}
+      - Hash: -1984709543
+        Position: {x: -0.85494685, y: -0.1743856, z: -18.66129}
+        Rotation: {x: 0, y: -0.38268343, z: 0, w: 0.92387956}
+        Scale: {x: 2, y: 2, z: 2}
+      - Hash: -1984709543
+        Position: {x: 8.279292, y: -0.17438567, z: -18.666317}
+        Rotation: {x: 0, y: -0.38268343, z: 0, w: 0.92387956}
+        Scale: {x: 2, y: 2, z: 2}
+      - Hash: -1984709543
+        Position: {x: 1.2082372, y: -0.17438567, z: -18.666306}
+        Rotation: {x: 0, y: -0.38268343, z: 0, w: 0.92387956}
+        Scale: {x: 2, y: 2, z: 2}
+      - Hash: -1984709543
         Position: {x: -7.9390774, y: 0, z: -7.5041227}
         Rotation: {x: -0, y: 0.38036934, z: -0, w: 0.9248347}
         Scale: {x: 2, y: 2, z: 2}
@@ -128,7 +148,7 @@ MonoBehaviour:
         Rotation: {x: 0, y: 1, z: 0, w: 0}
         Scale: {x: 0.5588212, y: 0.586, z: 1}
       - Hash: -1540618697
-        Position: {x: 2.49, y: 0, z: 14.97}
+        Position: {x: 2.49, y: 0, z: 15.65}
         Rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
         Scale: {x: 1, y: 1, z: 1}
       - Hash: -741003546
@@ -139,6 +159,46 @@ MonoBehaviour:
         Position: {x: -6.41, y: 0, z: 9.88}
         Rotation: {x: 0, y: 0, z: 0, w: 1}
         Scale: {x: 1, y: 1, z: 1}
+      - Hash: -1994382634
+        Position: {x: -25.4, y: -21.431484, z: 15.5}
+        Rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+        Scale: {x: 0.46763664, y: 0.30174, z: 0.30174}
+      - Hash: -592012767
+        Position: {x: 8.438393, y: 5.7118945, z: -1.2566681}
+        Rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+        Scale: {x: 14.055, y: 14.055, z: 14.055}
+      - Hash: -592012767
+        Position: {x: 8.438391, y: 5.711894, z: -18.507217}
+        Rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+        Scale: {x: 14.055, y: 14.055, z: 14.055}
+      - Hash: -592012767
+        Position: {x: -8.94, y: 5.7118936, z: -18.66}
+        Rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+        Scale: {x: 14.055, y: 14.055, z: 14.055}
+      - Hash: -592012767
+        Position: {x: -25.730001, y: 5.7118945, z: -1.2687492}
+        Rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+        Scale: {x: 14.055, y: 14.055, z: 14.055}
+      - Hash: -592012767
+        Position: {x: -25.74, y: 5.711894, z: -18.659998}
+        Rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+        Scale: {x: 14.055, y: 14.055, z: 14.055}
+      - Hash: -592012767
+        Position: {x: -25.73, y: 5.711895, z: 16.3}
+        Rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+        Scale: {x: 14.055, y: 14.055, z: 14.055}
+      - Hash: -592012767
+        Position: {x: 8.438395, y: 5.711895, z: 16.31208}
+        Rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+        Scale: {x: 14.055, y: 14.055, z: 14.055}
+      - Hash: -1520745960
+        Position: {x: 5.77, y: 16.878, z: 20.44}
+        Rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+        Scale: {x: 0.29289, y: 0.29289, z: 0.29289}
+      - Hash: -1994382634
+        Position: {x: 2.49, y: 12.6, z: 25.8}
+        Rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+        Scale: {x: 0.23103, y: 0.23103, z: 0.23103}
       chestEntities: []
       roomCustomObjects: []
     xpAmount: 100
@@ -6269,6 +6329,10 @@ MonoBehaviour:
   - prefab: {fileID: 3606492287996021589, guid: c5703f5dfc694014faa043656719689d,
       type: 3}
     hash: -1994382634
+    type: 1
+  - prefab: {fileID: 5297570122353698268, guid: 85ae94c477dbb1c4ca670a0da622765e,
+      type: 3}
+    hash: -592012767
     type: 1
   roomEnvPresets:
   - name: Wide
