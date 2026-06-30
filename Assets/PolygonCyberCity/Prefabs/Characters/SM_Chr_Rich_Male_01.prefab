@@ -31,6 +31,68 @@ Transform:
   m_Children: []
   m_Father: {fileID: 973056659269574952}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1968193972229213202
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7899554505672311690}
+  m_Layer: 0
+  m_Name: Tesla Holder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7899554505672311690
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1968193972229213202}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.213, y: 0.783, z: 0.357}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2932742935714353837}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2650530096589676524
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1137403826761296180}
+  m_Layer: 0
+  m_Name: Shotgun Holder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1137403826761296180
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2650530096589676524}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.22, y: 0.6735, z: 0.23}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2932742935714353837}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3578119016177765007
 GameObject:
   m_ObjectHideFlags: 0
@@ -61,6 +123,37 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 973056659269574952}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3678695531816083657
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5414936218033769279}
+  m_Layer: 0
+  m_Name: Minigun Holder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5414936218033769279
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3678695531816083657}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.204, y: 0.7, z: 0.375}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2932742935714353837}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4720882310264491588
 GameObject:
@@ -96,6 +189,37 @@ Transform:
   - {fileID: 967624111446119805}
   - {fileID: 8889487004980153854}
   m_Father: {fileID: 5312422105173126804}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8428073952801792790
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8687106332381320258}
+  m_Layer: 0
+  m_Name: Rocket Holder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8687106332381320258
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8428073952801792790}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.20730947, y: -0.026218507, z: 0.05906848, w: 0.9761385}
+  m_LocalPosition: {x: 0.234, y: 0.726, z: 0.369}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2932742935714353837}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8527373152341618648
 GameObject:
@@ -159,6 +283,41 @@ Transform:
   m_Children: []
   m_Father: {fileID: 973056659269574952}
   m_LocalEulerAnglesHint: {x: -23.688, y: -4.742, z: 7.924}
+--- !u!1 &9022210579435470590
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2932742935714353837}
+  m_Layer: 0
+  m_Name: Weapons
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2932742935714353837
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9022210579435470590}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.032, y: 0.399, z: 0.253}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 5414936218033769279}
+  - {fileID: 1137403826761296180}
+  - {fileID: 8687106332381320258}
+  - {fileID: 7899554505672311690}
+  m_Father: {fileID: 5312422105173126804}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &4965247189319242641
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -348,17 +507,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 21e1340f0ec98c849822321ff3df8758,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 42.62535
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 21e1340f0ec98c849822321ff3df8758,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.0000024151655
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 21e1340f0ec98c849822321ff3df8758,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 2.789432
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 21e1340f0ec98c849822321ff3df8758,
         type: 3}
@@ -587,6 +746,10 @@ PrefabInstance:
         type: 3}
       insertIndex: 0
       addedObject: {fileID: 973056659269574952}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 21e1340f0ec98c849822321ff3df8758,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2932742935714353837}
     - targetCorrespondingSourceObject: {fileID: -3990698397054048210, guid: 21e1340f0ec98c849822321ff3df8758,
         type: 3}
       insertIndex: -1
@@ -595,11 +758,7 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 4855623116327236730}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 21e1340f0ec98c849822321ff3df8758,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: -3216828581877180115}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 21e1340f0ec98c849822321ff3df8758, type: 3}
 --- !u!4 &481052060769640785 stripped
 Transform:
@@ -607,63 +766,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 5634912152486381951}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &4824009884950770734 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 21e1340f0ec98c849822321ff3df8758,
-    type: 3}
-  m_PrefabInstance: {fileID: 5634912152486381951}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &-3216828581877180115
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4824009884950770734}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bacc4076dc9801a43a3f85781b5705a1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  characterAnimator: {fileID: 5460560326104918344, guid: 46ed7a58790bfba429a7f6bf4c4ffcab,
-    type: 3}
-  meshRenderer: {fileID: 6759671834418216944, guid: 46ed7a58790bfba429a7f6bf4c4ffcab,
-    type: 3}
-  movementSettings:
-    RotationSpeed: 8
-    MoveSpeed: 5
-    Acceleration: 781.25
-    AnimationMultiplier:
-      firstValue: 0
-      secondValue: 1.4
-  movementAimingSettings:
-    RotationSpeed: 8
-    MoveSpeed: 4.375
-    Acceleration: 781.25
-    AnimationMultiplier:
-      firstValue: 0
-      secondValue: 1.2
-  leftHandRig: {fileID: 4006933272959053023, guid: 46ed7a58790bfba429a7f6bf4c4ffcab,
-    type: 3}
-  leftHandExtraRotation: {x: 0, y: 0, z: 0}
-  rightHandRig: {fileID: 866578661790101988, guid: 46ed7a58790bfba429a7f6bf4c4ffcab,
-    type: 3}
-  rightHandExtraRotation: {x: 0, y: 0, z: 0}
-  weaponsTransform: {fileID: 9223323684423222863, guid: 46ed7a58790bfba429a7f6bf4c4ffcab,
-    type: 3}
-  minigunHolderTransform: {fileID: 7232982542977915312, guid: 46ed7a58790bfba429a7f6bf4c4ffcab,
-    type: 3}
-  shootGunHolderTransform: {fileID: 4473405991651107879, guid: 46ed7a58790bfba429a7f6bf4c4ffcab,
-    type: 3}
-  rocketHolderTransform: {fileID: 682801144309499857, guid: 46ed7a58790bfba429a7f6bf4c4ffcab,
-    type: 3}
-  teslaHolderTransform: {fileID: 4385699172501096620, guid: 46ed7a58790bfba429a7f6bf4c4ffcab,
-    type: 3}
-  mainRig: {fileID: 4725317598183709309, guid: 46ed7a58790bfba429a7f6bf4c4ffcab, type: 3}
-  leftHandController: {fileID: 818021652634256197, guid: 46ed7a58790bfba429a7f6bf4c4ffcab,
-    type: 3}
-  rightHandController: {fileID: 8150722306542189385, guid: 46ed7a58790bfba429a7f6bf4c4ffcab,
-    type: 3}
 --- !u!4 &5312422105173126804 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 21e1340f0ec98c849822321ff3df8758,

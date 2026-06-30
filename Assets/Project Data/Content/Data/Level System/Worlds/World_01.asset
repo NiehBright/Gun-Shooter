@@ -5878,97 +5878,9 @@ MonoBehaviour:
         IsElite: 0
         PathPoints: []
       itemEntities:
-      - Hash: 1250060704
-        Position: {x: 3.90625, y: 0, z: -3.90625}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1250060704
-        Position: {x: -3.90625, y: 0, z: -3.90625}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1250060704
-        Position: {x: -3.90625, y: 0, z: 3.90625}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1250060704
-        Position: {x: 3.90625, y: 0, z: 3.90625}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1250060704
-        Position: {x: -3.90625, y: 0, z: -11.71875}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1250060704
-        Position: {x: 3.90625, y: 0, z: -11.71875}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1250060704
-        Position: {x: -3.90625, y: 0, z: 11.71875}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1250060704
-        Position: {x: 3.90625, y: 0, z: 11.71875}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
       - Hash: 1262717655
         Position: {x: 0, y: 0, z: 15.625}
         Rotation: {x: 0, y: 1, z: 0, w: 0.0000029504295}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1224998065
-        Position: {x: 0, y: 0, z: 0}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1229131032
-        Position: {x: 3.125, y: 0, z: 0}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1229131032
-        Position: {x: -3.125, y: 0, z: 0}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1224998065
-        Position: {x: -0.2108018, y: 0, z: 2.621231}
-        Rotation: {x: -0, y: 0.7071067, z: -0, w: 0.70710695}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1224998065
-        Position: {x: 0.066679396, y: 0, z: 7.1289062}
-        Rotation: {x: -0, y: 1, z: -0, w: 0.00000032782552}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1229131032
-        Position: {x: 2.953064, y: 0, z: 5.9325695}
-        Rotation: {x: -0, y: 0.38268343, z: -0, w: 0.92387956}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1229131032
-        Position: {x: -2.952349, y: 0, z: 6.2771225}
-        Rotation: {x: -0, y: 0.9238795, z: -0, w: 0.38268366}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1224998065
-        Position: {x: -5.859375, y: 0, z: -3.515625}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1224998065
-        Position: {x: -1.495821, y: 0, z: -3.0273438}
-        Rotation: {x: -0, y: -1, z: -0, w: 0.00000032782552}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1224998065
-        Position: {x: -1.6756451, y: 0, z: 9.195175}
-        Rotation: {x: -0, y: 0.70710635, z: -0, w: -0.7071073}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1229131032
-        Position: {x: 2.953064, y: 0, z: -6.5674305}
-        Rotation: {x: -0, y: 0.38268343, z: -0, w: 0.92387956}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1229131032
-        Position: {x: 5.0830784, y: 0, z: -6.932125}
-        Rotation: {x: -0, y: 1, z: -0, w: 0.00000032782552}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1229131032
-        Position: {x: 7.0362034, y: 0, z: -6.932125}
-        Rotation: {x: -0, y: 1, z: -0, w: 0.00000032782552}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1141071695
-        Position: {x: -3.125, y: 0, z: -4.6875}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
         Scale: {x: 1, y: 1, z: 1}
       - Hash: 1191394836
         Position: {x: 3.125, y: 0, z: 10.546875}
@@ -5994,78 +5906,6 @@ MonoBehaviour:
         Position: {x: 5.46875, y: 0, z: 14.453125}
         Rotation: {x: 0, y: 0, z: 0, w: 1}
         Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1174609383
-        Position: {x: -5.859375, y: 0, z: -14.0625}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1174609383
-        Position: {x: -7.03125, y: 0, z: -12.109375}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1203982050
-        Position: {x: 6.25, y: 0, z: -10.9375}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1203982050
-        Position: {x: 3.125, y: 0, z: -14.453125}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1229131032
-        Position: {x: -3.296936, y: 0, z: -6.5674305}
-        Rotation: {x: -0, y: 0.38268343, z: -0, w: 0.92387956}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1220803761
-        Position: {x: -2.3241324, y: 0, z: 0.36115646}
-        Rotation: {x: -0, y: -1, z: -0, w: 0.00000032782552}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1220803761
-        Position: {x: 2.34375, y: 0, z: 0}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1220803761
-        Position: {x: -2.3241324, y: 0, z: 7.0017815}
-        Rotation: {x: -0, y: -1, z: -0, w: 0.00000032782552}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1220803761
-        Position: {x: 1.9727427, y: 0, z: 7.0017815}
-        Rotation: {x: -0, y: -1, z: -0, w: 0.00000032782552}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1220803761
-        Position: {x: 3.9258676, y: 0, z: 0.36115646}
-        Rotation: {x: -0, y: -1, z: -0, w: 0.00000032782552}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1220803761
-        Position: {x: -4.2772574, y: 0, z: 0.36115646}
-        Rotation: {x: -0, y: -1, z: -0, w: 0.00000032782552}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1220803761
-        Position: {x: 4.293729, y: 0, z: -7.0600986}
-        Rotation: {x: -0, y: -0.7071067, z: -0, w: 0.70710695}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1220803761
-        Position: {x: 2.5471709, y: 0, z: -5.4217243}
-        Rotation: {x: -0, y: -0.9238795, z: -0, w: 0.38268358}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1220803761
-        Position: {x: -2.5309541, y: 0, z: -6.5935993}
-        Rotation: {x: -0, y: -0.9238795, z: -0, w: 0.38268358}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1220803761
-        Position: {x: -3.8866324, y: 0, z: -3.1544685}
-        Rotation: {x: -0, y: -1, z: -0, w: 0.00000032782552}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1220803761
-        Position: {x: 0.019617677, y: 0, z: -3.1544685}
-        Rotation: {x: -0, y: -1, z: -0, w: 0.00000032782552}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1220803761
-        Position: {x: -3.971096, y: 0, z: 5.263815}
-        Rotation: {x: -0, y: -0.92387974, z: -0, w: -0.382683}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1220803761
-        Position: {x: 3.450779, y: 0, z: 5.263815}
-        Rotation: {x: -0, y: -0.92387974, z: -0, w: -0.382683}
-        Scale: {x: 1, y: 1, z: 1}
       - Hash: 1117477001
         Position: {x: 6.1043, y: 1.9956, z: 14.95}
         Rotation: {x: -0, y: -1, z: -0, w: 0.00000058114523}
@@ -6234,6 +6074,82 @@ MonoBehaviour:
         Position: {x: -9.72, y: -0.56000036, z: 16.981365}
         Rotation: {x: -0, y: 0.9238797, z: -0, w: -0.38268322}
         Scale: {x: 2, y: 2, z: 2}
+      - Hash: -599461410
+        Position: {x: 3.573886, y: 0, z: -7.5538797}
+        Rotation: {x: -0, y: 0.38268274, z: -0, w: 0.9238798}
+        Scale: {x: 1, y: 1, z: 1}
+      - Hash: -599461410
+        Position: {x: -3.83, y: 0, z: -5.97}
+        Rotation: {x: -0, y: 0.70710605, z: -0, w: 0.7071075}
+        Scale: {x: 1, y: 1, z: 1}
+      - Hash: -599461410
+        Position: {x: 6.16, y: 0, z: -7.67}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - Hash: -599461410
+        Position: {x: 8.73, y: 0, z: -7.67}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - Hash: -599461410
+        Position: {x: 0, y: 0, z: -3.38}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - Hash: -599461410
+        Position: {x: -2.4999914, y: 0, z: -3.38}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - Hash: -599461410
+        Position: {x: -4.999983, y: 0, z: -3.605}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - Hash: -1160573671
+        Position: {x: -3.75, y: -0.53, z: -6.93}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 7, y: 7, z: 7}
+      - Hash: -599461410
+        Position: {x: 0, y: 0, z: 0}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - Hash: -599461410
+        Position: {x: 2.4999914, y: 0, z: 0}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - Hash: -599461410
+        Position: {x: 4.999983, y: 0, z: 0}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - Hash: -599461410
+        Position: {x: -2.4999914, y: 0, z: 0}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - Hash: -659475593
+        Position: {x: 0.08, y: -0, z: 0.27}
+        Rotation: {x: -0, y: 0.70710677, z: -0, w: 0.7071069}
+        Scale: {x: 1.2333, y: 1, z: 1}
+      - Hash: -599461410
+        Position: {x: 1.28, y: 0, z: 6.64}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - Hash: -599461410
+        Position: {x: 3.41, y: 0, z: 5.32}
+        Rotation: {x: -0, y: 0.258819, z: -0, w: 0.9659259}
+        Scale: {x: 1, y: 1, z: 1}
+      - Hash: -599461410
+        Position: {x: -1.17, y: 0, z: 6.63}
+        Rotation: {x: -0, y: -0.38268322, z: -0, w: 0.9238797}
+        Scale: {x: 1, y: 1, z: 1}
+      - Hash: -889295366
+        Position: {x: -1.04, y: 0, z: 11.7}
+        Rotation: {x: -0, y: -0.70710707, z: -0, w: 0.70710653}
+        Scale: {x: 1, y: 1, z: 1}
+      - Hash: 106241932
+        Position: {x: -6.81, y: 0, z: -11.78}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - Hash: -1113935946
+        Position: {x: 6.88, y: 0, z: -16.28}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
       chestEntities: []
       roomCustomObjects: []
     xpAmount: 150
@@ -6249,7 +6165,7 @@ MonoBehaviour:
     specialBehaviours: []
   - type: 1
     rooms:
-    - spawnPoint: {x: 0, y: 0, z: -11.71875}
+    - spawnPoint: {x: 0, y: 0, z: -15.2}
       enemyEntities:
       - EnemyType: 101
         Position: {x: 0, y: 0, z: 10.9375}
@@ -6258,125 +6174,17 @@ MonoBehaviour:
         IsElite: 0
         PathPoints:
         - {x: 2.953125, y: 0, z: 5.671875}
-        - {x: -7.03125, y: 0, z: 0.46875}
-        - {x: 0.390625, y: 0, z: -2.265625}
-        - {x: 6.640625, y: 0, z: 0.46875}
-        - {x: -7.421875, y: 0, z: 7.5}
+        - {x: -6.24, y: 0, z: 0.46875}
+        - {x: 0.390625, y: 0, z: -4.4525003}
+        - {x: 5.77, y: 0, z: 0.46875}
+        - {x: -8.54, y: 0, z: 8.8475}
         - {x: -2.234375, y: 0, z: 12.296875}
-        - {x: 5.08, y: 0, z: 12.296875}
+        - {x: 5.08, y: 0, z: 11.4875}
         - {x: 7.95, y: 0, z: 6.5775}
       itemEntities:
-      - Hash: 1250060704
-        Position: {x: 1.953125, y: 0, z: -3.90625}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1250060704
-        Position: {x: -5.859375, y: 0, z: -3.90625}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1250060704
-        Position: {x: -5.859375, y: 0, z: 3.90625}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1250060704
-        Position: {x: 1.953125, y: 0, z: 3.90625}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1250060704
-        Position: {x: -5.859375, y: 0, z: -11.71875}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1250060704
-        Position: {x: 1.953125, y: 0, z: -11.71875}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1250060704
-        Position: {x: -5.859375, y: 0, z: 11.71875}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1250060704
-        Position: {x: 1.953125, y: 0, z: 11.71875}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
       - Hash: 1262717655
         Position: {x: 0, y: 0, z: 15.625}
         Rotation: {x: 0, y: 1, z: 0, w: 0.0000029504295}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1245866400
-        Position: {x: 9.765625, y: 0, z: -11.71875}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1245866400
-        Position: {x: 9.765625, y: 0, z: -3.90625}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1245866400
-        Position: {x: 9.765625, y: 0, z: 3.90625}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1245866400
-        Position: {x: 9.765625, y: 0, z: 11.71875}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1203982050
-        Position: {x: 0, y: 0, z: 0}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1203982050
-        Position: {x: 5.46875, y: 0, z: -2.34375}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1203982050
-        Position: {x: -5.078125, y: 0, z: -2.34375}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1203982050
-        Position: {x: -8.984375, y: 0, z: 3.90625}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1203982050
-        Position: {x: -7.421875, y: 0, z: 3.90625}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1203982050
-        Position: {x: 8.59375, y: 0, z: 3.515625}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1203982050
-        Position: {x: 7.03125, y: 0, z: 3.515625}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1203982050
-        Position: {x: 5.46875, y: 0, z: 3.515625}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1203982050
-        Position: {x: 3.125, y: 0, z: -6.640625}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1203982050
-        Position: {x: -2.34375, y: 0, z: -6.640625}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1203982050
-        Position: {x: -3.90625, y: 0, z: 8.984375}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1203982050
-        Position: {x: 3.90625, y: 0, z: 8.984375}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1203982050
-        Position: {x: -7.03125, y: 0, z: 12.5}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1203982050
-        Position: {x: 7.03125, y: 0, z: 12.109375}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
-        Scale: {x: 1, y: 1, z: 1}
-      - Hash: 1203982050
-        Position: {x: 0, y: 0, z: 5.46875}
-        Rotation: {x: 0, y: 0, z: 0, w: 1}
         Scale: {x: 1, y: 1, z: 1}
       - Hash: 1117477001
         Position: {x: 6.1043, y: 1.9956, z: 14.95}
@@ -6546,6 +6354,54 @@ MonoBehaviour:
         Position: {x: -9.72, y: -0.56000036, z: 16.981365}
         Rotation: {x: -0, y: 0.9238797, z: -0, w: -0.38268322}
         Scale: {x: 2, y: 2, z: 2}
+      - Hash: -1600035607
+        Position: {x: 0.0090914, y: -1.2526, z: 0.58}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 3, y: 3, z: 3}
+      - Hash: -1600035607
+        Position: {x: 0.0090914, y: -1.2526, z: 6.92}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 3, y: 3, z: 3}
+      - Hash: -1600035607
+        Position: {x: -3.75, y: -1.2526, z: 8.5}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 3, y: 3, z: 3}
+      - Hash: -1600035607
+        Position: {x: 4.23, y: -1.2526, z: 8.5}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 3, y: 3, z: 3}
+      - Hash: -1600035607
+        Position: {x: 7.8, y: -1.2526, z: 14.04}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 3, y: 3, z: 3}
+      - Hash: -1600035607
+        Position: {x: -8.83, y: -1.2526, z: 14.04}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 3, y: 3, z: 3}
+      - Hash: -1600035607
+        Position: {x: 5.72, y: -1.2526, z: -2.99}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 3, y: 3, z: 3}
+      - Hash: -1600035607
+        Position: {x: -5.82, y: -1.2526, z: -2.99}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 3, y: 3, z: 3}
+      - Hash: -1600035607
+        Position: {x: -2.8, y: -1.2526, z: -7.63}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 3, y: 3, z: 3}
+      - Hash: -1600035607
+        Position: {x: 3.42, y: -1.2526, z: -7.63}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 3, y: 3, z: 3}
+      - Hash: -1641427232
+        Position: {x: -8.13, y: -0.68414, z: 3.32}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 3, y: 3, z: 3}
+      - Hash: -1641427232
+        Position: {x: 6.69, y: -0.68414, z: 3.32}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 3, y: 3, z: 3}
       chestEntities: []
       roomCustomObjects: []
     xpAmount: 200

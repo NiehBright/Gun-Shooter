@@ -1,9 +1,10 @@
-﻿namespace Watermelon.SquadShooter
+namespace Watermelon.SquadShooter
 {
     public enum CharacterType
     {
         Character_01 = 0,
         Character_02 = 1,
         Character_03 = 2,
-    }
+    
+        Character_04 = 3,}
 }
