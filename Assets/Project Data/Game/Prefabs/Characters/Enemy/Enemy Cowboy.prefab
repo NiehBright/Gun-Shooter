@@ -189,6 +189,16 @@ PrefabInstance:
       propertyPath: primaryHandBone
       value: 
       objectReference: {fileID: 8909915433634881574}
+    - target: {fileID: 7479239183273901518, guid: 935fe7b9fbc2d144fa8d8569ea9d2ffe,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7479239183273901518, guid: 935fe7b9fbc2d144fa8d8569ea9d2ffe,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.366
+      objectReference: {fileID: 0}
     - target: {fileID: 8712224188439255577, guid: 935fe7b9fbc2d144fa8d8569ea9d2ffe,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1649,10 +1659,20 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4796623966293115899}
     m_Modifications:
+    - target: {fileID: 680225747341438078, guid: d7d87b2ae8f930d489bf70d88e9aa07d,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 680225747341438078, guid: d7d87b2ae8f930d489bf70d88e9aa07d,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.243
+      objectReference: {fileID: 0}
     - target: {fileID: 2501733322650878922, guid: d7d87b2ae8f930d489bf70d88e9aa07d,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.45886165
+      value: -0.45886168
       objectReference: {fileID: 0}
     - target: {fileID: 2501733322650878922, guid: d7d87b2ae8f930d489bf70d88e9aa07d,
         type: 3}
