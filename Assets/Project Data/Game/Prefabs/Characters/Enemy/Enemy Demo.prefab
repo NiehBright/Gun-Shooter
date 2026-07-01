@@ -59,28 +59,8 @@ MonoBehaviour:
   meshRenderer: {fileID: 3585093932765981104}
   baseHitCollider: {fileID: 2816206852611366193}
   eliteCase:
-    pairs:
-    - renderer: {fileID: 0}
-      simpleMesh: {fileID: -4062010099356087610, guid: aabd711125e1fde4585cc938d511dd65,
-        type: 3}
-      eliteMesh: {fileID: -4062010099356087610, guid: 70ab96d6ea7316e468edb518f0056a68,
-        type: 3}
-    - renderer: {fileID: 0}
-      simpleMesh: {fileID: 4316145601666093191, guid: aabd711125e1fde4585cc938d511dd65,
-        type: 3}
-      eliteMesh: {fileID: 4316145601666093191, guid: 70ab96d6ea7316e468edb518f0056a68,
-        type: 3}
-    - renderer: {fileID: 0}
-      simpleMesh: {fileID: -7968085646536043705, guid: aabd711125e1fde4585cc938d511dd65,
-        type: 3}
-      eliteMesh: {fileID: -7968085646536043705, guid: 70ab96d6ea7316e468edb518f0056a68,
-        type: 3}
-    simplePairs:
-    - filter: {fileID: 0}
-      simpleMesh: {fileID: -849867405023671905, guid: aabd711125e1fde4585cc938d511dd65,
-        type: 3}
-      eliteMesh: {fileID: -849867405023671905, guid: 70ab96d6ea7316e468edb518f0056a68,
-        type: 3}
+    pairs: []
+    simplePairs: []
   weapons:
   - {fileID: 2472040042499891456}
   rightHandBone: {fileID: 5323471640126290797}

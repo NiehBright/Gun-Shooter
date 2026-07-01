@@ -220,6 +220,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tesla_charge
       objectReference: {fileID: 0}
+    - target: {fileID: 5977807008920101256, guid: f20caca1d3c46ae4ead59c942585acca,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5977807008939332134, guid: f20caca1d3c46ae4ead59c942585acca,
         type: 3}
       propertyPath: InitialModule.startSize.scalar
@@ -376,7 +381,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 579c2d54706b3cb4e94c72f922f7e459,
         type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 6ad1b3937261e4f28a481237cd606a36, type: 2}
     - target: {fileID: 919132149155446097, guid: 579c2d54706b3cb4e94c72f922f7e459,

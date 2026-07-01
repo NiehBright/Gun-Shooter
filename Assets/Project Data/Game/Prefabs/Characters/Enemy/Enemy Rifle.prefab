@@ -60,12 +60,7 @@ MonoBehaviour:
   baseHitCollider: {fileID: 4796623966293115897}
   eliteCase:
     pairs: []
-    simplePairs:
-    - filter: {fileID: 7856163983501991055}
-      simpleMesh: {fileID: 624270676327525987, guid: 9bba7c85dadff164aa5e6038986aacda,
-        type: 3}
-      eliteMesh: {fileID: 624270676327525987, guid: 2041c4cbef6c1d24dab7bcbf5ae7d08b,
-        type: 3}
+    simplePairs: []
   weapons:
   - {fileID: 4674633928257783731}
   rightHandBone: {fileID: 2586691085164471389}
@@ -1855,12 +1850,6 @@ MonoBehaviour:
 --- !u!4 &7819111722380488897 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1666705466983381481, guid: aa156710ec68c404496ad99c538bbb4e,
-    type: 3}
-  m_PrefabInstance: {fileID: 8908757117036005672}
-  m_PrefabAsset: {fileID: 0}
---- !u!33 &7856163983501991055 stripped
-MeshFilter:
-  m_CorrespondingSourceObject: {fileID: 1631693815698986407, guid: aa156710ec68c404496ad99c538bbb4e,
     type: 3}
   m_PrefabInstance: {fileID: 8908757117036005672}
   m_PrefabAsset: {fileID: 0}

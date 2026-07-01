@@ -518,20 +518,23 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: -2.5
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -1207,6 +1210,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
+  m_UseReflectionProbes: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -1242,6 +1246,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   backButton: {fileID: 8227189595013129318}
+  panelUIPrefab: {fileID: 2055018639182155067, guid: a6ed57f7517a6a64381706249f13f8d9,
+    type: 3}
+  panelsContainer: {fileID: 7346584915278347249}
   backgroundPanelRectTransform: {fileID: 160823568229223748}
   closeButtonRectTransform: {fileID: 8227189595013129317}
   scrollView: {fileID: 7423551204636039909}
@@ -1302,8 +1309,5 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  panelUIPrefab: {fileID: 2055018639182155067, guid: a6ed57f7517a6a64381706249f13f8d9,
-    type: 3}
-  panelsContainer: {fileID: 7346584915278347249}
   stageStarPrefab: {fileID: 315159776447187958, guid: 4e82445f25872284b8660a79f2fbe8d3,
     type: 3}

@@ -198,12 +198,7 @@ MonoBehaviour:
   baseHitCollider: {fileID: 328992961638531178}
   eliteCase:
     pairs: []
-    simplePairs:
-    - filter: {fileID: 0}
-      simpleMesh: {fileID: -759956795371474113, guid: d94c8b06af959a043a330e07de0248ba,
-        type: 3}
-      eliteMesh: {fileID: -759956795371474113, guid: be00ff7b892bcef429ad6b4599cd919c,
-        type: 3}
+    simplePairs: []
   weapons:
   - {fileID: 4858485237359756384}
   rightHandBone: {fileID: 7150424736443710660}
