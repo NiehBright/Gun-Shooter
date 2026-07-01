@@ -39,7 +39,7 @@ namespace Watermelon.SquadShooter
             }
         }
 
-        private void Update()
+        private void LateUpdate()
         {
             if (!(Application.isPlaying || enableRigWeaponInEditor)) return;
 
