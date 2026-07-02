@@ -8,19 +8,19 @@ namespace Watermelon.SquadShooter
         private static readonly int PARTICLE_UPGRADE = ParticlesController.GetHash("Gun Upgrade");
 
         [Header("Animations")]
-        [SerializeField] AnimationClip characterShootAnimation;
+        [SerializeField, InspectorLabel("Hoạt họa bắn nhân vật")] AnimationClip characterShootAnimation;
 
         [Space]
-        [SerializeField] Transform leftHandHolder;
-        [SerializeField] Transform rightHandHolder;
+        [SerializeField, InspectorLabel("Điểm tựa tay trái")] Transform leftHandHolder;
+        [SerializeField, InspectorLabel("Điểm tựa tay phải")] Transform rightHandHolder;
 
         [Space]
-        [SerializeField] 
+        [SerializeField, InspectorLabel("Điểm bắn đạn")] 
         protected Transform shootPoint;
 
         [Header("Upgrade")]
-        [SerializeField] Vector3 upgradeParticleOffset;
-        [SerializeField] float upgradeParticleSize = 1.0f;
+        [SerializeField, InspectorLabel("Lệch hiệu ứng nâng cấp")] Vector3 upgradeParticleOffset;
+        [SerializeField, InspectorLabel("Cỡ hiệu ứng nâng cấp")] float upgradeParticleSize = 1.0f;
 
         protected CharacterBehaviour characterBehaviour;
         protected WeaponData data;

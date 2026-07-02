@@ -7,14 +7,14 @@ namespace Watermelon.SquadShooter
     public class TeslaGunBehavior : BaseGunBehavior
     {
         [LineSpacer]
-        [SerializeField] ParticleSystem shootParticleSystem;
-        [SerializeField] GameObject lightningLoopParticle;
+        [SerializeField, InspectorLabel("Hạt hiệu ứng bắn")] ParticleSystem shootParticleSystem;
+        [SerializeField, InspectorLabel("Hiệu ứng vòng chớp")] GameObject lightningLoopParticle;
 
-        [SerializeField] LayerMask targetLayers;
-        [SerializeField] float chargeDuration;
+        [SerializeField, InspectorLabel("Lớp mục tiêu bắn")] LayerMask targetLayers;
+        [SerializeField, InspectorLabel("Thời gian nạp điện (giây)")] float chargeDuration;
         private DuoFloat bulletSpeed;
-        [SerializeField] DuoInt targetsHitGoal;
-        [SerializeField] float stunDuration = 0.2f;
+        [SerializeField, InspectorLabel("Số mục tiêu truyền sét")] DuoInt targetsHitGoal;
+        [SerializeField, InspectorLabel("Thời gian gây choáng (giây)")] float stunDuration = 0.2f;
 
         private Pool bulletPool;
 

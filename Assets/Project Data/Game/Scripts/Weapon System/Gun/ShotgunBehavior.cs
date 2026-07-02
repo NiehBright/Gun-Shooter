@@ -6,10 +6,10 @@ namespace Watermelon.SquadShooter
     public class ShotgunBehavior : BaseGunBehavior
     {
         [LineSpacer]
-        [SerializeField] ParticleSystem shootParticleSystem;
+        [SerializeField, InspectorLabel("Hạt hiệu ứng bắn")] ParticleSystem shootParticleSystem;
 
-        [SerializeField] LayerMask targetLayers;
-        [SerializeField] float bulletDisableTime;
+        [SerializeField, InspectorLabel("Lớp mục tiêu bắn")] LayerMask targetLayers;
+        [SerializeField, InspectorLabel("Thời gian hủy đạn")] float bulletDisableTime;
 
         private float attackDelay;
         private DuoFloat bulletSpeed;

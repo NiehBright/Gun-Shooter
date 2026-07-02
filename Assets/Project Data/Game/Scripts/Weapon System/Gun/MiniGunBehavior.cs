@@ -7,17 +7,17 @@ namespace Watermelon.SquadShooter
     public class MiniGunBehavior : BaseGunBehavior
     {
         [LineSpacer]
-        [SerializeField] Transform barrelTransform;
-        [SerializeField] ParticleSystem shootParticleSystem;
+        [SerializeField, InspectorLabel("Khớp xoay nòng súng")] Transform barrelTransform;
+        [SerializeField, InspectorLabel("Hiệu ứng tia lửa nòng")] ParticleSystem shootParticleSystem;
 
-        [SerializeField] LayerMask targetLayers;
-        [SerializeField] float bulletDisableTime;
-
-        [Space]
-        [SerializeField] float fireRotationSpeed;
+        [SerializeField, InspectorLabel("Lớp mục tiêu bắn")] LayerMask targetLayers;
+        [SerializeField, InspectorLabel("Thời gian hủy đạn (giây)")] float bulletDisableTime;
 
         [Space]
-        [SerializeField] List<float> bulletStreamAngles;
+        [SerializeField, InspectorLabel("Tốc độ xoay nòng")] float fireRotationSpeed;
+
+        [Space]
+        [SerializeField, InspectorLabel("Góc lệch các tia đạn")] List<float> bulletStreamAngles;
 
         private float spread;
         private float attackDelay;

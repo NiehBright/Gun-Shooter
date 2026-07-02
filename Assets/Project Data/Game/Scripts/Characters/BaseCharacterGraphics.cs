@@ -79,6 +79,10 @@ namespace Watermelon.SquadShooter
         {
             this.characterBehaviour = characterBehaviour;
 
+            // Vô hiệu hóa Root Motion để tránh việc hoạt ảnh di chuyển vị trí thực tế của nhân vật (gây bay lên trời)
+            if (characterAnimator != null)
+                characterAnimator.applyRootMotion = false;
+
             ragdoll = new RagdollBehavior();
             ragdoll.Initialise(characterAnimator.transform);
 
@@ -115,8 +119,14 @@ namespace Watermelon.SquadShooter
             mainRig.weight = 0f;
         }
 
+        private float lastGruntTime;
+
         public void Grunt()
         {
+            // Ngăn gọi liên tục trong thời gian ngắn làm dồn toa hoạt ảnh khiến nhân vật bay lên
+            if (Time.time - lastGruntTime < 0.35f) return;
+            lastGruntTime = Time.time;
+
             characterAnimator.SetTrigger(GRUNT_ANIMATION_HASH);
 
             var strength = 0.1f;
@@ -131,19 +141,19 @@ namespace Watermelon.SquadShooter
             saveLeftHandPosition = leftHandController.localPosition;
             saveRightHandPosition = rightHandController.localPosition;
 
-            weaponsTransformCase = weaponsTransform.DOMoveY(weaponsTransform.position.y - strength, durationIn).SetEasing(Ease.Type.SineOut).OnComplete(() =>
+            weaponsTransformCase = weaponsTransform.DOLocalMoveY(saveWeaponsPosition.y - strength, durationIn).SetEasing(Ease.Type.SineOut).OnComplete(() =>
             {
-                weaponsTransformCase = weaponsTransform.DOMoveY(weaponsTransform.position.y + strength, durationOut).SetEasing(Ease.Type.SineInOut);
+                weaponsTransformCase = weaponsTransform.DOLocalMoveY(saveWeaponsPosition.y, durationOut).SetEasing(Ease.Type.SineInOut);
             });
 
-            leftHandCase = leftHandController.DOMoveY(leftHandController.position.y - strength, durationIn).SetEasing(Ease.Type.SineOut).OnComplete(() =>
+            leftHandCase = leftHandController.DOLocalMoveY(saveLeftHandPosition.y - strength, durationIn).SetEasing(Ease.Type.SineOut).OnComplete(() =>
             {
-                leftHandCase = leftHandController.DOMoveY(leftHandController.position.y + strength, durationOut).SetEasing(Ease.Type.SineInOut);
+                leftHandCase = leftHandController.DOLocalMoveY(saveLeftHandPosition.y, durationOut).SetEasing(Ease.Type.SineInOut);
             });
 
-            rightHandCase = rightHandController.DOMoveY(rightHandController.position.y - strength, durationIn).SetEasing(Ease.Type.SineOut).OnComplete(() =>
+            rightHandCase = rightHandController.DOLocalMoveY(saveRightHandPosition.y - strength, durationIn).SetEasing(Ease.Type.SineOut).OnComplete(() =>
             {
-                rightHandCase = rightHandController.DOMoveY(rightHandController.position.y + strength, durationOut).SetEasing(Ease.Type.SineInOut);
+                rightHandCase = rightHandController.DOLocalMoveY(saveRightHandPosition.y, durationOut).SetEasing(Ease.Type.SineInOut);
             });
         }
 

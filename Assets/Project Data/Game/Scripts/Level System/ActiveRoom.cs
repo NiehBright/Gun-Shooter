@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 using Watermelon.SquadShooter;
 
@@ -110,6 +110,9 @@ namespace Watermelon.LevelSystem
 
         public static void RegisterExitPoint(ExitPointBehaviour exitPointBehaviour)
         {
+            if (exitPoints == null)
+                exitPoints = new List<ExitPointBehaviour>();
+
             exitPoints.Add(exitPointBehaviour);
 
             exitPointBehaviour.Initialise();

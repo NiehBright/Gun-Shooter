@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e94c31057fb9a64aa81ddae731f59d2, type: 3}
   m_Name: ao_giap_sat 1
   m_EditorClassIdentifier: Assembly-CSharp::Watermelon.SquadShooter.EquipmentData
-  itemName: "\xC1o Gi\xE1p S\u1EAFt"
-  itemID: ao_giap_sat
+  itemName: "\xC1o Gi\xE1p S\u1EAFt1"
+  itemID: ao_giap_sat1
   icon: {fileID: 0}
   equipmentType: 1
-  rarity: 1
+  rarity: 2
   baseStats:
     bonusHP: 0
     bonusDamagePercent: 0
