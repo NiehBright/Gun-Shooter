@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30c1b9868822fe74f892e83a6434aadc, type: 3}
+  m_Name: Equipment Database
+  m_EditorClassIdentifier: Assembly-CSharp::Watermelon.SquadShooter.EquipmentDatabase
+  allEquipment:
+  - {fileID: 11400000, guid: f9752bd8c6f30274bb0278f8dea8f757, type: 2}
+  - {fileID: 11400000, guid: b99d4f4e708ba6e4eb199876faad45a1, type: 2}
+  - {fileID: 11400000, guid: cca09d54286863743b5f05241cc08652, type: 2}
+  - {fileID: 11400000, guid: 9b9d70cf42736cd4e87a4f5d522538aa, type: 2}

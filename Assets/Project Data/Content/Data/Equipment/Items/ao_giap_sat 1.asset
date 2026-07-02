@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e94c31057fb9a64aa81ddae731f59d2, type: 3}
+  m_Name: ao_giap_sat 1
+  m_EditorClassIdentifier: Assembly-CSharp::Watermelon.SquadShooter.EquipmentData
+  itemName: "\xC1o Gi\xE1p S\u1EAFt"
+  itemID: ao_giap_sat
+  icon: {fileID: 0}
+  equipmentType: 1
+  rarity: 1
+  baseStats:
+    bonusHP: 0
+    bonusDamagePercent: 0
+    bonusArmor: 5
+    bonusMoveSpeed: 0
+  statsPerLevel:
+    bonusHP: 0
+    bonusDamagePercent: 0
+    bonusArmor: 2
+    bonusMoveSpeed: 0
+  maxLevel: 5
+  upgradeCosts: 64000000c8000000900100002003000040060000
+  sellPrice: 30
