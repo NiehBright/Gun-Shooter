@@ -19,7 +19,19 @@ namespace Watermelon.SquadShooter
 
         public static Difficulty CurrentDifficulty { get; private set; }
         public static int PowerRequirement { get; private set; }
-        public static int CurrentGeneralPower => CharactersController.SelectedCharacter.GetCurrentUpgrade().Stats.Power + (WeaponsController.GetCurrentWeaponUpgrade().CurrentStage as BaseWeaponUpgradeStage).Power;
+        public static int CurrentGeneralPower
+        {
+            get
+            {
+                int basePower = CharactersController.SelectedCharacter.GetCurrentUpgrade().Stats.Power + (WeaponsController.GetCurrentWeaponUpgrade().CurrentStage as BaseWeaponUpgradeStage).Power;
+                float bonusDmg = 0f;
+                if (Application.isPlaying)
+                {
+                    bonusDmg = EquipmentController.GetTotalBonusStats().bonusDamagePercent;
+                }
+                return Mathf.RoundToInt(basePower * (1f + bonusDmg / 100f));
+            }
+        }
         private static int upgradesDifference;
 
         private static int BaseCreaturePower => CharactersController.BasePower;

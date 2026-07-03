@@ -8,11 +8,33 @@ namespace Watermelon.SquadShooter
     public class CharacterStats
     {
         [SerializeField] int health;
-        public int Health => health;
+        public int Health
+        {
+            get
+            {
+                int bonusHP = 0;
+                if (Application.isPlaying)
+                {
+                    bonusHP = Mathf.RoundToInt(EquipmentController.GetTotalBonusStats().bonusHP);
+                }
+                return health + bonusHP;
+            }
+        }
 
         [Space]
         [SerializeField] float bulletDamageMultiplier = 1.0f;
-        public float BulletDamageMultiplier => bulletDamageMultiplier;
+        public float BulletDamageMultiplier
+        {
+            get
+            {
+                float bonusDmgPercent = 0f;
+                if (Application.isPlaying)
+                {
+                    bonusDmgPercent = EquipmentController.GetTotalBonusStats().bonusDamagePercent;
+                }
+                return bulletDamageMultiplier * (1f + bonusDmgPercent / 100f);
+            }
+        }
 
         [SerializeField] int power;
         public int Power => power;

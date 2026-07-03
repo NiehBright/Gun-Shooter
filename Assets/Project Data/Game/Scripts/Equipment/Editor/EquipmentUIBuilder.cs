@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.UI;
+using System.IO;
 
 namespace Watermelon.SquadShooter
 {
@@ -11,6 +12,9 @@ namespace Watermelon.SquadShooter
     /// </summary>
     public class EquipmentUIBuilder : EditorWindow
     {
+        private const string PREFAB_FOLDER = "Assets/Project Data/Content/Data/Equipment";
+        private const string PREFAB_PATH = "Assets/Project Data/Content/Data/Equipment/EquipmentSystem.prefab";
+
         [MenuItem("Tools/Equipment UI Builder")]
         public static void ShowWindow()
         {
@@ -19,42 +23,117 @@ namespace Watermelon.SquadShooter
 
         private void OnGUI()
         {
-            EditorGUILayout.LabelField("🏗️ TẠO UI TRANG BỊ", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField("TRANG BI - UI BUILDER", EditorStyles.boldLabel);
             EditorGUILayout.Space(10);
 
-            EditorGUILayout.HelpBox(
-                "Nút này sẽ tự động tạo toàn bộ UI trang bị trong scene hiện tại:\n" +
-                "• Canvas + Panel chính\n" +
-                "• 4 slot trang bị (Mũ, Áo, Quần, Giày)\n" +
-                "• Kho đồ (Scroll View)\n" +
-                "• Popup hành động\n" +
-                "• Nút mở/đóng\n" +
-                "• EquipmentController (DontDestroyOnLoad)",
-                MessageType.Info);
+            // Kiểm tra prefab đã tồn tại chưa
+            bool prefabExists = AssetDatabase.LoadAssetAtPath<GameObject>(PREFAB_PATH) != null;
 
-            EditorGUILayout.Space(10);
+            // Kiểm tra đã có trong scene chưa
+            var existingInScene = Object.FindFirstObjectByType<EquipmentPanelUI>();
+            bool existsInScene = existingInScene != null;
 
-            GUI.backgroundColor = new Color(0.3f, 0.8f, 0.3f);
-            if (GUILayout.Button("🔨 TẠO UI TRANG BỊ", GUILayout.Height(40)))
+            if (existsInScene)
             {
-                BuildEquipmentUI();
-            }
-            GUI.backgroundColor = Color.white;
+                EditorGUILayout.HelpBox(
+                    "[EQUIPMENT SYSTEM] da co trong scene!\n" +
+                    "Neu muon tao lai, xoa no trong Hierarchy truoc.",
+                    MessageType.Warning);
 
+                EditorGUILayout.Space(5);
+                GUI.backgroundColor = Color.yellow;
+                if (GUILayout.Button("CHON EQUIPMENT SYSTEM TRONG SCENE", GUILayout.Height(30)))
+                {
+                    Selection.activeObject = existingInScene.transform.root.gameObject;
+                }
+                GUI.backgroundColor = Color.white;
+            }
+            else if (prefabExists)
+            {
+                EditorGUILayout.HelpBox(
+                    "Da co Prefab san!\n" +
+                    "Bam nut ben duoi de dat vao scene ngay lap tuc.\n" +
+                    "Prefab: " + PREFAB_PATH,
+                    MessageType.Info);
+
+                EditorGUILayout.Space(10);
+
+                GUI.backgroundColor = new Color(0.3f, 0.9f, 0.3f);
+                if (GUILayout.Button("DAT VAO SCENE (tu Prefab)", GUILayout.Height(45)))
+                {
+                    PlacePrefabInScene();
+                }
+                GUI.backgroundColor = Color.white;
+
+                EditorGUILayout.Space(5);
+
+                GUI.backgroundColor = new Color(1f, 0.6f, 0.3f);
+                if (GUILayout.Button("BUILD LAI TU DAU (ghi de Prefab)", GUILayout.Height(30)))
+                {
+                    if (EditorUtility.DisplayDialog("Xac nhan",
+                        "Ban co chac muon build lai tu dau?\nPrefab cu se bi ghi de!", "Build lai", "Huy"))
+                    {
+                        BuildEquipmentUI();
+                    }
+                }
+                GUI.backgroundColor = Color.white;
+            }
+            else
+            {
+                EditorGUILayout.HelpBox(
+                    "Chua co Prefab. Bam nut ben duoi de tao UI trang bi.\n" +
+                    "Se tu dong luu thanh Prefab de lan sau dung lai.",
+                    MessageType.Info);
+
+                EditorGUILayout.Space(10);
+
+                GUI.backgroundColor = new Color(0.3f, 0.8f, 0.3f);
+                if (GUILayout.Button("TAO UI TRANG BI", GUILayout.Height(45)))
+                {
+                    BuildEquipmentUI();
+                }
+                GUI.backgroundColor = Color.white;
+            }
+
+            EditorGUILayout.Space(15);
+            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
             EditorGUILayout.Space(5);
+        }
 
-            GUI.backgroundColor = new Color(0.3f, 0.6f, 1.0f);
-            if (GUILayout.Button("🎮 TẠO EQUIPMENT CONTROLLER", GUILayout.Height(30)))
+        private void PlacePrefabInScene()
+        {
+            // Tìm Canvas chính
+            Canvas mainCanvas = Object.FindFirstObjectByType<Canvas>();
+            if (mainCanvas == null)
             {
-                BuildEquipmentController();
+                EditorUtility.DisplayDialog("Loi", "Khong tim thay Canvas trong scene!", "OK");
+                return;
             }
-            GUI.backgroundColor = Color.white;
+
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(PREFAB_PATH);
+            if (prefab == null)
+            {
+                EditorUtility.DisplayDialog("Loi", "Khong tim thay Prefab!\nHay bam 'BUILD LAI TU DAU' de tao moi.", "OK");
+                return;
+            }
+
+            GameObject instance = (GameObject)PrefabUtility.InstantiatePrefab(prefab, mainCanvas.transform);
+            instance.transform.SetAsLastSibling();
+
+            Undo.RegisterCreatedObjectUndo(instance, "Dat Equipment System vao Scene");
+            Selection.activeObject = instance;
+
+            Debug.Log("[Equipment UI Builder] Da dat [EQUIPMENT SYSTEM] vao scene tu Prefab!");
+            EditorUtility.DisplayDialog("Thanh cong!",
+                "Da dat [EQUIPMENT SYSTEM] vao scene!\n\n" +
+                "Nho tao Equipment Controller neu chưa có.",
+                "OK");
         }
 
         private void BuildEquipmentController()
         {
             // Kiểm tra đã có chưa
-            var existing = Object.FindObjectOfType<EquipmentController>();
+            var existing = Object.FindFirstObjectByType<EquipmentController>();
             if (existing != null)
             {
                 EditorUtility.DisplayDialog("Thông báo", "EquipmentController đã tồn tại trong scene!", "OK");
@@ -87,7 +166,7 @@ namespace Watermelon.SquadShooter
         private void BuildEquipmentUI()
         {
             // Tìm Canvas chính
-            Canvas mainCanvas = Object.FindObjectOfType<Canvas>();
+            Canvas mainCanvas = Object.FindFirstObjectByType<Canvas>();
             if (mainCanvas == null)
             {
                 EditorUtility.DisplayDialog("Lỗi", "Không tìm thấy Canvas trong scene!", "OK");
@@ -267,6 +346,16 @@ namespace Watermelon.SquadShooter
 
             // Đăng ký Undo
             Undo.RegisterCreatedObjectUndo(rootObj, "Tạo Equipment System UI");
+
+            // Tự động lưu thành Prefab để dễ quản lý và tái sử dụng
+            if (!AssetDatabase.IsValidFolder(PREFAB_FOLDER))
+            {
+                string parentFolder = Path.GetDirectoryName(PREFAB_FOLDER).Replace("\\", "/");
+                string newFolder = Path.GetFileName(PREFAB_FOLDER);
+                AssetDatabase.CreateFolder(parentFolder, newFolder);
+            }
+            PrefabUtility.SaveAsPrefabAssetAndConnect(rootObj, PREFAB_PATH, InteractionMode.AutomatedAction);
+
             Selection.activeObject = rootObj;
 
             Debug.Log("[Equipment UI Builder] Đã tạo [EQUIPMENT SYSTEM] chứa nút mở + panel trang bị!");
@@ -413,7 +502,7 @@ namespace Watermelon.SquadShooter
             viewport.transform.SetParent(scrollObj.transform, false);
             RectTransform viewportRect = viewport.AddComponent<RectTransform>();
             SetAnchorsStretch(viewportRect);
-            viewport.AddComponent<Image>().color = Color.clear;
+            viewport.AddComponent<Image>().color = Color.white;
             viewport.AddComponent<Mask>().showMaskGraphic = false;
 
             // Content

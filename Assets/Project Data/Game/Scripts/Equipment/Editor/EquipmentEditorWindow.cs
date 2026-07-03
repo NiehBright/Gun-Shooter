@@ -78,6 +78,15 @@ namespace Watermelon.SquadShooter
 
                 Debug.Log("[Equipment Editor] Đã tạo Equipment Database mới!");
             }
+
+            if (database != null)
+            {
+                // Dọn dẹp các liên kết hỏng (null) trong database nếu anh lỡ tay xóa file
+                database.AllEquipment.RemoveAll(item => item == null);
+
+                // Kiểm tra và khôi phục/tạo đủ 5 trang bị mẫu
+                CreateSampleEquipment();
+            }
         }
 
         private void OnGUI()
@@ -553,11 +562,18 @@ namespace Watermelon.SquadShooter
                 new EquipmentBonusStats(0, 2, 0, 1),
                 5, new int[] { 200, 400, 800, 1600, 3200 }, 50);
 
+            // 5. Mũ Siêu Nhân - Sử Thi - +HP +DMG
+            CreateSampleItem("mu_sieu_nhan", "Mũ Siêu Nhân", EquipmentType.Hat,
+                EquipmentRarity.Epic,
+                new EquipmentBonusStats(50, 8, 0, 0),
+                new EquipmentBonusStats(15, 3, 0, 0),
+                5, new int[] { 200, 400, 800, 1600, 3200 }, 55);
+
             EditorUtility.SetDirty(database);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 
-            Debug.Log("[Equipment Editor] Đã tạo 4 trang bị mẫu!");
+            Debug.Log("[Equipment Editor] Đã tạo 5 trang bị mẫu!");
         }
 
         private void CreateSampleItem(string id, string name, EquipmentType type,
@@ -565,15 +581,16 @@ namespace Watermelon.SquadShooter
             int maxLvl, int[] costs, int sellPrice)
         {
             string itemsPath = Path.Combine(DATABASE_PATH, ITEMS_FOLDER);
-            string assetPath = Path.Combine(itemsPath, $"{id}.asset");
+            string assetPath = Path.Combine(itemsPath, $"{id}.asset").Replace("\\", "/");
 
-            // Kiểm tra đã tồn tại chưa
-            if (AssetDatabase.LoadAssetAtPath<EquipmentData>(assetPath) != null) return;
+            EquipmentData item = AssetDatabase.LoadAssetAtPath<EquipmentData>(assetPath);
+            if (item == null)
+            {
+                item = CreateInstance<EquipmentData>();
+                item.SetupInEditor(id, name, null, type, rarity, baseStats, perLevel, maxLvl, costs, sellPrice);
+                AssetDatabase.CreateAsset(item, assetPath);
+            }
 
-            EquipmentData item = CreateInstance<EquipmentData>();
-            item.SetupInEditor(id, name, null, type, rarity, baseStats, perLevel, maxLvl, costs, sellPrice);
-
-            AssetDatabase.CreateAsset(item, assetPath);
             database.AddEquipment(item);
         }
     }

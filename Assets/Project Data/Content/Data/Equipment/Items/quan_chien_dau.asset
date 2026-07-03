@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Watermelon.SquadShooter.EquipmentData
   itemName: "Qu\u1EA7n Chi\u1EBFn \u0110\u1EA5u"
   itemID: quan_chien_dau
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: fe7c2cf803d169a49bbf74243aef2395, type: 3}
   equipmentType: 2
   rarity: 0
   baseStats:

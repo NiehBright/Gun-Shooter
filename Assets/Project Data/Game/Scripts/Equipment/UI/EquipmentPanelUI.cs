@@ -62,6 +62,25 @@ namespace Watermelon.SquadShooter
                 closeButton.onClick.AddListener(Close);
             }
 
+            // Tự động khởi tạo Controller nếu chưa có trong scene
+            if (EquipmentController.Instance == null)
+            {
+                GameObject controllerObj = new GameObject("[EQUIPMENT CONTROLLER]");
+                var controller = controllerObj.AddComponent<EquipmentController>();
+                controllerObj.AddComponent<EquipmentStatsApplier>();
+
+#if UNITY_EDITOR
+                var db = UnityEditor.AssetDatabase.LoadAssetAtPath<EquipmentDatabase>(
+                    "Assets/Project Data/Content/Data/Equipment/Equipment Database.asset");
+                if (db != null)
+                {
+                    var serializedObj = new UnityEditor.SerializedObject(controller);
+                    serializedObj.FindProperty("database").objectReferenceValue = db;
+                    serializedObj.ApplyModifiedProperties();
+                }
+#endif
+            }
+
             // Mặc định ẩn
             HideImmediate();
         }
@@ -156,15 +175,43 @@ namespace Watermelon.SquadShooter
             }
             inventoryItems.Clear();
 
+            Debug.Log($"[Equipment UI] RefreshInventory. SaveData: {(EquipmentController.SaveData != null ? "Not Null" : "Null")}, Database: {(EquipmentController.Database != null ? "Not Null" : "Null")}, Prefab: {(inventoryItemPrefab != null ? "Not Null" : "Null")}, Container: {(inventoryContainer != null ? "Not Null" : "Null")}");
+
             if (EquipmentController.SaveData == null || inventoryItemPrefab == null || inventoryContainer == null) return;
 
-            var ownedItems = EquipmentController.SaveData.OwnedItems;
-            foreach (var saveItem in ownedItems)
+            // Sao chép và sắp xếp kho đồ theo Loại (Type), rồi đến Độ hiếm (Rarity), rồi đến Cấp độ (Level)
+            var sortedItems = new List<EquipmentSaveItem>(EquipmentController.SaveData.OwnedItems);
+            sortedItems.Sort((a, b) =>
+            {
+                var dataA = EquipmentController.Database?.GetEquipmentByID(a.itemID);
+                var dataB = EquipmentController.Database?.GetEquipmentByID(b.itemID);
+                if (dataA == null && dataB == null) return 0;
+                if (dataA == null) return 1;
+                if (dataB == null) return -1;
+
+                // 1. Sắp xếp theo Loại (Mũ -> Áo -> Quần -> Giày)
+                int typeCompare = dataA.EquipmentType.CompareTo(dataB.EquipmentType);
+                if (typeCompare != 0) return typeCompare;
+
+                // 2. Sắp xếp theo Độ hiếm giảm dần (Sử thi -> Hiếm -> Thường)
+                int rarityCompare = dataB.Rarity.CompareTo(dataA.Rarity);
+                if (rarityCompare != 0) return rarityCompare;
+
+                // 3. Sắp xếp theo Cấp độ giảm dần
+                return b.level.CompareTo(a.level);
+            });
+
+            Debug.Log($"[Equipment UI] Owned Items Count: {sortedItems.Count}");
+
+            foreach (var saveItem in sortedItems)
             {
                 var data = EquipmentController.Database?.GetEquipmentByID(saveItem.itemID);
+                Debug.Log($"[Equipment UI] Item ID in save: '{saveItem.itemID}', Data in database: {(data != null ? data.ItemName : "Null")}");
                 if (data == null) continue;
 
                 GameObject itemObj = Instantiate(inventoryItemPrefab, inventoryContainer);
+                itemObj.transform.localScale = Vector3.one;
+                itemObj.transform.localPosition = Vector3.zero;
                 itemObj.SetActive(true);
                 EquipmentItemUI itemUI = itemObj.GetComponent<EquipmentItemUI>();
                 if (itemUI != null)

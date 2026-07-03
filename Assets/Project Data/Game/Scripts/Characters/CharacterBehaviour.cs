@@ -70,6 +70,7 @@ namespace Watermelon.SquadShooter
 
         private MovementSettings activeMovementSettings;
         public MovementSettings MovementSettings => activeMovementSettings;
+        public float ActualMoveSpeed => activeMovementSettings != null ? activeMovementSettings.MoveSpeed * (1f + EquipmentController.GetTotalBonusStats().bonusMoveSpeed / 100f) : 0f;
 
         private bool isMoving;
         private float speed = 0;
@@ -246,6 +247,11 @@ namespace Watermelon.SquadShooter
         {
             if (currentHealth <= 0 || IsInvulnerable)
                 return;
+
+            // Áp dụng giảm sát thương từ giáp của trang bị
+            float armorPercent = EquipmentController.GetTotalBonusStats().bonusArmor;
+            armorPercent = Mathf.Clamp(armorPercent, 0f, 75f); // Giới hạn tối đa 75% giảm sát thương
+            damage = damage * (1f - armorPercent / 100f);
 
             currentHealth = Mathf.Clamp(currentHealth - damage, 0, MaxHealth);
 
@@ -501,7 +507,7 @@ namespace Watermelon.SquadShooter
         {
             agent.enabled = false;
 
-            transform.DOMove(transform.position + Vector3.forward * activeMovementSettings.MoveSpeed * duration, duration).OnComplete(() =>
+            transform.DOMove(transform.position + Vector3.forward * ActualMoveSpeed * duration, duration).OnComplete(() =>
             {
                 Disable();
             });
@@ -540,7 +546,7 @@ namespace Watermelon.SquadShooter
                     graphics.OnMovingStarted();
                 }
 
-                float maxAlowedSpeed = Mathf.Clamp01(joystick.MovementInput.magnitude) * activeMovementSettings.MoveSpeed;
+                float maxAlowedSpeed = Mathf.Clamp01(joystick.MovementInput.magnitude) * ActualMoveSpeed;
 
                 if (speed > maxAlowedSpeed)
                 {
@@ -563,7 +569,7 @@ namespace Watermelon.SquadShooter
 
                 transform.position += joystick.MovementInput * Time.deltaTime * speed;
 
-                graphics.OnMoving(Mathf.InverseLerp(0, activeMovementSettings.MoveSpeed, speed), joystick.MovementInput, IsCloseEnemyFound);
+                graphics.OnMoving(Mathf.InverseLerp(0, ActualMoveSpeed, speed), joystick.MovementInput, IsCloseEnemyFound);
 
                 if (!IsCloseEnemyFound)
                 {

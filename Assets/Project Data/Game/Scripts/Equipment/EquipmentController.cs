@@ -30,12 +30,68 @@ namespace Watermelon.SquadShooter
 
             instance = this;
             DontDestroyOnLoad(gameObject);
+
+#if UNITY_EDITOR
+            if (database == null)
+            {
+                database = UnityEditor.AssetDatabase.LoadAssetAtPath<EquipmentDatabase>(
+                    "Assets/Project Data/Content/Data/Equipment/Equipment Database.asset");
+                if (database != null)
+                {
+                    Debug.Log("[Equipment] Tự động liên kết Database thành công!");
+                }
+            }
+#endif
         }
 
         private void Start()
         {
             // Load save data
             saveData = SaveController.GetSaveObject<EquipmentSaveData>("Equipment");
+            
+            Debug.Log($"[Equipment] Start. SaveData: {(saveData != null ? "Loaded" : "Null")}, Database: {(database != null ? "Loaded" : "Null")}");
+
+            // Để chạy thử nghiệm và Test: tự động tặng tất cả trang bị trong Database cho người chơi nếu chưa sở hữu
+            if (saveData != null && database != null)
+            {
+#if UNITY_EDITOR
+                // Fallback: nếu database rỗng nhưng có file sẵn trong folder, nạp chúng vào database trong Editor
+                if (database.AllEquipment == null || database.AllEquipment.Count == 0)
+                {
+                    Debug.Log("[Equipment] Database rỗng, đang quét tìm file trang bị mẫu...");
+                    string[] guids = UnityEditor.AssetDatabase.FindAssets("t:EquipmentData");
+                    foreach (string guid in guids)
+                    {
+                        string path = UnityEditor.AssetDatabase.GUIDToAssetPath(guid);
+                        var eqData = UnityEditor.AssetDatabase.LoadAssetAtPath<EquipmentData>(path);
+                        if (eqData != null)
+                        {
+                            database.AddEquipment(eqData);
+                        }
+                    }
+                    UnityEditor.EditorUtility.SetDirty(database);
+                    UnityEditor.AssetDatabase.SaveAssets();
+                    Debug.Log($"[Equipment] Đã nạp {database.AllEquipment.Count} trang bị vào Database!");
+                }
+#endif
+
+                Debug.Log($"[Equipment] Database items count: {database.AllEquipment.Count}");
+                foreach (var eq in database.AllEquipment)
+                {
+                    if (eq != null && !string.IsNullOrEmpty(eq.ItemID))
+                    {
+                        if (!saveData.HasItem(eq.ItemID))
+                        {
+                            saveData.AddItem(eq.ItemID);
+                            Debug.Log($"[Equipment] Tự động tặng item cho save: {eq.ItemName}");
+                        }
+                    }
+                }
+            }
+            else
+            {
+                Debug.LogError($"[Equipment] Start failed. SaveData: {saveData}, Database: {database}");
+            }
         }
 
         /// <summary>
@@ -58,7 +114,7 @@ namespace Watermelon.SquadShooter
 
             Debug.Log($"[Equipment] Đã trang bị: {item.ItemName} vào slot {item.EquipmentType}");
 
-            OnEquipmentChanged?.Invoke();
+            NotifyEquipmentChanged();
             SaveController.MarkAsSaveIsRequired();
 
             return true;
@@ -75,7 +131,7 @@ namespace Watermelon.SquadShooter
 
             Debug.Log($"[Equipment] Đã tháo trang bị slot: {slot}");
 
-            OnEquipmentChanged?.Invoke();
+            NotifyEquipmentChanged();
             SaveController.MarkAsSaveIsRequired();
         }
 
@@ -116,7 +172,7 @@ namespace Watermelon.SquadShooter
 
             Debug.Log($"[Equipment] Nâng cấp {data.ItemName} lên cấp {saveItem.level}");
 
-            OnEquipmentChanged?.Invoke();
+            NotifyEquipmentChanged();
             SaveController.MarkAsSaveIsRequired();
 
             return true;
@@ -156,7 +212,7 @@ namespace Watermelon.SquadShooter
                 CurrenciesController.Add(CurrencyType.Coins, data.SellPrice);
                 Debug.Log($"[Equipment] Đã bán {data.ItemName} được {data.SellPrice} coins");
 
-                OnEquipmentChanged?.Invoke();
+                NotifyEquipmentChanged();
                 SaveController.MarkAsSaveIsRequired();
                 return true;
             }
@@ -203,6 +259,18 @@ namespace Watermelon.SquadShooter
             }
 
             return total;
+        }
+
+        public static void NotifyEquipmentChanged()
+        {
+            OnEquipmentChanged?.Invoke();
+
+            // Cập nhật lại UI lực chiến tổng và các panel vũ khí bên ngoài ngay lập tức
+            if (Application.isPlaying)
+            {
+                UIGeneralPowerIndicator.UpdateText();
+                UIController.GetPage<UIWeaponPage>()?.UpdateUI();
+            }
         }
     }
 }

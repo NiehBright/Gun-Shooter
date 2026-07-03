@@ -152,7 +152,14 @@ namespace Watermelon.SquadShooter
 
             powerObject.SetActive(true);
             powerText.gameObject.SetActive(true);
-            powerText.text = Upgrade.GetCurrentStage().Power.ToString();
+
+            float bonusDmg = 0f;
+            if (Application.isPlaying)
+            {
+                bonusDmg = EquipmentController.GetTotalBonusStats().bonusDamagePercent;
+            }
+            int finalPower = Mathf.RoundToInt(Upgrade.GetCurrentStage().Power * (1f + bonusDmg / 100f));
+            powerText.text = finalPower.ToString();
 
             RedrawUpgradeElements();
         }
