@@ -1909,7 +1909,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Watermelon.SquadShooter.EnemyDeathDisappear
   delayBeforeDisappear: 0
-  shrinkDuration: 0.1
+  shrinkDuration: 0
 --- !u!4 &689991458
 Transform:
   m_ObjectHideFlags: 0

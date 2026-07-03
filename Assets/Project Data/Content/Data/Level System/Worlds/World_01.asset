@@ -6453,13 +6453,7 @@ MonoBehaviour:
         IsElite: 0
         PathPoints: []
       - EnemyType: 1
-        Position: {x: 4.77, y: 0, z: 2.18}
-        Rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
-        Scale: {x: 1, y: 1, z: 1}
-        IsElite: 0
-        PathPoints: []
-      - EnemyType: 2
-        Position: {x: -6.18, y: 0, z: 3.58}
+        Position: {x: -2.57, y: 0, z: 0.3}
         Rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
         Scale: {x: 1, y: 1, z: 1}
         IsElite: 0
@@ -6472,12 +6466,6 @@ MonoBehaviour:
         PathPoints: []
       - EnemyType: 2
         Position: {x: 6.82, y: 0, z: 11.8}
-        Rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
-        Scale: {x: 1, y: 1, z: 1}
-        IsElite: 0
-        PathPoints: []
-      - EnemyType: 0
-        Position: {x: -2.47, y: 0, z: 0.77}
         Rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
         Scale: {x: 1, y: 1, z: 1}
         IsElite: 0
@@ -6956,6 +6944,18 @@ MonoBehaviour:
       - Hash: 262024120
         Position: {x: -8.337, y: 0, z: 4.29}
         Rotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+        Scale: {x: 1, y: 1, z: 1}
+      - Hash: 262024120
+        Position: {x: 6.6900005, y: 0, z: 4.29}
+        Rotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+        Scale: {x: 1, y: 1, z: 1}
+      - Hash: -1641427232
+        Position: {x: 8.75, y: 0, z: 4.004}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - Hash: -1641427232
+        Position: {x: 8.75, y: 0, z: 4.636}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
         Scale: {x: 1, y: 1, z: 1}
       - Hash: -1641427232
         Position: {x: -6.277, y: 0, z: 4.004}
