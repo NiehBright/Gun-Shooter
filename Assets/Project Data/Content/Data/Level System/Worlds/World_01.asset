@@ -6619,6 +6619,22 @@ MonoBehaviour:
         Position: {x: 0, y: 0, z: 15.76}
         Rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
         Scale: {x: 1, y: 1, z: 1}
+      - Hash: 262024120
+        Position: {x: -6.49, y: 0, z: -6.82}
+        Rotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+        Scale: {x: 2, y: 2, z: 2}
+      - Hash: -1553411722
+        Position: {x: -0.61, y: 0, z: -7.08}
+        Rotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+        Scale: {x: 2, y: 2, z: 2}
+      - Hash: -1641427232
+        Position: {x: -2.43, y: 0, z: -7.32}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 2, y: 2, z: 2}
+      - Hash: -1641427232
+        Position: {x: -2.43, y: 0, z: -6.13}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 2, y: 2, z: 2}
       chestEntities: []
       roomCustomObjects: []
     xpAmount: 200
