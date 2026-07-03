@@ -6438,10 +6438,64 @@ MonoBehaviour:
     specialBehaviours: []
   - type: 0
     rooms:
-    - spawnPoint: {x: 0, y: 0, z: -11}
+    - spawnPoint: {x: 0, y: 0, z: -15}
       enemyEntities:
       - EnemyType: 2
-        Position: {x: 0, y: 0, z: 0}
+        Position: {x: -0, y: 0, z: -2.16}
+        Rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+        Scale: {x: 1, y: 1, z: 1}
+        IsElite: 0
+        PathPoints: []
+      - EnemyType: 10
+        Position: {x: -4.38, y: 0, z: -5.18}
+        Rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+        Scale: {x: 1, y: 1, z: 1}
+        IsElite: 0
+        PathPoints: []
+      - EnemyType: 1
+        Position: {x: 2.99, y: 0, z: -5.18}
+        Rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+        Scale: {x: 1, y: 1, z: 1}
+        IsElite: 0
+        PathPoints: []
+      - EnemyType: 1
+        Position: {x: 7.38, y: 0, z: -5.97}
+        Rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+        Scale: {x: 1, y: 1, z: 1}
+        IsElite: 0
+        PathPoints: []
+      - EnemyType: 3
+        Position: {x: 7.18, y: 0, z: 0.61}
+        Rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+        Scale: {x: 1, y: 1, z: 1}
+        IsElite: 0
+        PathPoints: []
+      - EnemyType: 1
+        Position: {x: 4.77, y: 0, z: 2.18}
+        Rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+        Scale: {x: 1, y: 1, z: 1}
+        IsElite: 0
+        PathPoints: []
+      - EnemyType: 2
+        Position: {x: -6.18, y: 0, z: 0}
+        Rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+        Scale: {x: 1, y: 1, z: 1}
+        IsElite: 0
+        PathPoints: []
+      - EnemyType: 3
+        Position: {x: 6.63, y: 0, z: 13.38}
+        Rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+        Scale: {x: 1, y: 1, z: 1}
+        IsElite: 0
+        PathPoints: []
+      - EnemyType: 1
+        Position: {x: 4.45, y: 0, z: 9.89}
+        Rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+        Scale: {x: 1, y: 1, z: 1}
+        IsElite: 0
+        PathPoints: []
+      - EnemyType: 2
+        Position: {x: -3.16, y: 0, z: 9.18}
         Rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
         Scale: {x: 1, y: 1, z: 1}
         IsElite: 0
@@ -6620,22 +6674,59 @@ MonoBehaviour:
         Rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
         Scale: {x: 1, y: 1, z: 1}
       - Hash: 262024120
-        Position: {x: -6.49, y: 0, z: -6.82}
+        Position: {x: -6.49, y: 0, z: -8.44}
         Rotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
         Scale: {x: 2, y: 2, z: 2}
       - Hash: -1553411722
-        Position: {x: -0.61, y: 0, z: -7.08}
+        Position: {x: -0.61, y: 0, z: -8.699999}
         Rotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
         Scale: {x: 2, y: 2, z: 2}
       - Hash: -1641427232
-        Position: {x: -2.43, y: 0, z: -7.32}
+        Position: {x: -2.43, y: 0, z: -8.94}
         Rotation: {x: 0, y: 0, z: 0, w: 1}
         Scale: {x: 2, y: 2, z: 2}
       - Hash: -1641427232
-        Position: {x: -2.43, y: 0, z: -6.13}
+        Position: {x: -2.43, y: 0, z: -7.7499995}
         Rotation: {x: 0, y: 0, z: 0, w: 1}
         Scale: {x: 2, y: 2, z: 2}
-      chestEntities: []
+      - Hash: -659475593
+        Position: {x: 4.46, y: 0, z: -1.637919}
+        Rotation: {x: 0, y: 1, z: 0, w: 0}
+        Scale: {x: 1, y: 1, z: 1}
+      - Hash: -659475593
+        Position: {x: -5.4890847, y: 0, z: 6.402081}
+        Rotation: {x: 0, y: 1, z: 0, w: 0}
+        Scale: {x: 1, y: 1, z: 1}
+      - Hash: -599461410
+        Position: {x: 4.399085, y: 0, z: -1.62}
+        Rotation: {x: -0, y: 0.2822053, z: -0, w: 0.95935404}
+        Scale: {x: 1, y: 1, z: 1}
+      - Hash: -599461410
+        Position: {x: 2.2972915, y: 0, z: -0.26633048}
+        Rotation: {x: -0, y: 0.2822053, z: -0, w: 0.95935404}
+        Scale: {x: 1, y: 1, z: 1}
+      - Hash: -599461410
+        Position: {x: -5.55, y: 0, z: 6.42}
+        Rotation: {x: -0, y: 0.2822053, z: -0, w: 0.95935404}
+        Scale: {x: 1, y: 1, z: 1}
+      - Hash: -599461410
+        Position: {x: -7.6517935, y: 0, z: 7.7736697}
+        Rotation: {x: -0, y: 0.2822053, z: -0, w: 0.95935404}
+        Scale: {x: 1, y: 1, z: 1}
+      - Hash: 106241932
+        Position: {x: 7.31, y: 0, z: 6.63}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - Hash: 347798235
+        Position: {x: 4.39, y: 0, z: 5.66}
+        Rotation: {x: 0, y: 1, z: 0, w: 0}
+        Scale: {x: 1, y: 1, z: 1}
+      chestEntities:
+      - IsInited: 1
+        ChestType: 0
+        Position: {x: -5.9, y: 0, z: 12.84}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
       roomCustomObjects: []
     xpAmount: 200
     requiredUpg: 10

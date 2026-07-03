@@ -54,10 +54,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 10
   tier: 0
-  animatorRef: {fileID: 0}
+  animatorRef: {fileID: 1495403541053942922}
   healthbarBehaviour: {fileID: 6658223778522967136}
-  enemyAnimationCallback: {fileID: 0}
-  meshRenderer: {fileID: 0}
+  enemyAnimationCallback: {fileID: 6301739370330483775}
+  meshRenderer: {fileID: 3323066614712510811}
   baseHitCollider: {fileID: 4796623966293115897}
   eliteCase:
     pairs: []
@@ -802,6 +802,12 @@ CharacterJoint:
   m_EnablePreprocessing: 0
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!95 &1495403541053942922 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 512506106991999978, guid: 8e120e0631295bf4d8304ebac8213d2f,
+    type: 3}
+  m_PrefabInstance: {fileID: 1431146386016458592}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2051786850228949005 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1127339488657180525, guid: 8e120e0631295bf4d8304ebac8213d2f,
@@ -1106,6 +1112,12 @@ CharacterJoint:
   m_EnablePreprocessing: 0
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!137 &3323066614712510811 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 4450000037388123707, guid: 8e120e0631295bf4d8304ebac8213d2f,
+    type: 3}
+  m_PrefabInstance: {fileID: 1431146386016458592}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3921186155907871070 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2717550768793658942, guid: 8e120e0631295bf4d8304ebac8213d2f,
