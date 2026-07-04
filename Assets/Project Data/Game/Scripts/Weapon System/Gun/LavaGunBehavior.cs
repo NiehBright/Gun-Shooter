@@ -90,7 +90,8 @@ namespace Watermelon.SquadShooter
 
                     for (int i = 0; i < bulletsNumber; i++)
                     {
-                        LavaBulletBehavior bullet = bulletPool.GetPooledObject(new PooledObjectSettings().SetPosition(shootPoint.position).SetEulerRotation(shootPoint.eulerAngles)).GetComponent<LavaBulletBehavior>();
+                        GameObject bulletObj = bulletPool.GetPooledObject(new PooledObjectSettings().SetPosition(shootPoint.position).SetEulerRotation(shootPoint.eulerAngles));
+                        LavaBulletBehavior bullet = GetOrAddBulletComponent<LavaBulletBehavior>(bulletObj);
                         bullet.Initialise(damage, bulletSpeed.Random(), characterBehaviour.ClosestEnemyBehaviour, -1f, false, shootingRadius, characterBehaviour, bulletHeight, explosionRadius);
                     }
 

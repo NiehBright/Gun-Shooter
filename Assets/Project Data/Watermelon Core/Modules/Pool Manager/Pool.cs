@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections.Generic;
 
@@ -559,6 +559,9 @@ namespace Watermelon
             {
                 for (int i = 0; i < pooledObjects.Count; i++)
                 {
+                    if (pooledObjects[i] == null)
+                        continue;
+
                     if (resetParrent)
                     {
                         pooledObjects[i].transform.SetParent(objectsContainer != null ? objectsContainer : PoolManager.ObjectsContainerTransform);
@@ -573,6 +576,9 @@ namespace Watermelon
                 {
                     for (int j = 0; j < multiPooledObjects[i].Count; j++)
                     {
+                        if (multiPooledObjects[i][j] == null)
+                            continue;
+
                         if (resetParrent)
                         {
                             multiPooledObjects[i][j].transform.SetParent(objectsContainer != null ? objectsContainer : PoolManager.ObjectsContainerTransform);

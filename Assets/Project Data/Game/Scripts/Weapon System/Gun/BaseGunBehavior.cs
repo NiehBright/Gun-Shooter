@@ -105,6 +105,66 @@ namespace Watermelon.SquadShooter
             damage = new DuoInt(minDamage, maxDamage);
         }
 
+        protected T GetOrAddBulletComponent<T>(GameObject bulletObj) where T : PlayerBulletBehavior
+        {
+            // Tự động đặt Layer của viên đạn và toàn bộ đối tượng con để đảm bảo va chạm được với Quái (Enemy)
+            int targetLayer = LayerMask.NameToLayer("Bullet");
+            if (targetLayer == -1)
+            {
+                targetLayer = LayerMask.NameToLayer("PlayerBullet");
+            }
+            if (targetLayer == -1)
+            {
+                targetLayer = LayerMask.NameToLayer("Player");
+            }
+            
+            if (targetLayer != -1)
+            {
+                bulletObj.layer = targetLayer;
+                foreach (Transform child in bulletObj.GetComponentsInChildren<Transform>(true))
+                {
+                    child.gameObject.layer = targetLayer;
+                }
+            }
+
+            T bullet = bulletObj.GetComponent<T>();
+            if (bullet == null)
+            {
+                bullet = bulletObj.AddComponent<T>();
+
+                // Cấu hình tất cả Collider trong prefab làm Trigger
+                var colliders = bulletObj.GetComponentsInChildren<Collider>(true);
+                if (colliders.Length == 0)
+                {
+                    var sphereCol = bulletObj.AddComponent<SphereCollider>();
+                    sphereCol.isTrigger = true;
+                    sphereCol.radius = 1.0f; // Bán kính 1.0 để chạm trúng quái nhạy và dễ dàng hơn
+                }
+                else
+                {
+                    foreach (var c in colliders)
+                    {
+                        c.isTrigger = true;
+                    }
+                }
+
+                // Cấu hình Rigidbody
+                var rb = bulletObj.GetComponent<Rigidbody>();
+                if (rb == null)
+                {
+                    rb = bulletObj.AddComponent<Rigidbody>();
+                    rb.useGravity = false;
+                    rb.isKinematic = true;
+                }
+                else
+                {
+                    rb.useGravity = false;
+                    rb.isKinematic = true;
+                }
+            }
+            return bullet;
+        }
+
         public void PlayUpgradeParticle()
         {
             ParticleCase particleCase = ParticlesController.PlayParticle(PARTICLE_UPGRADE).SetPosition(transform.position + upgradeParticleOffset).SetScale(upgradeParticleSize.ToVector3());

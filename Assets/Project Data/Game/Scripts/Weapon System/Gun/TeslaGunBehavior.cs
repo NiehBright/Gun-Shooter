@@ -127,7 +127,8 @@ namespace Watermelon.SquadShooter
 
                 for (int k = 0; k < bulletsNumber; k++)
                 {
-                    TeslaBulletBehavior bullet = bulletPool.GetPooledObject(new PooledObjectSettings().SetPosition(shootPoint.position).SetEulerRotation(characterBehaviour.transform.eulerAngles)).GetComponent<TeslaBulletBehavior>();
+                    GameObject bulletObj = bulletPool.GetPooledObject(new PooledObjectSettings().SetPosition(shootPoint.position).SetEulerRotation(characterBehaviour.transform.eulerAngles));
+                    TeslaBulletBehavior bullet = GetOrAddBulletComponent<TeslaBulletBehavior>(bulletObj);
                     bullet.Initialise(damage.Random() * characterBehaviour.Stats.BulletDamageMultiplier, bulletSpeed.Random(), characterBehaviour.ClosestEnemyBehaviour, 5f, false, stunDuration);
                     bullet.SetTargetsHitGoal(targetsHitGoal.Random());
                 }

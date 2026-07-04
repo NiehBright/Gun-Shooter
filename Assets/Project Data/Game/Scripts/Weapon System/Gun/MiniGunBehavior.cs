@@ -110,11 +110,11 @@ namespace Watermelon.SquadShooter
                         {
                             var streamAngle = bulletStreamAngles[i];
 
-                            PlayerBulletBehavior bullet = bulletPool
-                                .GetPooledObject(new PooledObjectSettings()
+                            GameObject bulletObj = bulletPool.GetPooledObject(new PooledObjectSettings()
                                 .SetPosition(shootPoint.position)
-                                .SetEulerRotation(characterBehaviour.transform.eulerAngles + Vector3.up * (Random.Range((float)-spread, spread) + streamAngle)))
-                                .GetComponent<PlayerBulletBehavior>();
+                                .SetEulerRotation(characterBehaviour.transform.eulerAngles + Vector3.up * (Random.Range((float)-spread, spread) + streamAngle)));
+                            
+                            PlayerBulletBehavior bullet = GetOrAddBulletComponent<MinigunBulletBehavior>(bulletObj);
                             bullet.Initialise(damage.Random() * characterBehaviour.Stats.BulletDamageMultiplier, bulletSpeed.Random(), characterBehaviour.ClosestEnemyBehaviour, bulletDisableTime);
                         }
                     }

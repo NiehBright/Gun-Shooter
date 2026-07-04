@@ -13,14 +13,16 @@ namespace Watermelon.SquadShooter
         {
             base.Initialise(damage, speed, currentTarget, autoDisableTime, autoDisableOnHit);
 
-            trailRenderer.Clear();
+            if (trailRenderer != null)
+                trailRenderer.Clear();
         }
 
         protected override void OnEnemyHitted(BaseEnemyBehavior baseEnemyBehavior)
         {
             ParticlesController.PlayParticle(PARTICLE_HIT_HASH).SetPosition(transform.position);
 
-            trailRenderer.Clear();
+            if (trailRenderer != null)
+                trailRenderer.Clear();
         }
 
         protected override void OnObstacleHitted()
@@ -28,7 +30,8 @@ namespace Watermelon.SquadShooter
             base.OnObstacleHitted();
 
             ParticlesController.PlayParticle(PARTICLE_WAll_HIT_HASH).SetPosition(transform.position);
-            trailRenderer.Clear();
+            if (trailRenderer != null)
+                trailRenderer.Clear();
         }
     }
 }

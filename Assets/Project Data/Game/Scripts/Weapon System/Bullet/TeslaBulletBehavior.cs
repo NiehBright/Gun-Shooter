@@ -24,7 +24,8 @@ namespace Watermelon.SquadShooter
             base.Initialise(damage, speed, currentTarget, autoDisableTime, autoDisableOnHit);
 
             this.stunDuration = stunDuration;
-            trailRenderer.Clear();
+            if (trailRenderer != null)
+                trailRenderer.Clear();
 
             transform.localScale = Vector3.one * 0.1f;
             transform.DOScale(1.0f, 0.25f).SetEasing(Ease.Type.CubicIn);
@@ -70,7 +71,8 @@ namespace Watermelon.SquadShooter
             baseEnemyBehavior.Stun(stunDuration);
             ParticlesController.PlayParticle(PARTICLE_HIT_HASH).SetPosition(transform.position);
 
-            trailRenderer.Clear();
+            if (trailRenderer != null)
+                trailRenderer.Clear();
 
             for (int i = 0; i < targets.Count; i++)
             {
@@ -105,7 +107,8 @@ namespace Watermelon.SquadShooter
 
         private void DisableBullet()
         {
-            trailRenderer.Clear();
+            if (trailRenderer != null)
+                trailRenderer.Clear();
             gameObject.SetActive(false);
         }
     }

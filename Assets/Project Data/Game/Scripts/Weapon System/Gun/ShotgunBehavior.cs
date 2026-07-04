@@ -91,7 +91,8 @@ namespace Watermelon.SquadShooter
 
                         for (int i = 0; i < bulletsNumber; i++)
                         {
-                            PlayerBulletBehavior bullet = bulletPool.GetPooledObject(new PooledObjectSettings().SetPosition(shootPoint.position).SetEulerRotation(characterBehaviour.transform.eulerAngles)).GetComponent<PlayerBulletBehavior>();
+                            GameObject bulletObj = bulletPool.GetPooledObject(new PooledObjectSettings().SetPosition(shootPoint.position).SetEulerRotation(characterBehaviour.transform.eulerAngles));
+                            PlayerBulletBehavior bullet = GetOrAddBulletComponent<ShotgunBulletBehavior>(bulletObj);
                             bullet.Initialise(damage.Random() * characterBehaviour.Stats.BulletDamageMultiplier, bulletSpeed.Random(), characterBehaviour.ClosestEnemyBehaviour, bulletDisableTime);
                             bullet.transform.Rotate(new Vector3(0f, i == 0 ? 0f : Random.Range(bulletSpreadAngle * -0.5f, bulletSpreadAngle * 0.5f), 0f));
                         }

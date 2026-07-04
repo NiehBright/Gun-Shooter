@@ -63,6 +63,10 @@ namespace Watermelon.SquadShooter
             }
             else
             {
+                // Bỏ qua va chạm với Player để đạn không tự hủy ngay khi vừa rời nòng súng
+                if (other.gameObject.layer == PhysicsHelper.LAYER_PLAYER)
+                    return;
+
                 OnObstacleHitted();
             }
         }
