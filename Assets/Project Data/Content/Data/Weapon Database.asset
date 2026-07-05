@@ -33,6 +33,11 @@ MonoBehaviour:
     upgradeType: 2
     rarity: 4
     icon: {fileID: 21300000, guid: 696461dadb27aa249a1c814e7fca4f57, type: 3}
+  - name: Sword
+    type: 4
+    upgradeType: 4
+    rarity: 4
+    icon: {fileID: 21300000, guid: 696461dadb27aa249a1c814e7fca4f57, type: 3}
   raritySettings:
   - rarity: 0
     name: COMMON

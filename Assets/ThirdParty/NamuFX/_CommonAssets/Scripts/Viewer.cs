@@ -101,8 +101,8 @@ public class Viewer : MonoBehaviour
 
             Vector3 stagePosition = ShowPos.transform.position;
 
+            _Cam.transform.RotateAround(stagePosition, Vector3.right, yRotateMove);
             _Cam.transform.RotateAround(stagePosition, Vector3.up, xRotateMove);
-            _Cam.transform.RotateAround(stagePosition, Vector3.right, -yRotateMove);
 
             _Cam.transform.LookAt(stagePosition);
         }

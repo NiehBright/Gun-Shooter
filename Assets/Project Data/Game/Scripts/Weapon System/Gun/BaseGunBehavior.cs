@@ -61,8 +61,12 @@ namespace Watermelon.SquadShooter
 
         }
 
+        public virtual bool NeedsRig => true;
+
         public void UpdateHandRig()
         {
+            if (!NeedsRig) return;
+
             leftHandRigController.position = leftHandHolder.position;
             rightHandRigController.position = rightHandHolder.position;
 

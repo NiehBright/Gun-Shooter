@@ -9,5 +9,6 @@ namespace Watermelon
         Shotgun = 1,
         Tesla = 2,
         LavaLauncher = 3,
+        Sword = 4,
     }
 }

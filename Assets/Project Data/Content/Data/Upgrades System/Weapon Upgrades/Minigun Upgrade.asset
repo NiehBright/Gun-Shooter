@@ -39,7 +39,7 @@ MonoBehaviour:
     previewSprite: {fileID: 0}
     weaponPrefab: {fileID: 6347890837037930244, guid: 60d8b7dff4bbbbc4db793104d2c025a1,
       type: 3}
-    bulletPrefab: {fileID: 1481587283673810, guid: 14858837f53355d4da384553fc019a5c,
+    bulletPrefab: {fileID: 1294834399362254, guid: 4d46a88382f3c124c93b73ffeb016270,
       type: 3}
     damage:
       firstValue: 5
@@ -60,7 +60,7 @@ MonoBehaviour:
     previewSprite: {fileID: 0}
     weaponPrefab: {fileID: 6347890837037930244, guid: 60d8b7dff4bbbbc4db793104d2c025a1,
       type: 3}
-    bulletPrefab: {fileID: 7995167561492624291, guid: 557f547da59937549b446b57778d73bb,
+    bulletPrefab: {fileID: 1294834399362254, guid: 4d46a88382f3c124c93b73ffeb016270,
       type: 3}
     damage:
       firstValue: 8
@@ -81,7 +81,7 @@ MonoBehaviour:
     previewSprite: {fileID: 0}
     weaponPrefab: {fileID: 6347890837037930244, guid: 60d8b7dff4bbbbc4db793104d2c025a1,
       type: 3}
-    bulletPrefab: {fileID: 7995167561492624291, guid: 557f547da59937549b446b57778d73bb,
+    bulletPrefab: {fileID: 1294834399362254, guid: 4d46a88382f3c124c93b73ffeb016270,
       type: 3}
     damage:
       firstValue: 10

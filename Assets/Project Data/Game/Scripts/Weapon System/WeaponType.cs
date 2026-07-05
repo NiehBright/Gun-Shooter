@@ -1,4 +1,4 @@
-﻿namespace Watermelon.SquadShooter
+namespace Watermelon.SquadShooter
 {
     public enum WeaponType
     {
@@ -7,5 +7,6 @@
         LavaLauncher = 1,
         TeslaGun = 2,
         Shotgun = 3,
+        Sword = 4,
     }
 }

@@ -162,6 +162,12 @@ namespace Watermelon.SquadShooter
             rigWeightCase = Tween.DoFloat(0, 1, 0.2f, (value) => mainRig.weight = value);
         }
 
+        public void DisableRig()
+        {
+            rigWeightCase.KillActive();
+            mainRig.weight = 0.0f;
+        }
+
         public abstract void CustomFixedUpdate();
 
         public void SetShootingAnimation(AnimationClip animationClip)
@@ -207,7 +213,10 @@ namespace Watermelon.SquadShooter
         {
             ragdoll?.Disable();
 
-            mainRig.weight = 1.0f;
+            if (characterBehaviour.Weapon == null || characterBehaviour.Weapon.NeedsRig)
+                mainRig.weight = 1.0f;
+            else
+                mainRig.weight = 0.0f;
 
             characterBehaviour.Weapon.gameObject.SetActive(true);
             characterAnimator.enabled = true;

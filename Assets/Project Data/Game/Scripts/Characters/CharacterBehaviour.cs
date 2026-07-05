@@ -530,6 +530,24 @@ namespace Watermelon.SquadShooter
             if (gunBehaviour != null)
                 gunBehaviour.UpdateHandRig();
 
+#if UNITY_EDITOR
+            // Cheat test nhanh: Nhấn phím I để tự động mở khóa và trang bị Kiếm (Sword)
+            if (UnityEngine.InputSystem.Keyboard.current != null && UnityEngine.InputSystem.Keyboard.current.iKey.wasPressedThisFrame)
+            {
+                var swordData = WeaponsController.Database.GetWeapon(WeaponType.Sword);
+                if (swordData != null)
+                {
+                    var upgrade = Watermelon.UpgradesController.GetUpgrade<Watermelon.Upgrades.BaseUpgrade>(swordData.UpgradeType);
+                    if (upgrade != null && upgrade.UpgradeLevel == 0)
+                    {
+                        upgrade.UpgradeStage();
+                    }
+                    WeaponsController.SelectWeapon(WeaponType.Sword);
+                    Debug.Log("[Cheat] Da mo khoa va trang bi Kiem (Sword) thanh cong!");
+                }
+            }
+#endif
+
             if (!isActive)
                 return;
 
@@ -763,7 +781,11 @@ namespace Watermelon.SquadShooter
 
         public void SpawnWeapon()
         {
-            graphics.EnableRig();
+            if (gunBehaviour.NeedsRig)
+                graphics.EnableRig();
+            else
+                graphics.DisableRig();
+
             gunBehaviour.gameObject.SetActive(true);
             gunBehaviour.DOScale(1, 0.2f).SetCustomEasing(Ease.GetCustomEasingFunction("BackOutLight"));
         }
