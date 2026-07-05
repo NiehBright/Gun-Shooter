@@ -167,17 +167,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   backgroundImage: {fileID: 8170153792821263252}
   handleImage: {fileID: 8170153791961219459}
-  backgroundActiveColor: {r: 1, g: 1, b: 1, a: 1}
-  backgroundDisableColor: {r: 1, g: 1, b: 1, a: 1}
-  handleActiveColor: {r: 1, g: 1, b: 1, a: 1}
-  handleDisableColor: {r: 1, g: 1, b: 1, a: 1}
+  backgroundActiveColor: {r: 0, g: 0.5058824, b: 1, a: 0.39215687}
+  backgroundDisableColor: {r: 0, g: 0.5058824, b: 1, a: 0.39215687}
+  handleActiveColor: {r: 0, g: 0.5058824, b: 1, a: 0.39215687}
+  handleDisableColor: {r: 0, g: 0.5058824, b: 1, a: 0.39215687}
   handleRange: 1
   deadZone: 0.2
   useTutorial: 0
   pointerGameObject: {fileID: 4065686597497042609}
 --- !u!95 &3999407885088170204
 Animator:
-  serializedVersion: 5
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -191,6 +191,7 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
@@ -254,7 +255,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0, g: 0.5058824, b: 1, a: 0.39215687}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -331,7 +332,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0, g: 0.50425196, b: 1, a: 0.39215687}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
