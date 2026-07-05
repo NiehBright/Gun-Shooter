@@ -3602,6 +3602,51 @@ PrefabInstance:
       propertyPath: gamepadButton
       value: 
       objectReference: {fileID: 4967690075321155342}
+    - target: {fileID: 1174637914089936749, guid: 2795eab0fe0987944a328525414ba1cf,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1174637914089936749, guid: 2795eab0fe0987944a328525414ba1cf,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1174637914089936749, guid: 2795eab0fe0987944a328525414ba1cf,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1174637914364873161, guid: 2795eab0fe0987944a328525414ba1cf,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1174637914364873161, guid: 2795eab0fe0987944a328525414ba1cf,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1174637914364873161, guid: 2795eab0fe0987944a328525414ba1cf,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1174637914908881953, guid: 2795eab0fe0987944a328525414ba1cf,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1174637914908881953, guid: 2795eab0fe0987944a328525414ba1cf,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1174637914908881953, guid: 2795eab0fe0987944a328525414ba1cf,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3125985076172682329, guid: 2795eab0fe0987944a328525414ba1cf,
         type: 3}
       propertyPath: gamepadButton
@@ -3712,11 +3757,115 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4256538093819395387, guid: 2795eab0fe0987944a328525414ba1cf,
+        type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4256538093819395387, guid: 2795eab0fe0987944a328525414ba1cf,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 8379972991606950233, guid: 2378aa05e9bb9284bab311cfc213d7fb,
+        type: 3}
+    - target: {fileID: 4256538093819395387, guid: 2795eab0fe0987944a328525414ba1cf,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4256538093819395387, guid: 2795eab0fe0987944a328525414ba1cf,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4256538093819395387, guid: 2795eab0fe0987944a328525414ba1cf,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4256538094016642520, guid: 2795eab0fe0987944a328525414ba1cf,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 8379972991606950233, guid: 2378aa05e9bb9284bab311cfc213d7fb,
+        type: 3}
+    - target: {fileID: 4256538094016642520, guid: 2795eab0fe0987944a328525414ba1cf,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4256538094016642520, guid: 2795eab0fe0987944a328525414ba1cf,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4256538094016642520, guid: 2795eab0fe0987944a328525414ba1cf,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4256538094046737359, guid: 2795eab0fe0987944a328525414ba1cf,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 8379972991606950233, guid: 2378aa05e9bb9284bab311cfc213d7fb,
+        type: 3}
+    - target: {fileID: 4256538094046737359, guid: 2795eab0fe0987944a328525414ba1cf,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4256538094046737359, guid: 2795eab0fe0987944a328525414ba1cf,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4256538094046737359, guid: 2795eab0fe0987944a328525414ba1cf,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4256538094107242508, guid: 2795eab0fe0987944a328525414ba1cf,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 8379972991606950233, guid: 2378aa05e9bb9284bab311cfc213d7fb,
+        type: 3}
+    - target: {fileID: 4256538094107242508, guid: 2795eab0fe0987944a328525414ba1cf,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4256538094107242508, guid: 2795eab0fe0987944a328525414ba1cf,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4256538094107242508, guid: 2795eab0fe0987944a328525414ba1cf,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4483277465006536030, guid: 2795eab0fe0987944a328525414ba1cf,
         type: 3}
       propertyPath: gamepadButton
       value: 
       objectReference: {fileID: 1520079938133703666}
+    - target: {fileID: 5601295551896357662, guid: 2795eab0fe0987944a328525414ba1cf,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5601295551896357662, guid: 2795eab0fe0987944a328525414ba1cf,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5601295551896357662, guid: 2795eab0fe0987944a328525414ba1cf,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5848881737687626785, guid: 2795eab0fe0987944a328525414ba1cf,
         type: 3}
       propertyPath: buttonTag
