@@ -9,6 +9,7 @@ namespace Watermelon.SquadShooter
 
         [Header("Animations")]
         [SerializeField, InspectorLabel("Hoạt họa bắn nhân vật")] AnimationClip characterShootAnimation;
+        [SerializeField, InspectorLabel("Tắt IK Rig tay")] protected bool disableHandRig = false;
 
         [Space]
         [SerializeField, InspectorLabel("Điểm tựa tay trái")] Transform leftHandHolder;
@@ -61,7 +62,7 @@ namespace Watermelon.SquadShooter
 
         }
 
-        public virtual bool NeedsRig => true;
+        public virtual bool NeedsRig => !disableHandRig;
 
         public void UpdateHandRig()
         {

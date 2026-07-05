@@ -51,6 +51,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Watermelon.SquadShooter.SwordBehavior
   characterShootAnimation: {fileID: 1827226128182048838, guid: e8193227c2ede8d4188aff6a836e0aa9,
     type: 3}
+  needsRig: 0
   leftHandHolder: {fileID: 6582127241408248861}
   rightHandHolder: {fileID: 6135585229073222511}
   shootPoint: {fileID: 330685787639834486}

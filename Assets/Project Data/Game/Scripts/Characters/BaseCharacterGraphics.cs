@@ -56,6 +56,9 @@ namespace Watermelon.SquadShooter
         [SerializeField] Transform teslaHolderTransform;
         public Transform TeslaHolderTransform => teslaHolderTransform;
 
+        [SerializeField] Transform swordHolderTransform;
+        public Transform SwordHolderTransform => swordHolderTransform != null ? swordHolderTransform : shootGunHolderTransform;
+
         [Space]
         [SerializeField] Rig mainRig;
         [SerializeField] Transform leftHandController;

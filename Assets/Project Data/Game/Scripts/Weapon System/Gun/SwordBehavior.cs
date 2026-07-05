@@ -75,7 +75,7 @@ namespace Watermelon.SquadShooter
 
         public override void PlaceGun(BaseCharacterGraphics characterGraphics)
         {
-            transform.SetParent(characterGraphics.ShootGunHolderTransform);
+            transform.SetParent(characterGraphics.SwordHolderTransform);
             transform.ResetLocal();
         }
 

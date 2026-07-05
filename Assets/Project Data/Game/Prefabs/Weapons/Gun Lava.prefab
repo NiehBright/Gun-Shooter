@@ -78,6 +78,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterShootAnimation: {fileID: 7400000, guid: a2673b84353c2cf4192ad92e8ff3b86f,
     type: 2}
+  needsRig: 1
   leftHandHolder: {fileID: 5086007143268474568}
   rightHandHolder: {fileID: 7275603231054945118}
   shootPoint: {fileID: 4041651966338408592}
@@ -215,7 +216,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 4c96b196e0b7e38409c3fa2af1a71420,
         type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 6ad1b3937261e4f28a481237cd606a36, type: 2}
     - target: {fileID: 919132149155446097, guid: 4c96b196e0b7e38409c3fa2af1a71420,
