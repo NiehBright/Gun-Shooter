@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Parallax_Full_01
   m_Shader: {fileID: 4800000, guid: 2a33a166317493947a7be330dcc78a05, type: 3}
-  m_Parent: {fileID: 2100000, guid: 35ccf395352bf8a48b76f552b71bbb2a, type: 2}
+  m_Parent: {fileID: 2100000, guid: f898770ef1563264eae3ed7efeb66b1b, type: 2}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _SHOWFACADE_ON
