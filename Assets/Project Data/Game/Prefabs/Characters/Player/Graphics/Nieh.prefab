@@ -1429,6 +1429,7 @@ MonoBehaviour:
   shootGunHolderTransform: {fileID: 1889372032497818484}
   rocketHolderTransform: {fileID: 2769980904710930933}
   teslaHolderTransform: {fileID: 2505901503959243552}
+  swordHolderTransform: {fileID: 0}
   mainRig: {fileID: 3442245602020940463}
   leftHandController: {fileID: 2923306921286120013}
   rightHandController: {fileID: 2269971103943274106}
@@ -2323,7 +2324,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 0cb44352831fc1a439a0ecff245686a4, type: 2}
+  - {fileID: 2100000, guid: 555c6373646e78e4f8eaa58c5b63f1e4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
