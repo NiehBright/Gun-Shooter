@@ -1,4 +1,4 @@
-﻿#if UNITY_EDITOR
+#if UNITY_EDITOR
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,7 +22,7 @@ namespace HovlStudio
         }
 
         static private int pipeline;
-        [MenuItem("Tools/RP changer for Hovl Studio assets")]
+        [MenuItem("Tools/Squad Shooter/ThirdParty/RP changer for Hovl Studio assets")]
 
         public static void ShowWindow()
         {

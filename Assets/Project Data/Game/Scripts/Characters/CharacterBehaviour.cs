@@ -75,6 +75,20 @@ namespace Watermelon.SquadShooter
         private bool isMoving;
         private float speed = 0;
 
+
+
+        // Dash Variables
+        private bool isDashing;
+        private float dashTimeLeft;
+        private float dashDuration = 0.2f;
+        private float dashSpeed = 22f;
+        private float dashCooldownTimeLeft;
+        private float dashCooldown = 1.0f;
+        private Vector3 dashDirection;
+        public bool IsDashing => isDashing;
+        public float DashCooldownTimeLeft => dashCooldownTimeLeft;
+        public float DashCooldown => dashCooldown;
+
         private Vector3 movementVelocity;
         public Vector3 MovementVelocity => movementVelocity;
 
@@ -245,7 +259,7 @@ namespace Watermelon.SquadShooter
 
         public virtual void TakeDamage(float damage)
         {
-            if (currentHealth <= 0 || IsInvulnerable)
+            if (currentHealth <= 0 || IsInvulnerable || isDashing)
                 return;
 
             // Áp dụng giảm sát thương từ giáp của trang bị
@@ -546,14 +560,55 @@ namespace Watermelon.SquadShooter
                     Debug.Log("[Cheat] Da mo khoa va trang bi Kiem (Sword) thanh cong!");
                 }
             }
+
+            // Keyboard Dash Test for PC Editor
+            if (UnityEngine.InputSystem.Keyboard.current != null)
+            {
+                if (UnityEngine.InputSystem.Keyboard.current.leftShiftKey.wasPressedThisFrame)
+                {
+                    PerformDash();
+                }
+            }
 #endif
+
+            if (dashCooldownTimeLeft > 0)
+            {
+                dashCooldownTimeLeft -= Time.deltaTime;
+            }
+
+
 
             if (!isActive)
                 return;
 
             var joystick = Control.CurrentControl;
 
-            if (joystick.IsMovementInputNonZero && joystick.MovementInput.sqrMagnitude > 0.1f)
+            if (isDashing)
+            {
+                dashTimeLeft -= Time.deltaTime;
+                if (dashTimeLeft <= 0)
+                {
+                    isDashing = false;
+                    isMoving = false;
+                    graphics.OnMovingStoped();
+                }
+                else
+                {
+                    transform.position += dashDirection * dashSpeed * Time.deltaTime;
+
+                    if (!isMoving)
+                    {
+                        isMoving = true;
+                        graphics.OnMovingStarted();
+                    }
+
+                    Vector2 animDir = new Vector2(dashDirection.x, dashDirection.z).normalized;
+                    graphics.OnMoving(1.0f, animDir, IsCloseEnemyFound);
+
+                    transform.rotation = Quaternion.LookRotation(dashDirection);
+                }
+            }
+            else if (joystick.IsMovementInputNonZero && joystick.MovementInput.sqrMagnitude > 0.1f)
             {
                 if (!isMoving)
                 {
@@ -788,6 +843,45 @@ namespace Watermelon.SquadShooter
 
             gunBehaviour.gameObject.SetActive(true);
             gunBehaviour.DOScale(1, 0.2f).SetCustomEasing(Ease.GetCustomEasingFunction("BackOutLight"));
+        }
+
+
+
+        public void PerformDash()
+        {
+            if (isDashing || dashCooldownTimeLeft > 0 || !isActive) return;
+
+            isDashing = true;
+            dashTimeLeft = dashDuration;
+            dashCooldownTimeLeft = dashCooldown;
+
+            var joystick = Control.CurrentControl;
+            if (joystick != null && joystick.IsMovementInputNonZero)
+            {
+                dashDirection = new Vector3(joystick.MovementInput.x, 0, joystick.MovementInput.y).normalized;
+            }
+            else
+            {
+                dashDirection = transform.forward;
+            }
+
+            try
+            {
+                int upgradeParticleHash = ParticlesController.GetHash("Upgrade");
+                ParticlesController.PlayParticle(upgradeParticleHash).SetPosition(transform.position + new Vector3(0, 0.5f, 0));
+            }
+            catch
+            {
+            }
+
+            var trail = GetComponentInChildren<TrailRenderer>();
+            if (trail != null)
+            {
+                trail.emitting = true;
+                Tween.DelayedCall(dashDuration, () => trail.emitting = false);
+            }
+
+            AudioController.PlaySound(AudioController.Sounds.buttonSound);
         }
 
         private void OnDestroy()

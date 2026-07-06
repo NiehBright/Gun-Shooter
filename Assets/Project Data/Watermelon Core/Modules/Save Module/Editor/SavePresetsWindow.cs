@@ -36,7 +36,7 @@ namespace Watermelon
         private Color color1;
         private Color color2;
 
-        [MenuItem("Tools/Save Presets")]
+        [MenuItem("Tools/Squad Shooter/Save Presets")]
         [MenuItem("Window/Save Presets")]
         static void ShowWindow()
         {

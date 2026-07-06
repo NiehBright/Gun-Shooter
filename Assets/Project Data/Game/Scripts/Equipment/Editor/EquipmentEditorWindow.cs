@@ -38,7 +38,7 @@ namespace Watermelon.SquadShooter
             new Color(0.7f, 0.3f, 0.9f),    // Tím
         };
 
-        [MenuItem("Tools/Equipment Editor")]
+        [MenuItem("Tools/Squad Shooter/Equipment Editor")]
         public static void ShowWindow()
         {
             var window = GetWindow<EquipmentEditorWindow>("Equipment Editor");

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics.CodeAnalysis;
 using UnityEditor;
 using UnityEngine;
@@ -8,7 +8,7 @@ namespace Borodar.FarlandSkies.Core.Editor
     public static class FarlandSkiesPreferences
     {
         private const string HOME_FOLDER_PREF_KEY = "Borodar.FarlandSkies.HomeFolder.";
-        private const string HOME_FOLDER_DEFAULT = "Assets/Farland Skies";
+        private const string HOME_FOLDER_DEFAULT = "Assets/ThirdParty/Farland Skies";
         private const string HOME_FOLDER_HINT = "Change this setting to the new location of the \"Farland Skies\" folder if you move it around in your project.";
 
         private static readonly EditorPrefsString HOME_FOLDER_PREF;
@@ -18,6 +18,10 @@ namespace Borodar.FarlandSkies.Core.Editor
         static FarlandSkiesPreferences()
         {
             HOME_FOLDER_PREF = new EditorPrefsString(HOME_FOLDER_PREF_KEY + ProjectName, "Folder Location", HOME_FOLDER_DEFAULT);
+            if (string.IsNullOrEmpty(HOME_FOLDER_PREF.Value) || HOME_FOLDER_PREF.Value == "Assets/Farland Skies")
+            {
+                HOME_FOLDER_PREF.Value = "Assets/ThirdParty/Farland Skies";
+            }
             HomeFolder = HOME_FOLDER_PREF.Value;
         }
 

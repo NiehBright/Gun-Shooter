@@ -104,20 +104,23 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: -2.5
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -170,7 +173,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 191.5, y: 18.507935}
+  m_AnchoredPosition: {x: 278, y: 18.507935}
   m_SizeDelta: {x: 335.3, y: 114.5842}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1420744982
@@ -331,8 +334,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8921751590247947864}
   m_HandleRect: {fileID: 236487834580562350}
   m_Direction: 0
-  m_Value: 1
-  m_Size: 1
+  m_Value: 0
+  m_Size: 0.9999492
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -394,6 +397,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
+  m_UseReflectionProbes: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -429,45 +433,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   backButton: {fileID: 2148901777399671421}
-  weaponHolder: {fileID: 9068757956156514045}
-  weaponPanelPrefab: {fileID: 7037976112761453784, guid: 8b9d661d93197474bb1335ba1b6db541,
-    type: 3}
+  panelUIPrefab: {fileID: 0}
+  panelsContainer: {fileID: 0}
   backgroundPanelRectTransform: {fileID: 4325530422164427213}
   closeButtonRectTransform: {fileID: 2148901777399671420}
-  weaponsScrollView: {fileID: 5047668992396703308}
-  movementAnimationCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 1.9380516
-      outSlope: 1.9380516
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.42945325
-      value: 0.8323026
-      inSlope: 0.9855343
-      outSlope: 0.9855343
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.120501034
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: -0.21093209
-      outSlope: -0.21093209
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.17656603
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
+  scrollView: {fileID: 0}
   panelScaleAnimationCurve:
     serializedVersion: 2
     m_Curve:
@@ -572,7 +542,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -83.299805, y: 11}
+  m_AnchoredPosition: {x: -186, y: 11}
   m_SizeDelta: {x: 122.8, y: 129.6204}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2148901777399671423
@@ -973,8 +943,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -42}
-  m_SizeDelta: {x: -100, y: 680}
+  m_AnchoredPosition: {x: 8.2148, y: -42}
+  m_SizeDelta: {x: -264.2988, y: 680}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &5047668992396703308
 MonoBehaviour:
@@ -1040,7 +1010,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.00012207031, y: 0.00018371773}
+  m_AnchoredPosition: {x: 0.00010401125, y: 0.00018371773}
   m_SizeDelta: {x: 0, y: 621.66}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1450128551

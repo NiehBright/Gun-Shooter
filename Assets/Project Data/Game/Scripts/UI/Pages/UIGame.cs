@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -13,6 +13,10 @@ namespace Watermelon
         [SerializeField] Joystick joystick;
         [SerializeField] AttackButtonBehavior attackButton;
         [SerializeField] RectTransform floatingTextHolder;
+
+        [Header("Controls")]
+        [SerializeField] Button dashButton;
+        [SerializeField] Image dashCooldownOverlay;
 
         [Space]
         [SerializeField] TextMeshProUGUI areaText;
@@ -48,6 +52,25 @@ namespace Watermelon
             pauseButton.onClick.AddListener(OnPauseButtonClicked);
             pauseExitButton.onClick.AddListener(OnPauseExitButtonClicked);
             pauseResumeButton.onClick.AddListener(OnPauseResumeButtonClicked);
+
+
+            if (dashButton == null)
+            {
+                Transform trans = transform.Find("Dash Button");
+                if (trans != null) dashButton = trans.GetComponent<Button>();
+            }
+            if (dashCooldownOverlay == null)
+            {
+                Transform trans = transform.Find("Dash Button/Cooldown Overlay");
+                if (trans != null) dashCooldownOverlay = trans.GetComponent<Image>();
+            }
+
+
+
+
+
+            if (dashButton != null)
+                dashButton.onClick.AddListener(OnDashButtonClicked);
         }
 
         private void Start()
@@ -180,6 +203,39 @@ namespace Watermelon
             pausePanelCanvasGroup.alpha = 0.0f;
             pausePanelCanvasGroup.DOFade(1.0f, 0.3f, unscaledTime: true);
 
+        }
+        private void Update()
+        {
+            if (dashCooldownOverlay != null)
+            {
+                var behavior = CharacterBehaviour.GetBehaviour();
+                if (behavior != null && behavior.DashCooldownTimeLeft > 0)
+                {
+                    dashCooldownOverlay.gameObject.SetActive(true);
+                    dashCooldownOverlay.fillAmount = behavior.DashCooldownTimeLeft / behavior.DashCooldown;
+                }
+                else
+                {
+                    dashCooldownOverlay.gameObject.SetActive(false);
+                }
+            }
+        }
+
+
+
+        private void OnDashButtonClicked()
+        {
+            var behavior = CharacterBehaviour.GetBehaviour();
+            if (behavior != null && !behavior.IsDashing && behavior.DashCooldownTimeLeft <= 0)
+            {
+                dashButton.transform.localScale = Vector3.one;
+                dashButton.transform.DOScale(0.8f, 0.1f, unscaledTime: true).SetEasing(Ease.Type.BackOut).OnComplete(() =>
+                {
+                    dashButton.transform.DOScale(1.0f, 0.1f, unscaledTime: true).SetEasing(Ease.Type.BackOut);
+                });
+
+                behavior.PerformDash();
+            }
         }
         #endregion
     }

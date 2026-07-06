@@ -1,4 +1,4 @@
-﻿#pragma warning disable 649
+#pragma warning disable 649
 
 using UnityEngine;
 using UnityEditor;
@@ -42,7 +42,7 @@ namespace Watermelon
         public static float SINGLE_LINE_HEIGHT { get => EditorGUIUtility.singleLineHeight; }
         public static float LABEL_WIDTH{ get => EditorGUIUtility.labelWidth; set => EditorGUIUtility.labelWidth = value; }
 
-        [MenuItem("Tools/Level Editor")]
+        [MenuItem("Tools/Squad Shooter/Level Editor")]
         static void ShowWindow()
         {
             System.Type childType = GetChildType();

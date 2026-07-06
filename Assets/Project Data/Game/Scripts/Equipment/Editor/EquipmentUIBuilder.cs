@@ -15,7 +15,7 @@ namespace Watermelon.SquadShooter
         private const string PREFAB_FOLDER = "Assets/Project Data/Content/Data/Equipment";
         private const string PREFAB_PATH = "Assets/Project Data/Content/Data/Equipment/EquipmentSystem.prefab";
 
-        [MenuItem("Tools/Equipment UI Builder")]
+        [MenuItem("Tools/Squad Shooter/Equipment UI Builder")]
         public static void ShowWindow()
         {
             GetWindow<EquipmentUIBuilder>("Equipment UI Builder").Show();

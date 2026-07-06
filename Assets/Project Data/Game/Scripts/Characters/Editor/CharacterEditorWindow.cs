@@ -22,7 +22,7 @@ namespace Watermelon.SquadShooter
 
         private string newEnumName = "Character_04";
 
-        [MenuItem("Tools/Character Editor")]
+        [MenuItem("Tools/Squad Shooter/Character Editor")]
         public static void OpenWindow()
         {
             CharacterEditorWindow window = GetWindow<CharacterEditorWindow>();

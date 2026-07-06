@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEditor;
 using System.Xml.Linq;
 using System.Collections.Generic;
@@ -34,7 +34,7 @@ namespace Watermelon
             }
         }
 
-        [MenuItem("Tools/Project Setup Guide")]
+        [MenuItem("Tools/Squad Shooter/Project Setup Guide")]
         [MenuItem("Window/Project Setup Guide")]
         static void ShowWindow()
         {
