@@ -175,6 +175,9 @@ namespace Watermelon.LevelSystem
 
         public static BaseEnemyBehavior GetEnemyForSpecialReward()
         {
+            if (enemies == null || enemies.Count == 0)
+                return null;
+
             BaseEnemyBehavior result = enemies.Find(e => e.Tier == EnemyTier.Boss);
 
             if (result != null)
@@ -209,16 +212,23 @@ namespace Watermelon.LevelSystem
             {
                 if (enemyDrop[i].dropType == DropableItemType.Currency && enemyDrop[i].currencyType == CurrencyType.Coins)
                 {
-                    List<int> coins = LevelController.SplitIntEqually(enemyDrop[i].amount, enemies.Count);
-
-                    for (int j = 0; j < enemies.Count; j++)
+                    if (enemies.Count > 0)
                     {
-                        enemies[j].AddDrop(new DropData() { dropType = DropableItemType.Currency, currencyType = CurrencyType.Coins, amount = coins[j] });
+                        List<int> coins = LevelController.SplitIntEqually(enemyDrop[i].amount, enemies.Count);
+
+                        for (int j = 0; j < enemies.Count; j++)
+                        {
+                            enemies[j].AddDrop(new DropData() { dropType = DropableItemType.Currency, currencyType = CurrencyType.Coins, amount = coins[j] });
+                        }
                     }
                 }
                 else
                 {
-                    GetEnemyForSpecialReward().AddDrop(enemyDrop[i]);
+                    BaseEnemyBehavior specialEnemy = GetEnemyForSpecialReward();
+                    if (specialEnemy != null)
+                    {
+                        specialEnemy.AddDrop(enemyDrop[i]);
+                    }
                 }
             }
 

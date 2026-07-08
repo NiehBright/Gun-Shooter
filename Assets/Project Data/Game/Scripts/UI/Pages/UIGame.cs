@@ -188,11 +188,11 @@ namespace Watermelon
                 CustomMusicController.ToggleMusic(AudioController.Music.menuMusic, 0.3f, 0.3f);
 
                 CameraController.SetCameraShiftState(false);
-                CameraController.EnableCamera(CameraType.Menu);
+                CameraController.EnableCamera(CameraType.Main); // Bật camera follow cho Lobby
 
                 UIController.ShowPage<UIMainMenu>();
 
-                LevelController.LoadCurrentLevel();
+                LevelController.LoadLobby(); // Nạp sảnh chờ Lobby
 
                 Overlay.Hide(0.3f, null);
             });
@@ -239,14 +239,26 @@ namespace Watermelon
             Debug.Log($"[UIGame] Player found. IsDashing: {behavior.IsDashing}, CooldownTimeLeft: {behavior.DashCooldownTimeLeft}");
             if (!behavior.IsDashing && behavior.DashCooldownTimeLeft <= 0)
             {
-                dashButton.transform.localScale = Vector3.one;
-                dashButton.transform.DOScale(0.8f, 0.1f, unscaledTime: true).SetEasing(Ease.Type.BackOut).OnComplete(() =>
-                {
-                    dashButton.transform.DOScale(1.0f, 0.1f, unscaledTime: true).SetEasing(Ease.Type.BackOut);
-                });
-
                 behavior.PerformDash();
             }
+        }
+
+        public void SetLobbyMode(bool active)
+        {
+            if (coinsText != null && coinsText.transform.parent != null)
+                coinsText.transform.parent.gameObject.SetActive(!active);
+
+            if (pauseButton != null)
+                pauseButton.gameObject.SetActive(!active);
+
+            if (roomsHolder != null && roomsHolder.parent != null)
+                roomsHolder.parent.gameObject.SetActive(!active);
+
+            if (areaText != null)
+                areaText.gameObject.SetActive(!active);
+
+            if (attackButton != null)
+                attackButton.gameObject.SetActive(!active);
         }
 
         private Transform FindChildRecursive(Transform parent, string childName)

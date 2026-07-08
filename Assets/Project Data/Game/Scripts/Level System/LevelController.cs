@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 using Watermelon.SquadShooter;
 
@@ -19,6 +19,8 @@ namespace Watermelon.LevelSystem
 
         private static bool isLevelLoaded;
         private static LevelData loadedLevel;
+        public static bool IsLobbyMode { get; private set; }
+        public static bool IsFirstTimePlayer => levelSave.WorldIndex == 0 && levelSave.LevelIndex == 0;
 
         private static bool isRoomLoaded;
         private static RoomData loadedRoom;
@@ -26,7 +28,17 @@ namespace Watermelon.LevelSystem
         private static LevelSave levelSave;
 
         private static LevelData currentLevelData;
-        public static LevelData CurrentLevelData => currentLevelData;
+        public static LevelData CurrentLevelData
+        {
+            get
+            {
+                if (IsLobbyMode && levelsDatabase != null && levelSave != null)
+                {
+                    return levelsDatabase.GetLevel(levelSave.WorldIndex, levelSave.LevelIndex);
+                }
+                return currentLevelData;
+            }
+        }
 
         private static int currentRoomIndex;
 
@@ -162,6 +174,72 @@ namespace Watermelon.LevelSystem
                 characterBehaviour.DisableAgent();
                 LoadPedestal();
             }
+        }
+
+        public static void LoadLobby()
+        {
+            if (isLevelLoaded)
+                return;
+
+            IsLobbyMode = true;
+            CharacterBehaviour.IsLobbyModeActive = true;
+
+            // Load Lobby Level
+            LevelData lobbyLevel = levelSettings.LobbyWorld != null && levelSettings.LobbyWorld.Levels.Length > 0 
+                ? levelSettings.LobbyWorld.Levels[0] 
+                : levelsDatabase.GetLevel(0, 0);
+
+            isLevelLoaded = true;
+            isExitEntered = false;
+
+            ActiveRoom.SetLevelData(lobbyLevel);
+            currentLevelData = lobbyLevel;
+            currentLevelData.OnLevelInitialised();
+
+            WorldData world = lobbyLevel.World;
+            ActivateWorld(world);
+
+            BalanceController.UpdateDifficulty();
+            lastLevelMoneyCollected = 0;
+
+            Control.DisableMovementControl();
+
+            uiGame.UpdateCoinsText(CurrenciesController.Get(CurrencyType.Coins));
+            uiGame.InitRoomsUI(lobbyLevel.Rooms);
+
+            uiMainMenu.LevelProgressionPanel.LoadPanel();
+            uiMainMenu.UpdateLevelText();
+
+            currentRoomIndex = 0;
+            DistributeRewardBetweenRooms();
+
+            // Load room 0 of the Lobby
+            LoadRoom(currentRoomIndex);
+
+            // Bật camera và di chuyển trong Lobby
+            CameraController.SetCameraShiftState(false);
+            CameraController.EnableCamera(CameraType.Main); // Góc nhìn theo nhân vật
+
+            Tween.NextFrame(() =>
+            {
+                characterBehaviour.Activate();
+                characterBehaviour.ActivateMovement();
+                characterBehaviour.ActivateAgent();
+                
+                // Bật Joystick và cấu hình UI sảnh chờ
+                uiGame.SetLobbyMode(true);
+                UIController.ShowPage<UIGame>(); // Mở UIGame song song để hiện Joystick
+                Control.EnableMovementControl();
+            });
+        }
+
+        public static void UnloadLobby()
+        {
+            if (!isLevelLoaded)
+                return;
+
+            ActiveRoom.Unload();
+            isLevelLoaded = false;
         }
 
         private static void DistributeRewardBetweenRooms()
@@ -584,6 +662,83 @@ namespace Watermelon.LevelSystem
 
         public static void OnGameStarted(bool immediately = false)
         {
+            if (immediately)
+            {
+                StartGamePlayTransition();
+                return;
+            }
+
+            // Mở Loading Screen chuyển tiếp mượt mà
+            UILoadingScreen loadingScreen = Object.FindObjectOfType<UILoadingScreen>(true);
+            if (loadingScreen != null)
+            {
+                // Tạm thời vô hiệu hóa di chuyển của nhân vật trong lúc chuyển tiếp
+                Control.DisableMovementControl();
+                characterBehaviour.DisableAgent();
+
+                loadingScreen.ShowLoading(1.2f, 
+                onHalfWay: () =>
+                {
+                    // 1. Giải phóng Sảnh chờ (Lobby Map)
+                    UnloadLobby();
+
+                    // 2. Tải bản đồ màn chơi thực tế
+                    IsLobbyMode = false;
+                    CharacterBehaviour.IsLobbyModeActive = false;
+
+                    // Load level thực tế dựa trên lưu trữ
+                    LoadLevel(levelSave.WorldIndex, levelSave.LevelIndex);
+                    
+                    // Khôi phục giao diện HUD chiến đấu đầy đủ
+                    uiGame.SetLobbyMode(false);
+                }, 
+                onComplete: () =>
+                {
+                    // 3. Hoàn tất: Kích hoạt chơi nhạc nền game và cho phép chiến đấu
+                    AudioClip musicClip = AudioController.Music.gameMusic;
+                    if (activeWorldData.UniqueWorldMusicClip != null)
+                        musicClip = activeWorldData.UniqueWorldMusicClip;
+
+                    CustomMusicController.ToggleMusic(musicClip, 0.3f, 0.3f);
+
+                    isGameplayActive = true;
+
+                    CameraController.SetCameraShiftState(true);
+                    CameraController.EnableCamera(CameraType.Main);
+
+                    characterBehaviour.SetPosition(CurrentLevelData.Rooms[currentRoomIndex].SpawnPoint);
+                    Tween.NextFrame(() =>
+                    {
+                        characterBehaviour.Activate();
+                        characterBehaviour.ActivateMovement();
+                        characterBehaviour.ActivateAgent();
+                    });
+
+                    // Ẩn Menu
+                    uiMainMenu.DisableCanvas();
+                    UIController.HidePage<UIMainMenu>(() =>
+                    {
+                        UIController.ShowPage<UIGame>();
+                        Control.EnableMovementControl();
+                        StartGameplay();
+                    });
+                });
+            }
+            else
+            {
+                // Fallback nếu chưa cấu hình Loading Screen
+                UnloadLobby();
+                IsLobbyMode = false;
+                CharacterBehaviour.IsLobbyModeActive = false;
+                LoadLevel(levelSave.WorldIndex, levelSave.LevelIndex);
+                uiGame.SetLobbyMode(false);
+                
+                StartGamePlayTransition();
+            }
+        }
+
+        private static void StartGamePlayTransition()
+        {
             AudioClip musicClip = AudioController.Music.gameMusic;
             if (activeWorldData.UniqueWorldMusicClip != null)
                 musicClip = activeWorldData.UniqueWorldMusicClip;
@@ -606,30 +761,12 @@ namespace Watermelon.LevelSystem
                 characterBehaviour.ActivateAgent();
             });
 
-            if (!immediately)
+            UIController.HidePage<UIMainMenu>(() =>
             {
-                UIController.HidePage<UIMainMenu>(() =>
-                {
-                    UIController.ShowPage<UIGame>();
-
-                    Control.EnableMovementControl();
-
-                    StartGameplay();
-                });
-            }
-            else
-            {
-                uiMainMenu.DisableCanvas();
-
                 UIController.ShowPage<UIGame>();
-
                 Control.EnableMovementControl();
-
                 StartGameplay();
-
-                UIGamepadButton.DisableAllTags();
-                UIGamepadButton.EnableTag(UIGamepadButtonTag.Game);
-            }
+            });
         }
 
         public static void OnLevelCompleted()
@@ -714,6 +851,10 @@ namespace Watermelon.LevelSystem
 
         public static string GetCurrentAreaText()
         {
+            if (IsLobbyMode && levelSave != null)
+            {
+                return string.Format("AREA {0}-{1}", levelSave.WorldIndex + 1, levelSave.LevelIndex + 1);
+            }
             return string.Format("AREA {0}-{1}", ActiveRoom.CurrentWorldIndex + 1, ActiveRoom.CurrentLevelIndex + 1);
         }
 

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using Watermelon.SquadShooter;
@@ -10,6 +10,10 @@ namespace Watermelon.LevelSystem
     {
         [SerializeField] LevelsDatabase levelsDatabase;
         public LevelsDatabase LevelsDatabase => levelsDatabase;
+
+        [LineSpacer("Lobby")]
+        [SerializeField] WorldData lobbyWorld;
+        public WorldData LobbyWorld => lobbyWorld;
 
         [LineSpacer("Player")]
         [SerializeField] GameObject playerPrefab;

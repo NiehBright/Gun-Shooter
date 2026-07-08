@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace Watermelon
 {
@@ -57,6 +57,12 @@ namespace Watermelon
 
         public void UpdateFixedPosition()
         {
+            if (fixedTargetTransform == null)
+            {
+                DisableArrow();
+                return;
+            }
+
             targetPosition = fixedTargetTransform.position;
         }
 

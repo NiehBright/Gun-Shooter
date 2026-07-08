@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Game Settings
   m_EditorClassIdentifier: 
   levelsDatabase: {fileID: 11400000, guid: ebf0575738af97241b29945840a565db, type: 2}
+  lobbyWorld: {fileID: 11400000, guid: 71bc3ccc26a497342ad50b52d1be1c1c, type: 2}
   playerPrefab: {fileID: 4402184686770468089, guid: 0a2969074fd41754aa55fcad338c7e27,
     type: 3}
   invulnerabilityAfrerReviveDuration: 5

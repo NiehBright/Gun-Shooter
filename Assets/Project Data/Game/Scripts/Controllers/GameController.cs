@@ -81,11 +81,32 @@ namespace Watermelon
 
             uiController.InitialisePages();
 
-            UIController.ShowPage<UIMainMenu>();
-
-            CameraController.SetCameraShiftState(false);
-
-            LevelController.LoadCurrentLevel();
+            if (LevelController.IsFirstTimePlayer)
+            {
+                // Lần đầu chơi game: Bỏ qua Main Menu và vào thẳng Level 1 World 1 để chạy hướng dẫn (Tutorial)
+                UIController.ShowPage<UIGame>();
+                CameraController.SetCameraShiftState(true);
+                CameraController.EnableCamera(CameraType.Main);
+                
+                LevelController.LoadLevel(0, 0);
+                LevelController.StartGameplay();
+                Control.EnableMovementControl();
+                
+                var character = CharacterBehaviour.GetBehaviour();
+                if (character != null)
+                {
+                    character.Activate();
+                    character.ActivateMovement();
+                    character.ActivateAgent();
+                }
+            }
+            else
+            {
+                // Đã hoàn thành màn 1: Hiện Menu sảnh chờ Lobby bình thường
+                UIController.ShowPage<UIMainMenu>();
+                CameraController.SetCameraShiftState(false);
+                LevelController.LoadLobby();
+            }
         }
 
         public static void OnGameStarted()
@@ -149,14 +170,14 @@ namespace Watermelon
             CustomMusicController.ToggleMusic(AudioController.Music.menuMusic, 0.3f, 0.3f);
 
             CameraController.SetCameraShiftState(false);
-            CameraController.EnableCamera(CameraType.Menu);
+            CameraController.EnableCamera(CameraType.Main); // Camera follow cho Lobby
 
             UIController.ShowPage<UIMainMenu>();
             ExperienceController.GainXPPoints(LevelController.CurrentLevelData.XPAmount);
 
             SaveController.Save(true);
 
-            LevelController.LoadCurrentLevel();
+            LevelController.LoadLobby(); // Nạp sảnh chờ Lobby
         }
 
         public static void OnLevelExit()
@@ -197,12 +218,12 @@ namespace Watermelon
             CustomMusicController.ToggleMusic(AudioController.Music.menuMusic, 0.3f, 0.3f);
 
             CameraController.SetCameraShiftState(false);
-            CameraController.EnableCamera(CameraType.Menu);
+            CameraController.EnableCamera(CameraType.Main); // Camera follow cho Lobby
             LevelController.UnloadLevel();
 
             UIController.HidePage<UIGameOver>(() =>
             {
-                LevelController.LoadCurrentLevel();
+                LevelController.LoadLobby(); // Nạp sảnh chờ Lobby
                 UIController.ShowPage<UIMainMenu>();
             });
         }

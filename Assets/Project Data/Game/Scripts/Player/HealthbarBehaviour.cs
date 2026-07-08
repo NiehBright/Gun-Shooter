@@ -133,21 +133,23 @@ namespace Watermelon.SquadShooter
 
             isDisabled = true;
 
-            healthBarCanvasGroup.DOFade(0.0f, 0.3f).OnComplete(delegate
+            panelTweenCase.KillActive();
+            panelTweenCase = healthBarCanvasGroup.DOFade(0.0f, 0.3f).OnComplete(delegate
             {
                 healthBarTransform.gameObject.SetActive(false);
             });
         }
 
-        public void EnableBar()
+        public void EnableBar(bool force = false)
         {
-            if (!isDisabled)
+            if (!force && !isDisabled)
                 return;
 
             isDisabled = false;
 
             healthBarTransform.gameObject.SetActive(true);
-            healthBarCanvasGroup.DOFade(1.0f, 0.3f);
+            panelTweenCase.KillActive();
+            panelTweenCase = healthBarCanvasGroup.DOFade(1.0f, 0.3f);
         }
 
         public void RedrawHealth()

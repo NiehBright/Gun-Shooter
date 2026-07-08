@@ -99,8 +99,33 @@ namespace Watermelon.SquadShooter
 
         public EnemyDetector EnemyDetector => enemyDetector;
 
-        public bool IsCloseEnemyFound => closestEnemyBehaviour != null;
+        public bool IsCloseEnemyFound => closestEnemyBehaviour != null && !IsLobbyModeActive;
         public bool IsAttackingAllowed { get; private set; } = true;
+
+        private static bool isLobbyModeActive;
+        public static bool IsLobbyModeActive
+        {
+            get => isLobbyModeActive;
+            set
+            {
+                isLobbyModeActive = value;
+                var behaviour = GetBehaviour();
+                if (behaviour != null)
+                {
+                    if (behaviour.healthbarBehaviour != null)
+                    {
+                        if (isLobbyModeActive)
+                            behaviour.healthbarBehaviour.DisableBar();
+                        else
+                            behaviour.healthbarBehaviour.EnableBar();
+                    }
+                    if (isLobbyModeActive)
+                    {
+                        behaviour.OnCloseEnemyChanged(null);
+                    }
+                }
+            }
+        }
 
         private BaseEnemyBehavior closestEnemyBehaviour;
         public BaseEnemyBehavior ClosestEnemyBehaviour => closestEnemyBehaviour;
@@ -178,6 +203,8 @@ namespace Watermelon.SquadShooter
 
         public void Reload(bool resetHealth = true)
         {
+            isActive = false;
+
             // Set health
             if (resetHealth)
             {
@@ -186,7 +213,7 @@ namespace Watermelon.SquadShooter
 
             IsDead = false;
 
-            healthbarBehaviour.EnableBar();
+            healthbarBehaviour.EnableBar(true);
             healthbarBehaviour.RedrawHealth();
 
             enemyDetector.Reload();
@@ -687,13 +714,14 @@ namespace Watermelon.SquadShooter
         {
             graphics.CustomFixedUpdate();
 
-            if (gunBehaviour != null)
+            if (gunBehaviour != null && !IsLobbyModeActive)
                 gunBehaviour.GunUpdate();
         }
 
         public void OnCloseEnemyChanged(BaseEnemyBehavior enemyBehavior)
         {
             if (!isActive) return;
+            if (IsLobbyModeActive) return;
 
             if (enemyBehavior != null)
             {
