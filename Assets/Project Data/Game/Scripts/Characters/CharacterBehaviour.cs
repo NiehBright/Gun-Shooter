@@ -77,13 +77,18 @@ namespace Watermelon.SquadShooter
 
 
 
-        // Dash Variables
+        // Dash Settings & Variables
+        [Header("Dash Settings")]
+        [SerializeField] float dashSpeed = 22f;
+        [SerializeField] float dashDuration = 0.2f;
+        [SerializeField] float dashCooldown = 1.0f;
+        [SerializeField] GameObject dashVFXPrefab;
+        [SerializeField] Vector3 dashVFXOffset = new Vector3(0f, 0.15f, -0.5f);
+        [SerializeField] GameObject dashVFXChildObject;
+
         private bool isDashing;
         private float dashTimeLeft;
-        private float dashDuration = 0.2f;
-        private float dashSpeed = 22f;
         private float dashCooldownTimeLeft;
-        private float dashCooldown = 1.0f;
         private Vector3 dashDirection;
         public bool IsDashing => isDashing;
         public float DashCooldownTimeLeft => dashCooldownTimeLeft;
@@ -865,13 +870,70 @@ namespace Watermelon.SquadShooter
                 dashDirection = transform.forward;
             }
 
-            try
+            // 1. Kích hoạt VFX con gắn trực tiếp trên nhân vật nếu được cấu hình
+            if (dashVFXChildObject != null)
             {
-                int upgradeParticleHash = ParticlesController.GetHash("Upgrade");
-                ParticlesController.PlayParticle(upgradeParticleHash).SetPosition(transform.position + new Vector3(0, 0.5f, 0));
+                try
+                {
+                    dashVFXChildObject.SetActive(true);
+                    var particles = dashVFXChildObject.GetComponentsInChildren<ParticleSystem>(true);
+                    foreach (var ps in particles)
+                    {
+                        ps.Play(true);
+                    }
+                    
+                    // Tắt đi sau khi lướt xong (theo thời gian dashDuration)
+                    Tween.DelayedCall(dashDuration, () =>
+                    {
+                        if (dashVFXChildObject != null)
+                            dashVFXChildObject.SetActive(false);
+                    });
+                    Debug.Log("[CharacterBehaviour] Da kich hoat VFX con: " + dashVFXChildObject.name);
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogError("[CharacterBehaviour] Loi kich hoat VFX con: " + e.Message);
+                }
             }
-            catch
+            // 2. Kích hoạt VFX prefab (Instantiate) nếu không gán VFX con
+            else if (dashVFXPrefab != null)
             {
+                try
+                {
+                    Vector3 spawnPos = transform.position + transform.rotation * dashVFXOffset;
+                    Quaternion spawnRot = Quaternion.LookRotation(-transform.forward); // Quay mặt về phía sau
+                    GameObject vfxInstance = Instantiate(dashVFXPrefab, spawnPos, spawnRot);
+                    
+                    if (vfxInstance != null)
+                    {
+                        vfxInstance.SetActive(true);
+                        // Bắt buộc chạy tất cả hệ thống hạt bên trong VFX
+                        var particles = vfxInstance.GetComponentsInChildren<ParticleSystem>(true);
+                        foreach (var ps in particles)
+                        {
+                            ps.Play(true);
+                        }
+                        
+                        Destroy(vfxInstance, 2.0f); // Tự động giải phóng bộ nhớ sau 2 giây
+                    }
+                    Debug.Log("[CharacterBehaviour] Da khoi tao va chay VFX luyen tai vi tri: " + spawnPos);
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogError("[CharacterBehaviour] Loi khoi tao VFX lướt: " + e.Message);
+                }
+            }
+            else
+            {
+                // Fallback nổ năng lượng tại vị trí nhân vật
+                try
+                {
+                    int upgradeParticleHash = ParticlesController.GetHash("Upgrade");
+                    ParticlesController.PlayParticle(upgradeParticleHash).SetPosition(transform.position + new Vector3(0, 0.5f, 0));
+                }
+                catch
+                {
+                }
             }
 
             var trail = GetComponentInChildren<TrailRenderer>();
