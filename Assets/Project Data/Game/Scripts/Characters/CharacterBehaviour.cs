@@ -100,7 +100,33 @@ namespace Watermelon.SquadShooter
         public EnemyDetector EnemyDetector => enemyDetector;
 
         public bool IsCloseEnemyFound => closestEnemyBehaviour != null && !IsLobbyModeActive;
-        public bool IsAttackingAllowed { get; private set; } = true;
+        private bool isAttackingAllowedInternal = true;
+        public bool IsAttackingAllowed
+        {
+            get
+            {
+                if (IsLobbyModeActive) return false;
+                return isAttackingAllowedInternal || IsAutoShootActive;
+            }
+            private set => isAttackingAllowedInternal = value;
+        }
+
+        public static bool IsAutoShootActive
+        {
+            get => PlayerPrefs.GetInt("AutoShootSetting", 1) == 1;
+            set
+            {
+                PlayerPrefs.SetInt("AutoShootSetting", value ? 1 : 0);
+                PlayerPrefs.Save();
+                
+                // Cập nhật hiển thị Attack Button ở giao diện UIGame
+                var uiGame = UIController.GetPage<UIGame>();
+                if (uiGame != null)
+                {
+                    uiGame.UpdateAttackButtonVisibility();
+                }
+            }
+        }
 
         private static bool isLobbyModeActive;
         public static bool IsLobbyModeActive
@@ -189,11 +215,9 @@ namespace Watermelon.SquadShooter
 
             IsDead = false;
 
-            IsAttackingAllowed = !GameController.Settings.UseAttackButton;
-            if (GameController.Settings.UseAttackButton)
-            {
-                AttackButtonBehavior.onStatusChanged += OnAttackButtonStatusChanged;
-            }
+            // Luôn đăng ký lắng nghe sự kiện từ nút bắn thủ công
+            AttackButtonBehavior.onStatusChanged += OnAttackButtonStatusChanged;
+            isAttackingAllowedInternal = false;
         }
 
         private void OnAttackButtonStatusChanged(bool isPressed)

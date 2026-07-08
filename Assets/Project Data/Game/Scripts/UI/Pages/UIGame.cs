@@ -18,6 +18,12 @@ namespace Watermelon
         [SerializeField] Button dashButton;
         [SerializeField] Image dashCooldownOverlay;
 
+        [Header("Auto Shoot")]
+        [SerializeField] Sprite autoShootActiveSprite;
+        [SerializeField] Sprite autoShootDisableSprite;
+        private Button autoShootButton;
+        private Image autoShootButtonImage;
+
         [Space]
         [SerializeField] TextMeshProUGUI areaText;
 
@@ -74,11 +80,28 @@ namespace Watermelon
             {
                 Debug.LogWarning("[UIGame] Dash Button could not be found recursively under UI Game canvas!");
             }
+
+            if (autoShootButton == null)
+            {
+                Transform trans = FindChildRecursive(transform, "Auto Shoot Button");
+                if (trans != null)
+                {
+                    autoShootButton = trans.GetComponent<Button>();
+                    autoShootButtonImage = trans.GetComponent<Image>();
+                }
+            }
+
+            if (autoShootButton != null)
+            {
+                autoShootButton.onClick.AddListener(OnAutoShootButtonClicked);
+                Debug.Log("[UIGame] Found and registered click listener for Auto Shoot Button.");
+            }
         }
 
         private void Start()
         {
-            attackButton.gameObject.SetActive(GameController.Settings.UseAttackButton);
+            UpdateAttackButtonVisibility();
+            UpdateAutoShootButtonUI();
         }
 
         public void FadeAnimation(float time, float startAlpha, float targetAlpha, Ease.Type easing, SimpleCallback callback, bool disableOnComplete = false)
@@ -257,8 +280,51 @@ namespace Watermelon
             if (areaText != null)
                 areaText.gameObject.SetActive(!active);
 
+            UpdateAttackButtonVisibility();
+        }
+
+        public void UpdateAttackButtonVisibility()
+        {
             if (attackButton != null)
-                attackButton.gameObject.SetActive(!active);
+            {
+                if (LevelController.IsLobbyMode)
+                {
+                    attackButton.gameObject.SetActive(false);
+                }
+                else
+                {
+                    attackButton.gameObject.SetActive(!CharacterBehaviour.IsAutoShootActive);
+                }
+            }
+        }
+
+        private void OnAutoShootButtonClicked()
+        {
+            CharacterBehaviour.IsAutoShootActive = !CharacterBehaviour.IsAutoShootActive;
+            UpdateAutoShootButtonUI();
+
+            AudioController.PlaySound(AudioController.Sounds.buttonSound);
+        }
+
+        public void UpdateAutoShootButtonUI()
+        {
+            if (autoShootButtonImage != null)
+            {
+                if (CharacterBehaviour.IsAutoShootActive)
+                {
+                    if (autoShootActiveSprite != null)
+                        autoShootButtonImage.sprite = autoShootActiveSprite;
+                    else
+                        autoShootButtonImage.color = Color.white;
+                }
+                else
+                {
+                    if (autoShootDisableSprite != null)
+                        autoShootButtonImage.sprite = autoShootDisableSprite;
+                    else
+                        autoShootButtonImage.color = new Color(1f, 1f, 1f, 0.4f); // Dim button when Auto Shoot is disabled
+                }
+            }
         }
 
         private Transform FindChildRecursive(Transform parent, string childName)
