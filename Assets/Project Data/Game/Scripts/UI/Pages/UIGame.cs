@@ -56,21 +56,24 @@ namespace Watermelon
 
             if (dashButton == null)
             {
-                Transform trans = transform.Find("Dash Button");
+                Transform trans = FindChildRecursive(transform, "Dash Button");
                 if (trans != null) dashButton = trans.GetComponent<Button>();
             }
             if (dashCooldownOverlay == null)
             {
-                Transform trans = transform.Find("Dash Button/Cooldown Overlay");
+                Transform trans = FindChildRecursive(transform, "Cooldown Overlay");
                 if (trans != null) dashCooldownOverlay = trans.GetComponent<Image>();
             }
 
-
-
-
-
             if (dashButton != null)
+            {
                 dashButton.onClick.AddListener(OnDashButtonClicked);
+                Debug.Log("[UIGame] Found and registered click listener for Dash Button.");
+            }
+            else
+            {
+                Debug.LogWarning("[UIGame] Dash Button could not be found recursively under UI Game canvas!");
+            }
         }
 
         private void Start()
@@ -225,8 +228,16 @@ namespace Watermelon
 
         private void OnDashButtonClicked()
         {
+            Debug.Log("[UIGame] OnDashButtonClicked was triggered!");
             var behavior = CharacterBehaviour.GetBehaviour();
-            if (behavior != null && !behavior.IsDashing && behavior.DashCooldownTimeLeft <= 0)
+            if (behavior == null)
+            {
+                Debug.LogWarning("[UIGame] Player CharacterBehaviour is null! Cannot perform dash.");
+                return;
+            }
+
+            Debug.Log($"[UIGame] Player found. IsDashing: {behavior.IsDashing}, CooldownTimeLeft: {behavior.DashCooldownTimeLeft}");
+            if (!behavior.IsDashing && behavior.DashCooldownTimeLeft <= 0)
             {
                 dashButton.transform.localScale = Vector3.one;
                 dashButton.transform.DOScale(0.8f, 0.1f, unscaledTime: true).SetEasing(Ease.Type.BackOut).OnComplete(() =>
@@ -236,6 +247,21 @@ namespace Watermelon
 
                 behavior.PerformDash();
             }
+        }
+
+        private Transform FindChildRecursive(Transform parent, string childName)
+        {
+            if (parent.name == childName)
+                return parent;
+
+            for (int i = 0; i < parent.childCount; i++)
+            {
+                Transform found = FindChildRecursive(parent.GetChild(i), childName);
+                if (found != null)
+                    return found;
+            }
+
+            return null;
         }
         #endregion
     }
