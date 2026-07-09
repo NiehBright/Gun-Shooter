@@ -25,6 +25,9 @@ namespace Watermelon
         {
             notchSaveArea = this;
 
+            // Ép buộc tắt cơ chế co rút theo trục Y để giữ giao diện tràn xuống đáy màn hình
+            conformY = false;
+
             registeredTransforms.AddRange(safePanels);
 
             Refresh();

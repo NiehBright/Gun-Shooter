@@ -90,6 +90,10 @@ namespace Watermelon.LevelSystem
             levelGameObject.transform.ResetGlobal();
 
             backWallCollider = MonoBehaviour.Instantiate(levelSettings.BackWallCollider, Vector3.forward * -1000f, Quaternion.identity, levelGameObject.transform);
+            if (backWallCollider != null)
+            {
+                backWallCollider.SetActive(false);
+            }
 
             // UI
             uiComplete = UIController.GetPage<UIComplete>();
@@ -359,7 +363,7 @@ namespace Watermelon.LevelSystem
 
             ActiveRoom.SetRoomData(roomData);
 
-            backWallCollider.transform.localPosition = roomData.SpawnPoint;
+            // backWallCollider.transform.localPosition = roomData.SpawnPoint;
 
             manualExitActivation = false;
             isExitEntered = false;

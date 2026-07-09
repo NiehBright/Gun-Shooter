@@ -6676,6 +6676,10 @@ MonoBehaviour:
       type: 3}
     hash: 1929882776
     type: 0
+  - prefab: {fileID: 2867563236380827594, guid: 789ef9ac351d11942bfe79cb5be8a203,
+      type: 3}
+    hash: -1466429766
+    type: 0
   roomEnvPresets:
   - name: Wide
     itemEntities:
