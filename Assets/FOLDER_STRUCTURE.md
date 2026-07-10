@@ -27,14 +27,20 @@ Dưới đây là vị trí mới của các thư mục tài nguyên bên thứ 
 
 | Tên Thư Mục Gốc | Vị Trí Mới | Công Dụng / Mô Tả |
 | :--- | :--- | :--- |
+| `ATART` | `Assets/ThirdParty/ATART/` | Mô hình và trang phục của Nhân vật chính. |
 | `Farland Skies` | `Assets/ThirdParty/Farland Skies/` | Hiệu ứng bầu trời (Skybox), vũ trụ, mây trời trong game. |
 | `Hovl Studio` | `Assets/ThirdParty/Hovl Studio/` | Hiệu ứng đạn bắn, tia laser, hiệu ứng nổ phép thuật. |
 | `Magic Pig Games (Infinity PBR)` | `Assets/ThirdParty/Magic Pig Games (Infinity PBR)/` | Dữ liệu âm thanh, tiếng súng, tiếng động vật và ngoại trang nhân vật. |
-| `NamuFX` | `Assets/ThirdParty/NamuFX/` | Thư viện hiệu ứng hạt VFX dùng chung. |
+| `NamuFX` | `Assets/ThirdParty/NamuFX/` | Thư viện hiệu ứng hạt VFX (Stylized VFX Doodles). |
+| `NamuFX_Slash` | `Assets/ThirdParty/NamuFX_Slash/` | Thư viện hiệu ứng chém kiếm (Simple Stylized Slash vol2). |
 | `PolygonCyberCity` | `Assets/ThirdParty/PolygonCyberCity/` | Gói mô hình 3D thành phố tương lai của hãng Synty. |
 | `PolygonMech` | `Assets/ThirdParty/PolygonMech/` | Gói mô hình robot và chiến giáp cơ khí của hãng Synty. |
+| `PolygonMilitary` | `Assets/ThirdParty/PolygonMilitary/` | Gói mô hình quân đội, vũ khí quân sự của hãng Synty. |
 | `Space_Exploration_GUI_Kit` | `Assets/ThirdParty/Space_Exploration_GUI_Kit/` | Bộ giao diện người dùng (GUI) phong cách không gian/viễn tưởng. |
-| `TutorialInfo` | `Assets/ThirdParty/TutorialInfo/` | Thư mục thông tin hướng dẫn mặc định của Unity (có thể bỏ qua). |
+| `TutorialInfo` | `Assets/ThirdParty/TutorialInfo/` | Thư mục thông tin hướng dẫn mặc định của Unity. |
+| `Vefects` | `Assets/ThirdParty/Vefects/` | Thư viện các hiệu ứng kỹ năng vật lý/phép thuật. |
+| `vFavorites` | `Assets/ThirdParty/vFavorites/` | Plugin hỗ trợ quản lý thư mục yêu thích trong Editor. |
+| `_Recovery` | `Assets/ThirdParty/_Recovery/` | Các cảnh game tự động sao lưu dự phòng của Unity. |
 
 ---
 
