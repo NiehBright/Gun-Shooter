@@ -52,10 +52,10 @@ namespace Watermelon.SquadShooter
         private const string ITEM_ASSIGNED = "Nút này sẽ sinh ra vật phẩm.";
         private const string TEST_LEVEL = "Chơi thử màn này";
 
-        private const float ITEMS_BUTTON_MAX_WIDTH = 120;
-        private const float ITEMS_BUTTON_SPACE = 8;
-        private const float ITEMS_BUTTON_WIDTH = 80;
-        private const float ITEMS_BUTTON_HEIGHT = 80;
+        private const float ITEMS_BUTTON_MAX_WIDTH = 150;
+        private const float ITEMS_BUTTON_SPACE = 10;
+        private const float ITEMS_BUTTON_WIDTH = 110;
+        private const float ITEMS_BUTTON_HEIGHT = 110;
         private GameObject tempPrefab;
         private int tempType;
         private GUIContent itemContent;
@@ -117,6 +117,373 @@ namespace Watermelon.SquadShooter
         private bool listElementDragged;
         private ReorderableList itemsReordableList;
         private float currentItemListWidth;
+
+        // ── NÂNG CẤP: Styles (khởi tạo 1 lần) ──────────────────────────────
+        private GUIStyle _boxStyle;
+        private GUIStyle _headerStyle;
+        private GUIStyle _labelBoldStyle;
+        private GUIStyle _warningStyle;
+        private GUIStyle _errorStyle;
+        private GUIStyle _okStyle;
+        private bool _stylesReady;
+        private bool _showRoomToolsGroup = false;
+
+        private void EnsureUpgradeStyles()
+        {
+            if (_stylesReady) return;
+            _boxStyle = new GUIStyle(EditorStyles.helpBox) { padding = new RectOffset(8, 8, 6, 6) };
+            _headerStyle = new GUIStyle(EditorStyles.boldLabel) { fontSize = 11 };
+            _labelBoldStyle = new GUIStyle(EditorStyles.label) { fontStyle = FontStyle.Bold };
+            _warningStyle = new GUIStyle(EditorStyles.label) { normal = { textColor = new Color(0.9f, 0.65f, 0f) }, fontStyle = FontStyle.Bold };
+            _errorStyle = new GUIStyle(EditorStyles.label) { normal = { textColor = new Color(0.85f, 0.2f, 0.2f) }, fontStyle = FontStyle.Bold };
+            _okStyle = new GUIStyle(EditorStyles.label) { normal = { textColor = new Color(0.2f, 0.75f, 0.3f) }, fontStyle = FontStyle.Bold };
+            _stylesReady = true;
+        }
+
+        // ── NÂNG CẤP 1: Room Stats ──────────────────────────────────────────
+        private bool _showStats = false;
+        private void DrawRoomStatsDashboard()
+        {
+            if (selectedLevelRepresentation == null) return;
+            if (selectedLevelRepresentation.selectedRoomindex < 0) return;
+            if (selectedLevelRepresentation.enemyEntitiesProperty == null) return;
+            EnsureUpgradeStyles();
+
+            int enemyCount = selectedLevelRepresentation.enemyEntitiesProperty.arraySize;
+            int eliteCount = 0;
+            int chestCount = selectedLevelRepresentation.chestEntitiesProperty != null
+                ? selectedLevelRepresentation.chestEntitiesProperty.arraySize : 0;
+            int itemCount = selectedLevelRepresentation.itemEntitiesProperty != null
+                ? selectedLevelRepresentation.itemEntitiesProperty.arraySize : 0;
+            for (int i = 0; i < enemyCount; i++)
+            {
+                var elem = selectedLevelRepresentation.enemyEntitiesProperty.GetArrayElementAtIndex(i);
+                if (elem.FindPropertyRelative("IsElite") != null && elem.FindPropertyRelative("IsElite").boolValue)
+                    eliteCount++;
+            }
+            int normalCount = enemyCount - eliteCount;
+
+            EditorGUILayout.BeginVertical(_boxStyle);
+            EditorGUILayout.BeginHorizontal();
+            // Header luôn hiện kèm tóm tắt nhanh
+            EditorGUILayout.LabelField($"📊  Thống Kê Phòng  |  Địch: {enemyCount}  Rương: {chestCount}", _headerStyle, GUILayout.ExpandWidth(true));
+            if (GUILayout.Button(_showStats ? "▲" : "▼", GUILayout.Width(28)))
+                _showStats = !_showStats;
+            EditorGUILayout.EndHorizontal();
+
+            if (_showStats)
+            {
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField($"👾 Địch: {enemyCount}  (Thường: {normalCount}  Elite: {eliteCount})", GUILayout.ExpandWidth(true));
+                EditorGUILayout.LabelField($"📦 Rương: {chestCount}  🧱 Vật cản: {itemCount}", GUILayout.ExpandWidth(true));
+                EditorGUILayout.EndHorizontal();
+
+                if (enemyCount == 0)
+                    EditorGUILayout.LabelField("⚠️  Phòng không có kẻ địch!", _warningStyle);
+                else if (enemyCount > 20)
+                    EditorGUILayout.LabelField($"⚠️  Phòng có nhiều địch ({enemyCount} > 20) — có thể gây giật lag!", _warningStyle);
+                else
+                    EditorGUILayout.LabelField($"✅  Số lượng địch hợp lý.", _okStyle);
+            }
+
+            EditorGUILayout.EndVertical();
+            EditorGUILayout.Space(4);
+        }
+
+        // ── NÂNG CẤP 2: Global Validation ───────────────────────────────────
+        private bool _showValidationPanel;
+        private List<string> _validationErrors = new List<string>();
+        private List<string> _validationWarnings = new List<string>();
+
+        private void DrawGlobalValidationPanel()
+        {
+            EnsureUpgradeStyles();
+            EditorGUILayout.BeginVertical(_boxStyle);
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("🔍  Kiểm Tra Toàn Bộ (Global Validation)", _headerStyle, GUILayout.ExpandWidth(true));
+            if (GUILayout.Button("Quét", GUILayout.Width(60)))
+                RunGlobalValidation();
+            if (GUILayout.Button(_showValidationPanel ? "▲" : "▼", GUILayout.Width(28)))
+                _showValidationPanel = !_showValidationPanel;
+            EditorGUILayout.EndHorizontal();
+
+            if (_showValidationPanel)
+            {
+                if (_validationErrors.Count == 0 && _validationWarnings.Count == 0)
+                {
+                    EditorGUILayout.LabelField("✅  Tất cả Level đều hợp lệ!", _okStyle);
+                }
+                else
+                {
+                    foreach (var err in _validationErrors)
+                        EditorGUILayout.LabelField("❌  " + err, _errorStyle);
+                    foreach (var warn in _validationWarnings)
+                        EditorGUILayout.LabelField("⚠️  " + warn, _warningStyle);
+                }
+            }
+            EditorGUILayout.EndVertical();
+            EditorGUILayout.Space(4);
+        }
+
+        private void RunGlobalValidation()
+        {
+            _validationErrors.Clear();
+            _validationWarnings.Clear();
+            if (levelsProperty == null) { _validationErrors.Add("Chưa load World!"); _showValidationPanel = true; return; }
+
+            for (int lvl = 0; lvl < levelsProperty.arraySize; lvl++)
+            {
+                var levelProp = levelsProperty.GetArrayElementAtIndex(lvl);
+                var roomsProp = levelProp.FindPropertyRelative("rooms");
+                if (roomsProp == null) continue;
+
+                if (roomsProp.arraySize == 0)
+                    _validationWarnings.Add($"Level #{lvl + 1}: Không có phòng nào.");
+
+                for (int r = 0; r < roomsProp.arraySize; r++)
+                {
+                    var room = roomsProp.GetArrayElementAtIndex(r);
+                    var enemProp = room.FindPropertyRelative("enemyEntities");
+                    if (enemProp != null && enemProp.arraySize == 0)
+                        _validationWarnings.Add($"Level #{lvl + 1} – Phòng #{r + 1}: Không có kẻ địch.");
+                    if (enemProp != null && enemProp.arraySize > 25)
+                        _validationWarnings.Add($"Level #{lvl + 1} – Phòng #{r + 1}: Quá nhiều địch ({enemProp.arraySize})!");
+                }
+            }
+            _showValidationPanel = true;
+        }
+
+        // ── NÂNG CẤP 4: Difficulty Meter ────────────────────────────────────
+        private bool _showDifficulty = false;
+        private void DrawDifficultyMeter()
+        {
+            if (selectedLevelRepresentation == null) return;
+            if (selectedLevelRepresentation.enemyEntitiesProperty == null) return;
+            EnsureUpgradeStyles();
+
+            int enemyCount = selectedLevelRepresentation.enemyEntitiesProperty.arraySize;
+            int eliteCount = 0;
+            for (int i = 0; i < enemyCount; i++)
+            {
+                var e = selectedLevelRepresentation.enemyEntitiesProperty.GetArrayElementAtIndex(i);
+                if (e.FindPropertyRelative("IsElite") != null && e.FindPropertyRelative("IsElite").boolValue)
+                    eliteCount++;
+            }
+            float rawScore = (enemyCount - eliteCount) * 1f + eliteCount * 2.5f;
+            float difficulty = Mathf.Clamp01(rawScore / 30f);
+
+            string label;
+            Color barColor;
+            if (difficulty < 0.3f)       { label = "De";        barColor = new Color(0.2f, 0.8f, 0.3f); }
+            else if (difficulty < 0.6f)  { label = "TB";        barColor = new Color(0.9f, 0.75f, 0.1f); }
+            else if (difficulty < 0.85f) { label = "Kho";       barColor = new Color(0.9f, 0.45f, 0.1f); }
+            else                         { label = "Cuc kho";   barColor = new Color(0.85f, 0.1f, 0.1f); }
+
+            EditorGUILayout.BeginVertical(_boxStyle);
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField($"Do Kho: {label} ({Mathf.RoundToInt(difficulty * 100)}%)", _headerStyle, GUILayout.ExpandWidth(true));
+            if (GUILayout.Button(_showDifficulty ? "▲" : "▼", GUILayout.Width(28)))
+                _showDifficulty = !_showDifficulty;
+            EditorGUILayout.EndHorizontal();
+
+            if (_showDifficulty)
+            {
+                Rect barBg = GUILayoutUtility.GetRect(0, 14, GUILayout.ExpandWidth(true));
+                EditorGUI.DrawRect(barBg, new Color(0.15f, 0.15f, 0.15f));
+                Rect barFill = new Rect(barBg.x, barBg.y, barBg.width * difficulty, barBg.height);
+                EditorGUI.DrawRect(barFill, barColor);
+            }
+
+            EditorGUILayout.EndVertical();
+            EditorGUILayout.Space(4);
+        }
+
+        // ── NÂNG CẤP 5: Bulk Actions ────────────────────────────────────────
+        private bool _showBulkActions;
+        private float _scalePercent = 20f;
+        private int  _bulkEnemyLevel = 1;
+
+        private void DrawBulkActionsPanel()
+        {
+            if (selectedLevelRepresentation == null) return;
+            if (selectedLevelRepresentation.selectedRoomindex < 0) return;
+            EnsureUpgradeStyles();
+
+            EditorGUILayout.BeginVertical(_boxStyle);
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("⚡  Thao Tác Hàng Loạt (Bulk Actions)", _headerStyle, GUILayout.ExpandWidth(true));
+            if (GUILayout.Button(_showBulkActions ? "▲" : "▼", GUILayout.Width(28)))
+                _showBulkActions = !_showBulkActions;
+            EditorGUILayout.EndHorizontal();
+
+            if (_showBulkActions)
+            {
+                EditorGUILayout.Space(2);
+
+                // --- Nhân bản phòng ---
+                EditorGUILayout.LabelField("Nhân bản phòng:", _labelBoldStyle);
+                if (GUILayout.Button("📋  Nhân bản phòng hiện tại thành phòng mới"))
+                    BulkDuplicateRoom();
+
+                EditorGUILayout.Space(4);
+
+                // --- Scale độ khó ---
+                EditorGUILayout.LabelField("Scale độ khó địch trong phòng:", _labelBoldStyle);
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField("Tỉ lệ (%):", GUILayout.Width(70));
+                _scalePercent = EditorGUILayout.Slider(_scalePercent, -80f, 200f);
+                EditorGUILayout.EndHorizontal();
+                EditorGUILayout.BeginHorizontal();
+                if (GUILayout.Button("📈  Tăng Elite Count"))
+                    BulkScaleElite(true);
+                if (GUILayout.Button("📉  Giảm Elite Count"))
+                    BulkScaleElite(false);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.Space(4);
+
+                // --- Set enemy level hàng loạt ---
+                EditorGUILayout.LabelField("Đặt cấp địch (Level) cho toàn Level:", _labelBoldStyle);
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField("Cấp:", GUILayout.Width(40));
+                _bulkEnemyLevel = EditorGUILayout.IntSlider(_bulkEnemyLevel, 1, 30);
+                if (GUILayout.Button("Áp dụng", GUILayout.Width(80)))
+                    BulkSetEnemyLevel(_bulkEnemyLevel);
+                EditorGUILayout.EndHorizontal();
+            }
+            EditorGUILayout.EndVertical();
+            EditorGUILayout.Space(4);
+        }
+
+        private void BulkDuplicateRoom()
+        {
+            if (selectedLevelRepresentation == null || selectedLevelRepresentation.selectedRoomindex < 0) return;
+            SaveRoom();
+            int srcIdx = selectedLevelRepresentation.selectedRoomindex;
+            selectedLevelRepresentation.roomsProperty.arraySize++;
+            int newIdx = selectedLevelRepresentation.roomsProperty.arraySize - 1;
+            selectedLevelRepresentation.roomTabs.Add("Room #" + (newIdx + 1));
+
+            // Copy dữ liệu từ phòng nguồn
+            SerializedProperty src = selectedLevelRepresentation.roomsProperty.GetArrayElementAtIndex(srcIdx);
+            SerializedProperty dst = selectedLevelRepresentation.roomsProperty.GetArrayElementAtIndex(newIdx);
+
+            // spawnPoint
+            dst.FindPropertyRelative("spawnPoint").vector3Value = src.FindPropertyRelative("spawnPoint").vector3Value;
+
+            // enemyEntities
+            SerializedProperty srcEnemies = src.FindPropertyRelative("enemyEntities");
+            SerializedProperty dstEnemies = dst.FindPropertyRelative("enemyEntities");
+            dstEnemies.arraySize = srcEnemies.arraySize;
+            for (int i = 0; i < srcEnemies.arraySize; i++)
+            {
+                var se = srcEnemies.GetArrayElementAtIndex(i);
+                var de = dstEnemies.GetArrayElementAtIndex(i);
+                de.FindPropertyRelative("EnemyType").enumValueIndex = se.FindPropertyRelative("EnemyType").enumValueIndex;
+                de.FindPropertyRelative("Position").vector3Value    = se.FindPropertyRelative("Position").vector3Value;
+                de.FindPropertyRelative("Rotation").quaternionValue = se.FindPropertyRelative("Rotation").quaternionValue;
+                de.FindPropertyRelative("Scale").vector3Value       = se.FindPropertyRelative("Scale").vector3Value;
+                de.FindPropertyRelative("IsElite").boolValue        = se.FindPropertyRelative("IsElite").boolValue;
+                var sp = se.FindPropertyRelative("PathPoints");
+                var dp = de.FindPropertyRelative("PathPoints");
+                dp.arraySize = sp.arraySize;
+                for (int j = 0; j < sp.arraySize; j++)
+                    dp.GetArrayElementAtIndex(j).vector3Value = sp.GetArrayElementAtIndex(j).vector3Value;
+            }
+
+            // itemEntities
+            SerializedProperty srcItems = src.FindPropertyRelative("itemEntities");
+            SerializedProperty dstItems = dst.FindPropertyRelative("itemEntities");
+            dstItems.arraySize = srcItems.arraySize;
+            for (int i = 0; i < srcItems.arraySize; i++)
+            {
+                var si = srcItems.GetArrayElementAtIndex(i);
+                var di = dstItems.GetArrayElementAtIndex(i);
+                di.FindPropertyRelative("Hash").intValue            = si.FindPropertyRelative("Hash").intValue;
+                di.FindPropertyRelative("Position").vector3Value    = si.FindPropertyRelative("Position").vector3Value;
+                di.FindPropertyRelative("Rotation").quaternionValue = si.FindPropertyRelative("Rotation").quaternionValue;
+                di.FindPropertyRelative("Scale").vector3Value       = si.FindPropertyRelative("Scale").vector3Value;
+            }
+
+            worldSerializedObject.ApplyModifiedProperties();
+            AssetDatabase.SaveAssets();
+
+            selectedLevelRepresentation.selectedRoomindex = newIdx;
+            LoadRoom();
+            Debug.Log($"[Level Editor] Đã nhân bản phòng #{srcIdx + 1} → Phòng #{newIdx + 1}");
+        }
+
+        private void BulkScaleElite(bool increase)
+        {
+            if (selectedLevelRepresentation?.enemyEntitiesProperty == null) return;
+            for (int i = 0; i < selectedLevelRepresentation.enemyEntitiesProperty.arraySize; i++)
+            {
+                var e = selectedLevelRepresentation.enemyEntitiesProperty.GetArrayElementAtIndex(i);
+                var isEliteProp = e.FindPropertyRelative("IsElite");
+                if (isEliteProp == null) continue;
+                isEliteProp.boolValue = increase;
+            }
+            worldSerializedObject.ApplyModifiedProperties();
+            LoadRoom();
+            Debug.Log($"[Level Editor] Đã {(increase ? "bật" : "tắt")} Elite cho toàn bộ địch trong phòng.");
+        }
+
+        private void BulkSetEnemyLevel(int level)
+        {
+            if (selectedLevelRepresentation?.enemiesLevelProperty == null) return;
+            selectedLevelRepresentation.enemiesLevelProperty.intValue = level;
+            worldSerializedObject.ApplyModifiedProperties();
+            AssetDatabase.SaveAssets();
+            Debug.Log($"[Level Editor] Đã đặt cấp địch = {level} cho Level này.");
+        }
+
+        // ── NÂNG CẤP 6: Room Snapshot ───────────────────────────────────────
+        private struct RoomSnapshot
+        {
+            public int enemyCount;
+            public int itemCount;
+            public int chestCount;
+            public string label;
+        }
+        private RoomSnapshot? _snapshot;
+
+        private void DrawSnapshotPanel()
+        {
+            if (selectedLevelRepresentation == null) return;
+            if (selectedLevelRepresentation.selectedRoomindex < 0) return;
+            EnsureUpgradeStyles();
+
+            EditorGUILayout.BeginVertical(_boxStyle);
+            EditorGUILayout.LabelField("📸  Snapshot Phòng", _headerStyle);
+            EditorGUILayout.BeginHorizontal();
+
+            if (GUILayout.Button("Chụp snapshot"))
+            {
+                _snapshot = new RoomSnapshot
+                {
+                    enemyCount = selectedLevelRepresentation.enemyEntitiesProperty?.arraySize ?? 0,
+                    itemCount  = selectedLevelRepresentation.itemEntitiesProperty?.arraySize ?? 0,
+                    chestCount = selectedLevelRepresentation.chestEntitiesProperty?.arraySize ?? 0,
+                    label      = $"Phòng #{selectedLevelRepresentation.selectedRoomindex + 1} – {System.DateTime.Now:HH:mm:ss}"
+                };
+                Debug.Log($"[Level Editor] Đã chụp snapshot: {_snapshot.Value.label}");
+            }
+
+            EditorGUI.BeginDisabledGroup(_snapshot == null);
+            if (GUILayout.Button("Xem thông tin snapshot"))
+            {
+                var s = _snapshot.Value;
+                EditorUtility.DisplayDialog("Snapshot: " + s.label,
+                    $"Địch: {s.enemyCount}\nVật cản: {s.itemCount}\nRương: {s.chestCount}", "OK");
+            }
+            EditorGUI.EndDisabledGroup();
+
+            EditorGUILayout.EndHorizontal();
+            if (_snapshot != null)
+                EditorGUILayout.LabelField($"Snapshot gần nhất: {_snapshot.Value.label}", EditorStyles.miniLabel);
+            EditorGUILayout.EndVertical();
+            EditorGUILayout.Space(4);
+        }
 
         protected override string LEVELS_FOLDER_NAME => "Worlds";
 
@@ -632,6 +999,9 @@ namespace Watermelon.SquadShooter
             if (!isWorldLoaded)
                 return;
 
+            // ── NÂNG CẤP 2: Global Validation luôn hiển thị trên cùng tab ──
+            DrawGlobalValidationPanel();
+
             EditorGUILayout.BeginHorizontal();
             //sidebar 
             EditorGUILayout.BeginVertical(GUI.skin.box, GUILayout.MaxWidth(SIDEBAR_WIDTH));
@@ -695,14 +1065,33 @@ namespace Watermelon.SquadShooter
 
             if (selectedLevelRepresentation.selectedRoomindex != -1)
             {
+                // ── NÂNG CẤP: Group toàn bộ công cụ mới vào 1 Collapse lớn để tránh chật màn hình ──
+                EnsureUpgradeStyles();
+                EditorGUILayout.BeginVertical(_boxStyle);
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField("🔧  Phân Tích & Hỗ Trợ Phòng", _headerStyle, GUILayout.ExpandWidth(true));
+                if (GUILayout.Button(_showRoomToolsGroup ? "▲ Thu gọn" : "▼ Mở rộng", GUILayout.Width(80)))
+                    _showRoomToolsGroup = !_showRoomToolsGroup;
+                EditorGUILayout.EndHorizontal();
+
+                if (_showRoomToolsGroup)
+                {
+                    EditorGUILayout.Space(4);
+                    DrawRoomStatsDashboard();
+                    DrawDifficultyMeter();
+                    DrawBulkActionsPanel();
+                    DrawSnapshotPanel();
+                }
+                EditorGUILayout.EndVertical();
+                EditorGUILayout.Space(4);
+                // ──────────────────────────────────────────────────────────
+
                 DisplayToolbar();
                 EditorGUILayout.Space();
             }
 
             DisplyLevelObjectMenagementSection();
             EditorGUILayout.Space();
-
-
         }
 
         private void RewriteSave(int worldIndex, int levelIndex)

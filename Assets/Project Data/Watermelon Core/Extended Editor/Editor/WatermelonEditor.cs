@@ -41,11 +41,23 @@ namespace Watermelon
 
         private void OnEnable()
         {
+            // Guard: target có thể null khi Unity inspector chạy trên object vừa bị destroy
+            if (target == null) return;
+
             // Cache nested classes
             nestedClassTypes = GetClassNestedTypes(target.GetType());
 
-            // Cache serialized fields
-            fields = GetFields(f => serializedObject.FindProperty(f.Name) != null);
+            // Cache serialized fields — bọc try/catch để tránh SerializedObjectNotCreatableException
+            try
+            {
+                fields = GetFields(f => serializedObject != null && serializedObject.FindProperty(f.Name) != null);
+            }
+            catch (System.Exception)
+            {
+                // Đối tượng không hợp lệ (đã bị destroy hoặc null), bỏ qua
+                useDefaultInspector = true;
+                return;
+            }
 
             if (fields.All(f => f.GetCustomAttributes(typeof(ExtendedEditorAttribute), true).Length == 0))
             {

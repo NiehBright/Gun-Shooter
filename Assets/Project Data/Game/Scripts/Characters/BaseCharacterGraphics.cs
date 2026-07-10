@@ -209,11 +209,15 @@ namespace Watermelon.SquadShooter
 
             characterBehaviour.Weapon.gameObject.SetActive(false);
 
-            ragdoll?.ActivateWithForce(transform.position + transform.forward, 700, 100);
+            // Ẩn toàn bộ phần đồ họa để nhân vật biến mất thay vì bật Ragdoll bị lỗi
+            gameObject.SetActive(false);
         }
 
         public void DisableRagdoll()
         {
+            // Bật lại phần đồ họa khi nhân vật được nạp lại/hồi sinh
+            gameObject.SetActive(true);
+
             ragdoll?.Disable();
 
             if (characterBehaviour.Weapon == null || characterBehaviour.Weapon.NeedsRig)
