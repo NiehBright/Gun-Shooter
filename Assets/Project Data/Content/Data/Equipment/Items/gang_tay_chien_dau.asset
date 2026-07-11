@@ -10,23 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2e94c31057fb9a64aa81ddae731f59d2, type: 3}
-  m_Name: mu_sieu_nhan
+  m_Name: gang_tay_chien_dau
   m_EditorClassIdentifier: Assembly-CSharp::Watermelon.SquadShooter.EquipmentData
-  itemName: "M\u0169 Si\xEAu Nh\xE2n"
-  itemID: mu_sieu_nhan
-  icon: {fileID: 21300000, guid: 33f6e3554f9e51f4cbf57d08ff156084, type: 3}
-  equipmentType: 0
-  rarity: 2
+  itemName: Gang Tay Chien Dau
+  itemID: gang_tay_chien_dau
+  icon: {fileID: 0}
+  equipmentType: 2
+  rarity: 0
   baseStats:
-    bonusHP: 50
-    bonusDamagePercent: 8
+    bonusHP: 0
+    bonusDamagePercent: 0
     bonusArmor: 0
-    bonusMoveSpeed: 0
+    bonusMoveSpeed: 3
   statsPerLevel:
-    bonusHP: 15
-    bonusDamagePercent: 3
+    bonusHP: 0
+    bonusDamagePercent: 0
     bonusArmor: 0
-    bonusMoveSpeed: 0
+    bonusMoveSpeed: 1
   maxLevel: 5
-  upgradeCosts: c8000000900100002003000040060000800c0000
-  sellPrice: 55
+  upgradeCosts: 3200000064000000c80000009001000020030000
+  sellPrice: 15

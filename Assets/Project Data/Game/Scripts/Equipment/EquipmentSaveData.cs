@@ -14,7 +14,7 @@ namespace Watermelon.SquadShooter
         // Trang bị đang mặc trên 4 slot (lưu ItemID, rỗng = chưa trang bị)
         [SerializeField] string equippedHat = "";
         [SerializeField] string equippedArmor = "";
-        [SerializeField] string equippedPants = "";
+        [SerializeField] string equippedGloves = "";
         [SerializeField] string equippedShoes = "";
 
         public void Flush() { }
@@ -28,7 +28,7 @@ namespace Watermelon.SquadShooter
             {
                 case EquipmentType.Hat: return equippedHat;
                 case EquipmentType.Armor: return equippedArmor;
-                case EquipmentType.Pants: return equippedPants;
+                case EquipmentType.Gloves: return equippedGloves;
                 case EquipmentType.Shoes: return equippedShoes;
                 default: return "";
             }
@@ -43,7 +43,7 @@ namespace Watermelon.SquadShooter
             {
                 case EquipmentType.Hat: equippedHat = itemID; break;
                 case EquipmentType.Armor: equippedArmor = itemID; break;
-                case EquipmentType.Pants: equippedPants = itemID; break;
+                case EquipmentType.Gloves: equippedGloves = itemID; break;
                 case EquipmentType.Shoes: equippedShoes = itemID; break;
             }
 
@@ -84,7 +84,7 @@ namespace Watermelon.SquadShooter
                 // Nếu đang trang bị item này thì tháo ra
                 if (equippedHat == itemID) equippedHat = "";
                 if (equippedArmor == itemID) equippedArmor = "";
-                if (equippedPants == itemID) equippedPants = "";
+                if (equippedGloves == itemID) equippedGloves = "";
                 if (equippedShoes == itemID) equippedShoes = "";
             }
 
@@ -114,7 +114,7 @@ namespace Watermelon.SquadShooter
         public bool IsEquipped(string itemID)
         {
             return equippedHat == itemID || equippedArmor == itemID
-                || equippedPants == itemID || equippedShoes == itemID;
+                || equippedGloves == itemID || equippedShoes == itemID;
         }
     }
 

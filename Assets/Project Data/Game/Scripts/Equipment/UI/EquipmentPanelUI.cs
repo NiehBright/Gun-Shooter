@@ -1,52 +1,61 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Watermelon.Upgrades;
 
 namespace Watermelon.SquadShooter
 {
-    /// <summary>
-    /// Panel UI chính hiển thị 4 slot trang bị và kho đồ.
-    /// Tự quản lý Canvas riêng, không can thiệp vào hệ thống UIPage gốc.
-    /// </summary>
     public class EquipmentPanelUI : MonoBehaviour
     {
-        [Header("Tham chiếu")]
+        [Header("Database")]
         [SerializeField] EquipmentDatabase database;
 
-        [Header("Slot trang bị")]
+        [Header("Equipment Slots")]
         [SerializeField] EquipmentSlotUI hatSlot;
         [SerializeField] EquipmentSlotUI armorSlot;
-        [SerializeField] EquipmentSlotUI pantsSlot;
+        [SerializeField] EquipmentSlotUI glovesSlot;
         [SerializeField] EquipmentSlotUI shoesSlot;
 
-        [Header("Kho đồ")]
+        [Header("Inventory")]
         [SerializeField] Transform inventoryContainer;
         [SerializeField] GameObject inventoryItemPrefab;
 
-        [Header("Popup hành động")]
+        [Header("Character Stats Area")]
+        [SerializeField] Image charPreviewImage;
+        [SerializeField] Text charNameText;
+        [SerializeField] Text charStarsText;
+        [SerializeField] Text charHpValueText;
+        [SerializeField] Text charDmgValueText;
+        [SerializeField] Text coinsText; // Ô hiển thị vàng ở góc phải
+
+        [Header("Category Filter Buttons")]
+        [SerializeField] Button filterAllBtn;
+        [SerializeField] Button filterHatBtn;
+        [SerializeField] Button filterArmorBtn;
+        [SerializeField] Button filterGlovesBtn;
+        [SerializeField] Button filterShoesBtn;
+
+        [Header("Popup")]
         [SerializeField] EquipmentActionPopup actionPopup;
 
-        [Header("Tổng chỉ số")]
-        [SerializeField] Text totalStatsText;
-
-        [Header("Nút đóng")]
+        [Header("Close Panel")]
         [SerializeField] Button closeButton;
 
         private List<EquipmentItemUI> inventoryItems = new List<EquipmentItemUI>();
-
         private static EquipmentPanelUI instance;
         public static EquipmentPanelUI Instance => instance;
 
-        // Canvas riêng để bật/tắt mà không ảnh hưởng UI gốc
         private Canvas panelCanvas;
         private GraphicRaycaster panelRaycaster;
         private CanvasGroup panelCanvasGroup;
 
+        private EquipmentType? currentFilter = null;
+
         private void Awake()
         {
+            Debug.Log("[EquipmentPanelUI] Awake triggered.");
             instance = this;
 
-            // Lấy hoặc thêm Canvas riêng
             panelCanvas = GetComponent<Canvas>();
             if (panelCanvas == null) panelCanvas = gameObject.AddComponent<Canvas>();
 
@@ -62,45 +71,80 @@ namespace Watermelon.SquadShooter
                 closeButton.onClick.AddListener(Close);
             }
 
-            // Tự động khởi tạo Controller nếu chưa có trong scene
+#if UNITY_EDITOR
+            if (database == null)
+            {
+                database = UnityEditor.AssetDatabase.LoadAssetAtPath<EquipmentDatabase>(
+                    "Assets/Project Data/Content/Data/Equipment/Equipment Database.asset");
+            }
+#endif
+
             if (EquipmentController.Instance == null)
             {
+                Debug.Log("[EquipmentPanelUI] Creating dynamic EquipmentController.");
                 GameObject controllerObj = new GameObject("[EQUIPMENT CONTROLLER]");
-                var controller = controllerObj.AddComponent<EquipmentController>();
+                controllerObj.AddComponent<EquipmentController>();
                 controllerObj.AddComponent<EquipmentStatsApplier>();
-
-#if UNITY_EDITOR
-                var db = UnityEditor.AssetDatabase.LoadAssetAtPath<EquipmentDatabase>(
-                    "Assets/Project Data/Content/Data/Equipment/Equipment Database.asset");
-                if (db != null)
-                {
-                    var serializedObj = new UnityEditor.SerializedObject(controller);
-                    serializedObj.FindProperty("database").objectReferenceValue = db;
-                    serializedObj.ApplyModifiedProperties();
-                }
-#endif
             }
 
-            // Mặc định ẩn
+            BindFilterButtons();
             HideImmediate();
         }
 
         private void OnEnable()
         {
             EquipmentController.OnEquipmentChanged += RefreshUI;
+            CharactersController.OnCharacterSelectedEvent += OnCharacterSelected;
         }
 
         private void OnDisable()
         {
             EquipmentController.OnEquipmentChanged -= RefreshUI;
+            CharactersController.OnCharacterSelectedEvent -= OnCharacterSelected;
         }
 
-        /// <summary>
-        /// Mở panel trang bị
-        /// </summary>
+        private void OnCharacterSelected(CharacterType type, Character character)
+        {
+            Debug.Log("[EquipmentPanelUI] Character selected changed: " + type);
+            RefreshUI();
+        }
+
+        private void BindFilterButtons()
+        {
+            if (filterAllBtn != null) filterAllBtn.onClick.AddListener(() => FilterCategory(null));
+            if (filterHatBtn != null) filterHatBtn.onClick.AddListener(() => FilterCategory(EquipmentType.Hat));
+            if (filterArmorBtn != null) filterArmorBtn.onClick.AddListener(() => FilterCategory(EquipmentType.Armor));
+            if (filterGlovesBtn != null) filterGlovesBtn.onClick.AddListener(() => FilterCategory(EquipmentType.Gloves));
+            if (filterShoesBtn != null) filterShoesBtn.onClick.AddListener(() => FilterCategory(EquipmentType.Shoes));
+        }
+
+        private void FilterCategory(EquipmentType? type)
+        {
+            currentFilter = type;
+            RefreshInventory();
+            UpdateFilterBtnColors();
+        }
+
+        private void UpdateFilterBtnColors()
+        {
+            Color selectedCol = new Color(0.9f, 0.7f, 0.2f, 1f);
+            Color normalCol = new Color(0.25f, 0.25f, 0.35f, 1f);
+
+            if (filterAllBtn != null) filterAllBtn.GetComponent<Image>().color = currentFilter == null ? selectedCol : normalCol;
+            if (filterHatBtn != null) filterHatBtn.GetComponent<Image>().color = currentFilter == EquipmentType.Hat ? selectedCol : normalCol;
+            if (filterArmorBtn != null) filterArmorBtn.GetComponent<Image>().color = currentFilter == EquipmentType.Armor ? selectedCol : normalCol;
+            if (filterGlovesBtn != null) filterGlovesBtn.GetComponent<Image>().color = currentFilter == EquipmentType.Gloves ? selectedCol : normalCol;
+            if (filterShoesBtn != null) filterShoesBtn.GetComponent<Image>().color = currentFilter == EquipmentType.Shoes ? selectedCol : normalCol;
+        }
+
         public static void Show()
         {
-            if (instance == null) return;
+            Debug.Log("[EquipmentPanelUI] Show static method called.");
+            if (instance == null)
+            {
+                Debug.LogError("[EquipmentPanelUI] Show failed: instance is null! Is the script active in the scene?");
+                return;
+            }
 
             instance.panelCanvas.enabled = true;
             instance.panelRaycaster.enabled = true;
@@ -108,14 +152,14 @@ namespace Watermelon.SquadShooter
             instance.panelCanvasGroup.blocksRaycasts = true;
             instance.panelCanvasGroup.interactable = true;
 
+            instance.currentFilter = null;
             instance.RefreshUI();
+            instance.UpdateFilterBtnColors();
         }
 
-        /// <summary>
-        /// Đóng panel trang bị
-        /// </summary>
         public void Close()
         {
+            Debug.Log("[EquipmentPanelUI] Close panel called.");
             if (actionPopup != null)
                 actionPopup.Hide();
 
@@ -124,6 +168,7 @@ namespace Watermelon.SquadShooter
 
         private void HideImmediate()
         {
+            if (actionPopup != null) actionPopup.Hide();
             if (panelCanvas != null) panelCanvas.enabled = false;
             if (panelRaycaster != null) panelRaycaster.enabled = false;
             if (panelCanvasGroup != null)
@@ -136,17 +181,14 @@ namespace Watermelon.SquadShooter
 
         public void RefreshUI()
         {
-            // Cập nhật 4 slot
+            Debug.Log("[EquipmentPanelUI] RefreshUI called.");
             RefreshSlot(hatSlot, EquipmentType.Hat);
             RefreshSlot(armorSlot, EquipmentType.Armor);
-            RefreshSlot(pantsSlot, EquipmentType.Pants);
+            RefreshSlot(glovesSlot, EquipmentType.Gloves);
             RefreshSlot(shoesSlot, EquipmentType.Shoes);
 
-            // Cập nhật kho đồ
             RefreshInventory();
-
-            // Cập nhật tổng chỉ số
-            RefreshTotalStats();
+            RefreshCharacterStats();
         }
 
         private void RefreshSlot(EquipmentSlotUI slot, EquipmentType type)
@@ -167,7 +209,6 @@ namespace Watermelon.SquadShooter
 
         private void RefreshInventory()
         {
-            // Xóa items cũ
             foreach (var item in inventoryItems)
             {
                 if (item != null)
@@ -175,11 +216,8 @@ namespace Watermelon.SquadShooter
             }
             inventoryItems.Clear();
 
-            Debug.Log($"[Equipment UI] RefreshInventory. SaveData: {(EquipmentController.SaveData != null ? "Not Null" : "Null")}, Database: {(EquipmentController.Database != null ? "Not Null" : "Null")}, Prefab: {(inventoryItemPrefab != null ? "Not Null" : "Null")}, Container: {(inventoryContainer != null ? "Not Null" : "Null")}");
-
             if (EquipmentController.SaveData == null || inventoryItemPrefab == null || inventoryContainer == null) return;
 
-            // Sao chép và sắp xếp kho đồ theo Loại (Type), rồi đến Độ hiếm (Rarity), rồi đến Cấp độ (Level)
             var sortedItems = new List<EquipmentSaveItem>(EquipmentController.SaveData.OwnedItems);
             sortedItems.Sort((a, b) =>
             {
@@ -189,71 +227,122 @@ namespace Watermelon.SquadShooter
                 if (dataA == null) return 1;
                 if (dataB == null) return -1;
 
-                // 1. Sắp xếp theo Loại (Mũ -> Áo -> Quần -> Giày)
                 int typeCompare = dataA.EquipmentType.CompareTo(dataB.EquipmentType);
                 if (typeCompare != 0) return typeCompare;
 
-                // 2. Sắp xếp theo Độ hiếm giảm dần (Sử thi -> Hiếm -> Thường)
                 int rarityCompare = dataB.Rarity.CompareTo(dataA.Rarity);
                 if (rarityCompare != 0) return rarityCompare;
 
-                // 3. Sắp xếp theo Cấp độ giảm dần
                 return b.level.CompareTo(a.level);
             });
-
-            Debug.Log($"[Equipment UI] Owned Items Count: {sortedItems.Count}");
 
             foreach (var saveItem in sortedItems)
             {
                 var data = EquipmentController.Database?.GetEquipmentByID(saveItem.itemID);
-                Debug.Log($"[Equipment UI] Item ID in save: '{saveItem.itemID}', Data in database: {(data != null ? data.ItemName : "Null")}");
                 if (data == null) continue;
 
+                if (currentFilter.HasValue && data.EquipmentType != currentFilter.Value)
+                    continue;
+
+                // Kiểm tra xem trang bị này có đang mặc không
+                bool isEquipped = EquipmentController.SaveData.IsEquipped(saveItem.itemID);
+                int countInInventory = saveItem.count;
+
+                // Nếu đang mặc 1 chiếc, ta ẩn chiếc đang mặc đi (chỉ hiển thị những chiếc còn dư trong kho đồ)
+                if (isEquipped)
+                {
+                    countInInventory -= 1;
+                }
+
+                if (countInInventory <= 0)
+                {
+                    continue; // Ẩn hoàn toàn khỏi kho đồ nếu không còn dư chiếc nào
+                }
+
                 GameObject itemObj = Instantiate(inventoryItemPrefab, inventoryContainer);
-                itemObj.transform.localScale = Vector3.one;
-                itemObj.transform.localPosition = Vector3.zero;
                 itemObj.SetActive(true);
-                EquipmentItemUI itemUI = itemObj.GetComponent<EquipmentItemUI>();
+
+                var itemUI = itemObj.GetComponent<EquipmentItemUI>();
                 if (itemUI != null)
                 {
-                    bool isEquipped = EquipmentController.SaveData.IsEquipped(saveItem.itemID);
-                    itemUI.Setup(data, saveItem.level, isEquipped, OnInventoryItemClicked);
+                    // Các vật phẩm hiển thị trong kho đồ lúc này chắc chắn là chưa mặc
+                    itemUI.Setup(data, saveItem.level, false, OnInventoryItemClicked);
                     inventoryItems.Add(itemUI);
                 }
             }
         }
 
-        private void RefreshTotalStats()
+        private void RefreshCharacterStats()
         {
-            if (totalStatsText == null) return;
+            var character = CharactersController.SelectedCharacter;
+            if (character == null)
+            {
+                Debug.LogWarning("[EquipmentPanelUI] SelectedCharacter is null!");
+                return;
+            }
 
-            var total = EquipmentController.GetTotalBonusStats();
-            List<string> parts = new List<string>();
+            Debug.Log("[EquipmentPanelUI] Selected character name: " + character.Name);
+            if (charNameText != null) charNameText.text = character.Name;
+            if (charStarsText != null)
+            {
+                string stars = "";
+                int count = Mathf.Clamp(character.Save != null ? character.Save.UpgradeLevel + 1 : 1, 1, 5);
+                for (int i = 0; i < count; i++) stars += "★";
+                charStarsText.text = stars;
+            }
 
-            if (total.bonusHP != 0) parts.Add($"HP+{total.bonusHP}");
-            if (total.bonusDamagePercent != 0) parts.Add($"DMG+{total.bonusDamagePercent}%");
-            if (total.bonusArmor != 0) parts.Add($"Giap {total.bonusArmor}%");
-            if (total.bonusMoveSpeed != 0) parts.Add($"Speed+{total.bonusMoveSpeed}%");
+            if (charPreviewImage != null && character.GetCurrentStage() != null)
+            {
+                charPreviewImage.sprite = character.GetCurrentStage().PreviewSprite;
+                charPreviewImage.enabled = charPreviewImage.sprite != null;
+            }
 
-            totalStatsText.text = parts.Count > 0 ? string.Join("  |  ", parts) : "Chua trang bi gi";
+            // Cập nhật số lượng vàng ở góc phải
+            if (coinsText != null)
+            {
+                coinsText.text = CurrenciesController.Get(CurrencyType.Coins).ToString();
+            }
+
+            var charStats = character.Upgrades[character.Save.UpgradeLevel].Stats;
+            float baseHP = charStats.Health;
+            var bonusStats = EquipmentController.GetTotalBonusStats();
+
+            float totalHP = baseHP + bonusStats.bonusHP;
+
+            float baseDmg = 100f;
+            var activeWeapon = WeaponsController.Database.Weapons[WeaponsController.SelectedWeaponIndex];
+            if (activeWeapon != null)
+            {
+                var stage = UpgradesController.GetUpgrade<BaseWeaponUpgrade>(activeWeapon.UpgradeType).GetCurrentStage();
+                if (stage != null)
+                {
+                    baseDmg = (stage.Damage.firstValue + stage.Damage.secondValue) / 2f;
+                }
+            }
+
+            float totalDmg = baseDmg * (1f + bonusStats.bonusDamagePercent / 100f);
+
+            if (charHpValueText != null) charHpValueText.text = totalHP.ToString();
+            if (charDmgValueText != null) charDmgValueText.text = Mathf.RoundToInt(totalDmg).ToString();
         }
 
         private void OnSlotClicked(EquipmentSlotUI slot, EquipmentData item, EquipmentType type)
         {
-            if (item == null) return;
-            actionPopup.ShowForEquipped(item, type, slot.transform.position);
-        }
-
-        private void OnInventoryItemClicked(EquipmentItemUI itemUI, EquipmentData item, bool isEquipped)
-        {
-            if (isEquipped)
+            if (item != null)
             {
-                actionPopup.ShowForEquipped(item, item.EquipmentType, itemUI.transform.position);
+                if (actionPopup != null)
+                    actionPopup.ShowForEquipped(item, type);
             }
             else
             {
-                actionPopup.ShowForUnequipped(item, itemUI.transform.position);
+                FilterCategory(type);
             }
+        }
+
+        private void OnInventoryItemClicked(EquipmentItemUI itemUI, EquipmentData data, bool isEquipped)
+        {
+            if (actionPopup != null)
+                actionPopup.ShowForUnequipped(data);
         }
     }
 }

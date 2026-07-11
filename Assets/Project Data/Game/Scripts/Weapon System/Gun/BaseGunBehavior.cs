@@ -41,6 +41,21 @@ namespace Watermelon.SquadShooter
             this.data = data;
         }
 
+        protected virtual void OnEnable()
+        {
+            EquipmentController.OnEquipmentChanged += OnEquipmentChangedCallback;
+        }
+
+        protected virtual void OnDisable()
+        {
+            EquipmentController.OnEquipmentChanged -= OnEquipmentChangedCallback;
+        }
+
+        private void OnEquipmentChangedCallback()
+        {
+            RecalculateDamage();
+        }
+
         public void InitialiseCharacter(BaseCharacterGraphics characterGraphics)
         {
             leftHandRigController = characterGraphics.LeftHandRig.data.target;

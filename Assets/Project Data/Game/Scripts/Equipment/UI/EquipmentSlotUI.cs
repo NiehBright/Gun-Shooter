@@ -25,7 +25,7 @@ namespace Watermelon.SquadShooter
             new Color(0.7f, 0.2f, 0.9f, 1f),   // Sử thi - tím
         };
 
-        private static readonly string[] SLOT_NAMES = { "Mũ", "Áo", "Quần", "Giày" };
+        private static readonly string[] SLOT_NAMES = { "Mũ", "Giáp", "Găng tay", "Giày" };
 
         private void Awake()
         {
@@ -59,7 +59,7 @@ namespace Watermelon.SquadShooter
 
                 if (levelText != null)
                 {
-                    levelText.text = level > 0 ? $"+{level}" : "";
+                    levelText.text = level > 0 ? $"Lv.{level}" : "";
                     levelText.enabled = level > 0;
                 }
 

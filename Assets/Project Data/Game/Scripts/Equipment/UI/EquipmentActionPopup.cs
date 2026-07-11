@@ -3,27 +3,28 @@ using UnityEngine.UI;
 
 namespace Watermelon.SquadShooter
 {
-    /// <summary>
-    /// Popup nhỏ hiển thị khi click vào trang bị:
-    /// - Chưa trang bị: "Đeo trang bị" / "Bán"
-    /// - Đang trang bị: "Nâng cấp" / "Tháo trang bị"
-    /// </summary>
     public class EquipmentActionPopup : MonoBehaviour
     {
         [Header("UI Elements")]
         [SerializeField] GameObject popupPanel;
-        [SerializeField] Button topButton;
-        [SerializeField] Text topButtonText;
-        [SerializeField] Button bottomButton;
-        [SerializeField] Text bottomButtonText;
         [SerializeField] Text itemNameText;
+        [SerializeField] Text itemLevelText;
         [SerializeField] Image itemIconImage;
+        [SerializeField] Text itemStatsText;
+        [SerializeField] Image rarityBgImage;
+        [SerializeField] Button blockerButton; // Nút nền để đóng khi ấn ra ngoài
 
-        [Header("Popup xác nhận bán")]
-        [SerializeField] GameObject sellConfirmPanel;
-        [SerializeField] Text sellConfirmText;
-        [SerializeField] Button sellConfirmYes;
-        [SerializeField] Button sellConfirmNo;
+        [Header("Equip Elements")]
+        [SerializeField] GameObject equipGroup;
+        [SerializeField] Button equipButton;
+        [SerializeField] Text equipButtonText;
+
+        [Header("Upgrade Elements")]
+        [SerializeField] GameObject upgradeGroup;
+        [SerializeField] Button unequipButton;
+        [SerializeField] Button upgradeButton;
+        [SerializeField] Text coinCostText;
+        [SerializeField] Image coinIcon;
 
         private EquipmentData currentItem;
         private EquipmentType currentSlotType;
@@ -33,47 +34,41 @@ namespace Watermelon.SquadShooter
         {
             Hide();
 
-            if (sellConfirmYes != null)
-                sellConfirmYes.onClick.AddListener(OnConfirmSell);
-            if (sellConfirmNo != null)
-                sellConfirmNo.onClick.AddListener(() => { if (sellConfirmPanel != null) sellConfirmPanel.SetActive(false); });
+            if (blockerButton != null)
+                blockerButton.onClick.AddListener(Hide);
+
+            if (equipButton != null)
+                equipButton.onClick.AddListener(OnEquipClicked);
+
+            if (unequipButton != null)
+                unequipButton.onClick.AddListener(OnUnequipClicked);
+
+            if (upgradeButton != null)
+                upgradeButton.onClick.AddListener(OnUpgradeClicked);
         }
 
-        /// <summary>
-        /// Hiện popup cho item CHƯA trang bị: "Đeo trang bị" / "Bán"
-        /// </summary>
-        public void ShowForUnequipped(EquipmentData item, Vector3 position)
+        public void ShowForUnequipped(EquipmentData item)
         {
             if (item == null || popupPanel == null) return;
 
             currentItem = item;
             isForEquipped = false;
 
-            // Tên và icon
-            if (itemNameText != null) itemNameText.text = item.ItemName;
-            if (itemIconImage != null)
+            SetupBaseInfo(item);
+
+            if (equipGroup != null) equipGroup.SetActive(true);
+            if (upgradeGroup != null) upgradeGroup.SetActive(false);
+
+            if (equipButtonText != null)
             {
-                itemIconImage.sprite = item.Icon;
-                itemIconImage.enabled = item.Icon != null;
+                var equippedID = EquipmentController.SaveData.GetEquippedID(item.EquipmentType);
+                equipButtonText.text = string.IsNullOrEmpty(equippedID) ? "Mang" : "Doi";
             }
-
-            // Nút trên: Đeo trang bị
-            if (topButtonText != null) topButtonText.text = "Deo trang bi";
-            topButton.onClick.RemoveAllListeners();
-            topButton.onClick.AddListener(OnEquipClicked);
-
-            // Nút dưới: Bán
-            if (bottomButtonText != null) bottomButtonText.text = $"Ban ({item.SellPrice} coins)";
-            bottomButton.onClick.RemoveAllListeners();
-            bottomButton.onClick.AddListener(OnSellClicked);
 
             ShowPopup();
         }
 
-        /// <summary>
-        /// Hiện popup cho item ĐANG trang bị: "Nâng cấp" / "Tháo trang bị"
-        /// </summary>
-        public void ShowForEquipped(EquipmentData item, EquipmentType slotType, Vector3 position)
+        public void ShowForEquipped(EquipmentData item, EquipmentType slotType)
         {
             if (item == null || popupPanel == null) return;
 
@@ -81,65 +76,117 @@ namespace Watermelon.SquadShooter
             currentSlotType = slotType;
             isForEquipped = true;
 
-            // Tên và icon
+            SetupBaseInfo(item);
+
+            if (equipGroup != null) equipGroup.SetActive(false);
+            if (upgradeGroup != null) upgradeGroup.SetActive(true);
+
+            UpdateUpgradeCost(item);
+
+            ShowPopup();
+        }
+
+        private void SetupBaseInfo(EquipmentData item)
+        {
+            var saveItem = EquipmentController.SaveData.GetItem(item.ItemID);
+            int level = saveItem != null ? saveItem.level : 1;
+
             if (itemNameText != null) itemNameText.text = item.ItemName;
+            if (itemLevelText != null) itemLevelText.text = "Cap " + level + "/" + item.MaxLevel;
             if (itemIconImage != null)
             {
                 itemIconImage.sprite = item.Icon;
                 itemIconImage.enabled = item.Icon != null;
             }
 
-            // Nút trên: Nâng cấp
-            string upgradeCostText = "";
-            if (EquipmentController.SaveData != null)
+            if (rarityBgImage != null)
             {
-                var saveItem = EquipmentController.SaveData.GetItem(item.ItemID);
-                if (saveItem != null)
-                {
-                    int cost = item.GetUpgradeCost(saveItem.level);
-                    if (cost >= 0)
-                        upgradeCostText = $" ({cost} coins)";
-                    else
-                        upgradeCostText = " (MAX)";
-                }
+                Color rc = GetRarityColor(item.Rarity);
+                rarityBgImage.color = new Color(rc.r, rc.g, rc.b, 0.45f);
             }
 
-            if (topButtonText != null) topButtonText.text = $"Nang cap{upgradeCostText}";
-            topButton.onClick.RemoveAllListeners();
-            topButton.onClick.AddListener(OnUpgradeClicked);
+            var stats = item.GetStatsAtLevel(level);
+            var nextStats = level < item.MaxLevel ? item.GetStatsAtLevel(level + 1) : stats;
+            string statsStr = "";
 
-            // Nút dưới: Tháo trang bị
-            if (bottomButtonText != null) bottomButtonText.text = "Thao trang bi";
-            bottomButton.onClick.RemoveAllListeners();
-            bottomButton.onClick.AddListener(OnUnequipClicked);
+            if (stats.bonusHP > 0)
+            {
+                statsStr = level < item.MaxLevel 
+                    ? $"Mau: +{stats.bonusHP} \u2794 +{nextStats.bonusHP}" 
+                    : $"Mau: +{stats.bonusHP} (Max)";
+            }
+            else if (stats.bonusDamagePercent > 0)
+            {
+                statsStr = level < item.MaxLevel 
+                    ? $"Sat thuong: +{stats.bonusDamagePercent}% \u2794 +{nextStats.bonusDamagePercent}%" 
+                    : $"Sat thuong: +{stats.bonusDamagePercent}% (Max)";
+            }
+            else if (stats.bonusArmor > 0)
+            {
+                statsStr = level < item.MaxLevel 
+                    ? $"Giap: +{stats.bonusArmor}% \u2794 +{nextStats.bonusArmor}%" 
+                    : $"Giap: +{stats.bonusArmor}% (Max)";
+            }
+            else if (stats.bonusMoveSpeed > 0)
+            {
+                statsStr = level < item.MaxLevel 
+                    ? $"Toc do: +{stats.bonusMoveSpeed}% \u2794 +{nextStats.bonusMoveSpeed}%" 
+                    : $"Toc do: +{stats.bonusMoveSpeed}% (Max)";
+            }
 
-            ShowPopup();
+            if (itemStatsText != null) itemStatsText.text = statsStr;
+        }
+
+        private void UpdateUpgradeCost(EquipmentData item)
+        {
+            var saveItem = EquipmentController.SaveData.GetItem(item.ItemID);
+            if (saveItem == null) return;
+
+            int level = saveItem.level;
+            int costCoins = item.GetUpgradeCost(level);
+
+            if (costCoins < 0 || level >= item.MaxLevel)
+            {
+                if (coinCostText != null) coinCostText.text = "Max";
+                if (upgradeButton != null) upgradeButton.interactable = false;
+                return;
+            }
+
+            int currentCoins = CurrenciesController.Get(CurrencyType.Coins);
+            if (coinCostText != null)
+            {
+                coinCostText.text = currentCoins + "/" + costCoins;
+                coinCostText.color = currentCoins >= costCoins ? Color.white : Color.red;
+            }
+
+            if (upgradeButton != null)
+            {
+                upgradeButton.interactable = currentCoins >= costCoins;
+            }
+        }
+
+        private Color GetRarityColor(EquipmentRarity rarity)
+        {
+            switch (rarity)
+            {
+                case EquipmentRarity.Common: return new Color(0.7f, 0.7f, 0.7f);
+                case EquipmentRarity.Rare: return new Color(0.2f, 0.6f, 1f);
+                case EquipmentRarity.Epic: return new Color(0.7f, 0.2f, 0.9f);
+                default: return Color.white;
+            }
         }
 
         private void ShowPopup()
         {
-            // Đặt popup ở giữa màn hình
-            RectTransform popupRect = popupPanel.GetComponent<RectTransform>();
-            if (popupRect != null)
-            {
-                popupRect.anchoredPosition = Vector2.zero;
-            }
-
-            popupPanel.SetActive(true);
-
-            if (sellConfirmPanel != null)
-                sellConfirmPanel.SetActive(false);
-
-            Debug.Log($"[Equipment] Popup mở cho: {currentItem?.ItemName}");
+            gameObject.SetActive(true);
+            if (popupPanel != null) popupPanel.SetActive(true);
         }
 
         public void Hide()
         {
             if (popupPanel != null) popupPanel.SetActive(false);
-            if (sellConfirmPanel != null) sellConfirmPanel.SetActive(false);
+            gameObject.SetActive(false);
         }
-
-        // === Button Handlers ===
 
         private void OnEquipClicked()
         {
@@ -148,39 +195,15 @@ namespace Watermelon.SquadShooter
             EquipmentController.Equip(currentItem);
             Hide();
 
-            // Refresh UI
             if (EquipmentPanelUI.Instance != null)
                 EquipmentPanelUI.Instance.RefreshUI();
         }
 
-        private void OnSellClicked()
+        private void OnUnequipClicked()
         {
             if (currentItem == null) return;
 
-            // Hiện popup xác nhận
-            if (sellConfirmPanel != null)
-            {
-                if (sellConfirmText != null)
-                    sellConfirmText.text = $"Ban \"{currentItem.ItemName}\" voi gia {currentItem.SellPrice} coins?";
-                sellConfirmPanel.SetActive(true);
-            }
-            else
-            {
-                // Không có popup xác nhận → bán luôn
-                ConfirmSell();
-            }
-        }
-
-        private void OnConfirmSell()
-        {
-            ConfirmSell();
-        }
-
-        private void ConfirmSell()
-        {
-            if (currentItem == null) return;
-
-            EquipmentController.SellEquipment(currentItem.ItemID);
+            EquipmentController.Unequip(currentSlotType);
             Hide();
 
             if (EquipmentPanelUI.Instance != null)
@@ -191,26 +214,19 @@ namespace Watermelon.SquadShooter
         {
             if (currentItem == null) return;
 
-            bool success = EquipmentController.UpgradeEquipment(currentItem.ItemID);
+            var saveItem = EquipmentController.SaveData.GetItem(currentItem.ItemID);
+            if (saveItem == null) return;
 
-            if (success)
-            {
-                Hide();
+            int costCoins = currentItem.GetUpgradeCost(saveItem.level);
 
-                if (EquipmentPanelUI.Instance != null)
-                    EquipmentPanelUI.Instance.RefreshUI();
-            }
-            else
-            {
-                Debug.Log("[Equipment] Không thể nâng cấp - kiểm tra tiền hoặc cấp tối đa!");
-            }
-        }
+            if (CurrenciesController.Get(CurrencyType.Coins) < costCoins) return;
 
-        private void OnUnequipClicked()
-        {
-            if (currentItem == null) return;
+            CurrenciesController.Substract(CurrencyType.Coins, costCoins);
+            saveItem.level++;
 
-            EquipmentController.Unequip(currentSlotType);
+            EquipmentController.NotifyEquipmentChanged();
+            SaveController.MarkAsSaveIsRequired();
+
             Hide();
 
             if (EquipmentPanelUI.Instance != null)

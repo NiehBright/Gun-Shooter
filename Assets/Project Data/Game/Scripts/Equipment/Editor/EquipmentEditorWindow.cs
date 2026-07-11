@@ -548,8 +548,8 @@ namespace Watermelon.SquadShooter
                 new EquipmentBonusStats(0, 0, 2, 0),
                 5, new int[] { 100, 200, 400, 800, 1600 }, 30);
 
-            // 3. Quần Chiến Đấu - Thường - +Tốc độ
-            CreateSampleItem("quan_chien_dau", "Quần Chiến Đấu", EquipmentType.Pants,
+            // 3. Găng Tay Chiến Đấu - Thường - +Tốc độ
+            CreateSampleItem("gang_tay_chien_dau", "Găng Tay Chiến Đấu", EquipmentType.Gloves,
                 EquipmentRarity.Common,
                 new EquipmentBonusStats(0, 0, 0, 3),
                 new EquipmentBonusStats(0, 0, 0, 1),
