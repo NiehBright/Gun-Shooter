@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -108,8 +108,8 @@ namespace Watermelon
                 pointerGameObject.SetActive(false);
             }
 
-            backgroundImage.color = backgroundDisableColor.SetAlpha(hideVisualsActive ? 0f : backgroundDisableColor.a);
-            handleImage.color = handleDisableColor.SetAlpha(hideVisualsActive ? 0f : backgroundDisableColor.a);
+            backgroundImage.color = backgroundDisableColor.SetAlpha(0f);
+            handleImage.color = handleDisableColor.SetAlpha(0f);
 
             defaultAnchoredPosition = backgroundRectTransform.anchoredPosition;
         }
@@ -130,8 +130,8 @@ namespace Watermelon
 
             backgroundRectTransform.anchoredPosition = ScreenPointToAnchoredPosition(eventData.position);
 
-            backgroundImage.color = backgroundActiveColor.SetAlpha(hideVisualsActive ? 0f : backgroundDisableColor.a);
-            handleImage.color = handleActiveColor.SetAlpha(hideVisualsActive ? 0f : backgroundDisableColor.a);
+            backgroundImage.color = backgroundActiveColor.SetAlpha(hideVisualsActive ? 0f : backgroundActiveColor.a);
+            handleImage.color = handleActiveColor.SetAlpha(hideVisualsActive ? 0f : handleActiveColor.a);
 
             isActive = true;
 
@@ -179,8 +179,8 @@ namespace Watermelon
         {
             isActive = false;
 
-            backgroundImage.color = backgroundDisableColor.SetAlpha(hideVisualsActive ? 0f : backgroundDisableColor.a);
-            handleImage.color = handleDisableColor.SetAlpha(hideVisualsActive ? 0f : backgroundDisableColor.a);
+            backgroundImage.color = backgroundDisableColor.SetAlpha(0f);
+            handleImage.color = handleDisableColor.SetAlpha(0f);
 
             backgroundRectTransform.anchoredPosition = defaultAnchoredPosition;
 

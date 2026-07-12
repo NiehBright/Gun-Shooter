@@ -304,10 +304,9 @@ namespace Watermelon.SquadShooter
             }
 
             var charStats = character.Upgrades[character.Save.UpgradeLevel].Stats;
-            float baseHP = charStats.Health;
+            float charHP = charStats.BaseHealth;
             var bonusStats = EquipmentController.GetTotalBonusStats();
-
-            float totalHP = baseHP + bonusStats.bonusHP;
+            float equipHP = bonusStats.bonusHP;
 
             float baseDmg = 100f;
             var activeWeapon = WeaponsController.Database.Weapons[WeaponsController.SelectedWeaponIndex];
@@ -320,10 +319,20 @@ namespace Watermelon.SquadShooter
                 }
             }
 
-            float totalDmg = baseDmg * (1f + bonusStats.bonusDamagePercent / 100f);
+            // Chỉ số cơ bản = sát thương vũ khí * hệ số sát thương nhân vật
+            float charDmgMult = charStats.BaseBulletDamageMultiplier;
+            float finalBaseDmg = baseDmg * charDmgMult;
+            float equipDmg = finalBaseDmg * (bonusStats.bonusDamagePercent / 100f);
 
-            if (charHpValueText != null) charHpValueText.text = totalHP.ToString();
-            if (charDmgValueText != null) charDmgValueText.text = Mathf.RoundToInt(totalDmg).ToString();
+            if (charHpValueText != null)
+            {
+                charHpValueText.text = equipHP > 0 ? $"{charHP} (+{equipHP})" : $"{charHP}";
+            }
+
+            if (charDmgValueText != null)
+            {
+                charDmgValueText.text = equipDmg > 0 ? $"{Mathf.RoundToInt(finalBaseDmg)} (+{Mathf.RoundToInt(equipDmg)})" : $"{Mathf.RoundToInt(finalBaseDmg)}";
+            }
         }
 
         private void OnSlotClicked(EquipmentSlotUI slot, EquipmentData item, EquipmentType type)

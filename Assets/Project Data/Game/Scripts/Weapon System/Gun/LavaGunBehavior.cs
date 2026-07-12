@@ -48,10 +48,7 @@ namespace Watermelon.SquadShooter
         public override void RecalculateDamage()
         {
             var stage = upgrade.GetCurrentStage();
-
-            float bonusDmgPercent = EquipmentController.Instance != null ? EquipmentController.GetTotalBonusStats().bonusDamagePercent : 0f;
-            float multiplier = 1f + (bonusDmgPercent / 100f);
-            damage = stage.Damage * multiplier;
+            damage = stage.Damage;
 
             attackDelay = 1f / stage.FireRate;
             bulletSpeed = stage.BulletSpeed;
@@ -95,7 +92,7 @@ namespace Watermelon.SquadShooter
                     {
                         GameObject bulletObj = bulletPool.GetPooledObject(new PooledObjectSettings().SetPosition(shootPoint.position).SetEulerRotation(shootPoint.eulerAngles));
                         LavaBulletBehavior bullet = GetOrAddBulletComponent<LavaBulletBehavior>(bulletObj);
-                        bullet.Initialise(damage, bulletSpeed.Random(), characterBehaviour.ClosestEnemyBehaviour, -1f, false, shootingRadius, characterBehaviour, bulletHeight, explosionRadius);
+                        bullet.Initialise(damage * characterBehaviour.Stats.BulletDamageMultiplier, bulletSpeed.Random(), characterBehaviour.ClosestEnemyBehaviour, -1f, false, shootingRadius, characterBehaviour, bulletHeight, explosionRadius);
                     }
 
                     characterBehaviour.OnGunShooted();

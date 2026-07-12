@@ -116,7 +116,18 @@ namespace Watermelon
         public void UpdateLevelText()
         {
             areaText.text = LevelController.GetCurrentAreaText();
-            recomendedPowerText.text = BalanceController.PowerRequirement.ToString();
+            if (recomendedPowerText != null)
+            {
+                recomendedPowerText.text = Mathf.RoundToInt(EquipmentController.GetTotalPlayerDamage()).ToString();
+            }
+        }
+
+        private void Update()
+        {
+            if (recomendedPowerText != null && recomendedPowerText.gameObject.activeInHierarchy)
+            {
+                recomendedPowerText.text = Mathf.RoundToInt(EquipmentController.GetTotalPlayerDamage()).ToString();
+            }
         }
 
         public override void PlayShowAnimation()

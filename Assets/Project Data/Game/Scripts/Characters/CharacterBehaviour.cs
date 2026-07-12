@@ -54,7 +54,7 @@ namespace Watermelon.SquadShooter
         private float currentHealth;
 
         public float CurrentHealth => currentHealth;
-        public float MaxHealth => stats.Health + (EquipmentController.Instance != null ? EquipmentController.GetTotalBonusStats().bonusHP : 0);
+        public float MaxHealth => stats.Health;
         public bool FullHealth => currentHealth == MaxHealth;
 
         public bool IsInvulnerable { get; private set; }

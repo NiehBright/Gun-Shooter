@@ -54,10 +54,7 @@ namespace Watermelon.SquadShooter
         public override void RecalculateDamage()
         {
             var stage = upgrade.GetCurrentStage();
-
-            float bonusDmgPercent = EquipmentController.Instance != null ? EquipmentController.GetTotalBonusStats().bonusDamagePercent : 0f;
-            float multiplier = 1f + (bonusDmgPercent / 100f);
-            damage = stage.Damage * multiplier;
+            damage = stage.Damage;
 
             attackDelay = 1f / stage.FireRate;
             spread = stage.Spread;

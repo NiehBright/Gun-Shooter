@@ -1,4 +1,5 @@
 using UnityEngine;
+using Watermelon.Upgrades;
 
 namespace Watermelon.SquadShooter
 {
@@ -271,6 +272,51 @@ namespace Watermelon.SquadShooter
                 UIGeneralPowerIndicator.UpdateText();
                 UIController.GetPage<UIWeaponPage>()?.UpdateUI();
             }
+        }
+
+        public static float GetTotalPlayerDamage()
+        {
+            float baseDmg = 100f;
+            if (WeaponsController.Database != null && WeaponsController.SelectedWeaponIndex >= 0)
+            {
+                var weapons = WeaponsController.Database.Weapons;
+                if (weapons != null && WeaponsController.SelectedWeaponIndex < weapons.Length)
+                {
+                    var activeWeapon = weapons[WeaponsController.SelectedWeaponIndex];
+                    if (activeWeapon != null)
+                    {
+                        var upgrade = UpgradesController.GetUpgrade<BaseWeaponUpgrade>(activeWeapon.UpgradeType);
+                        if (upgrade != null)
+                        {
+                            var stage = upgrade.GetCurrentStage();
+                            if (stage != null)
+                            {
+                                baseDmg = (stage.Damage.firstValue + stage.Damage.secondValue) / 2f;
+                            }
+                        }
+                    }
+                }
+            }
+
+            float charDmgMult = 1.0f;
+            if (CharactersController.SelectedCharacter != null)
+            {
+                var character = CharactersController.SelectedCharacter;
+                if (character.Upgrades != null && character.Save != null && character.Save.UpgradeLevel < character.Upgrades.Length)
+                {
+                    var charStats = character.Upgrades[character.Save.UpgradeLevel].Stats;
+                    if (charStats != null)
+                    {
+                        charDmgMult = charStats.BaseBulletDamageMultiplier;
+                    }
+                }
+            }
+
+            float finalBaseDmg = baseDmg * charDmgMult;
+            float bonusDmgPercent = GetTotalBonusStats().bonusDamagePercent;
+            float equipDmg = finalBaseDmg * (bonusDmgPercent / 100f);
+
+            return finalBaseDmg + equipDmg;
         }
     }
 }
