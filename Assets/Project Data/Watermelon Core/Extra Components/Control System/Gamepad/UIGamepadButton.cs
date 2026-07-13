@@ -61,6 +61,8 @@ namespace Watermelon
         // Showing or hiding gamepad icon on a button if necessary
         private void OnInputChanged(InputType type)
         {
+            if (gamepadButtonIcon == null) return;
+
             if (Control.InputType == InputType.Gamepad && IsInFocus)
             {
                 gamepadButtonIcon.enabled = true;
