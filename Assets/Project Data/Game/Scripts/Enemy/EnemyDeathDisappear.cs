@@ -4,10 +4,7 @@ using UnityEngine;
 namespace Watermelon.SquadShooter
 {
     /// <summary>
-    /// Gắn script này vào 1 GameObject bất kỳ trong scene Game.
-    /// Khi Enemy chết, thay vì hiệu ứng Ragdoll bị lỗi, 
-    /// Enemy sẽ thu nhỏ dần rồi biến mất.
-    /// Không thay đổi bất kỳ code gốc nào.
+
     /// </summary>
     public class EnemyDeathDisappear : MonoBehaviour
     {
