@@ -296,7 +296,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 4
-  m_FollowOffset: {x: 0, y: 12.8125, z: -8.4375}
+  m_FollowOffset: {x: 0, y: 10, z: -8.4375}
   m_XDamping: 0
   m_YDamping: 1
   m_ZDamping: 1
@@ -1445,7 +1445,7 @@ MonoBehaviour:
   m_LookAt: {fileID: 0}
   m_Follow: {fileID: 0}
   m_Lens:
-    FieldOfView: 70
+    FieldOfView: 60
     OrthographicSize: 5
     NearClipPlane: 2
     FarClipPlane: 50
@@ -3016,7 +3016,7 @@ PrefabInstance:
     - target: {fileID: 9068757956156514045, guid: 16ae3e6461f25be45bc05ba7fc78f9fa,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.001317227
+      value: 0.000099290766
       objectReference: {fileID: 0}
     - target: {fileID: 9154281434466665231, guid: 16ae3e6461f25be45bc05ba7fc78f9fa,
         type: 3}
