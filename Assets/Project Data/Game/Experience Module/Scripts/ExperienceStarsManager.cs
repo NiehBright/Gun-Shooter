@@ -52,7 +52,10 @@ namespace Watermelon
         {
             this.experienceUIController = experienceUIController;
 
-            starIconBounce.Initialise(starIconTransform);
+            if (starIconTransform != null)
+            {
+                starIconBounce.Initialise(starIconTransform);
+            }
         }
 
         private void AssignPools()
@@ -152,7 +155,10 @@ namespace Watermelon
                     starsInfo.RemoveAt(i);
                     i--;
 
-                    starIconBounce.Bounce();
+                    if (starIconTransform != null)
+                    {
+                        starIconBounce.Bounce();
+                    }
 
                     experienceUIController.OnStarHitted();
                 }

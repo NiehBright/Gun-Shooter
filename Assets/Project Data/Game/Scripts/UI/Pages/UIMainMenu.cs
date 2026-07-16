@@ -61,6 +61,22 @@ namespace Watermelon
 
         public static bool DontFadeRevealNextTime { get; set; }
 
+        [Header("User Profile Header UI")]
+        [SerializeField] Button profileAvatarButton;
+        [SerializeField] Image profileAvatarIcon;
+        [SerializeField] TextMeshProUGUI profileNameText;
+
+        [Header("User Profile Popup UI")]
+        [SerializeField] GameObject profilePopupObject;
+        [SerializeField] Button profilePopupCloseButton;
+        [SerializeField] Button profilePopupBlockerButton;
+        [SerializeField] Image profilePopupAvatarIcon;
+        [SerializeField] TextMeshProUGUI profilePopupNameText;
+        [SerializeField] TMP_InputField profilePopupNameInputField;
+        [SerializeField] Button profilePopupEditNameButton;
+        [SerializeField] TextMeshProUGUI profilePopupDmgText;
+        [SerializeField] TextMeshProUGUI profilePopupHpText;
+
         #region UI Page
 
         public override void Initialise()
@@ -123,6 +139,160 @@ namespace Watermelon
                 scrollSize.y += 60;
                 bottomPanelRectTransform.sizeDelta = scrollSize;
             }
+
+            InitUserProfile();
+        }
+
+        private void InitUserProfile()
+        {
+            if (profileAvatarButton != null)
+            {
+                profileAvatarButton.onClick.AddListener(ShowProfilePopup);
+            }
+
+            if (profilePopupCloseButton != null)
+            {
+                profilePopupCloseButton.onClick.AddListener(HideProfilePopup);
+            }
+
+            if (profilePopupBlockerButton != null)
+            {
+                profilePopupBlockerButton.onClick.AddListener(HideProfilePopup);
+            }
+
+            if (profilePopupEditNameButton != null)
+            {
+                profilePopupEditNameButton.onClick.AddListener(OnEditProfileNameClicked);
+            }
+
+            if (profilePopupNameInputField != null)
+            {
+                profilePopupNameInputField.onEndEdit.AddListener(OnProfileNameInputEndEdit);
+            }
+
+            CharactersController.OnCharacterSelectedEvent += (charType, character) => UpdateProfileUI();
+
+            UpdateProfileUI();
+        }
+
+        public void UpdateProfileUI()
+        {
+            string userName = PlayerPrefs.GetString("PlayerProfileName", "User Name");
+
+            if (profileNameText != null)
+            {
+                profileNameText.text = userName;
+            }
+
+            if (profilePopupNameText != null)
+            {
+                profilePopupNameText.text = userName;
+            }
+
+            if (profilePopupNameInputField != null)
+            {
+                profilePopupNameInputField.text = userName;
+            }
+
+            var character = CharactersController.SelectedCharacter;
+            if (character != null)
+            {
+                var sprite = character.GetCurrentStage().PreviewSprite;
+                if (profileAvatarIcon != null && sprite != null) profileAvatarIcon.sprite = sprite;
+                if (profilePopupAvatarIcon != null && sprite != null) profilePopupAvatarIcon.sprite = sprite;
+            }
+        }
+
+        private void ShowProfilePopup()
+        {
+            UpdateProfileUI();
+
+            float totalHP = 100f;
+            float totalDmg = 100f;
+
+            if (CharactersController.SelectedCharacter != null)
+            {
+                var character = CharactersController.SelectedCharacter;
+                if (character.Upgrades != null && character.Save != null && character.Save.UpgradeLevel < character.Upgrades.Length)
+                {
+                    var charStats = character.Upgrades[character.Save.UpgradeLevel].Stats;
+                    if (charStats != null)
+                    {
+                        float charHP = charStats.BaseHealth;
+                        var bonusStats = EquipmentController.GetTotalBonusStats();
+                        totalHP = charHP + bonusStats.bonusHP;
+                    }
+                }
+            }
+
+            totalDmg = EquipmentController.GetTotalPlayerDamage();
+
+            if (profilePopupHpText != null)
+            {
+                profilePopupHpText.text = Mathf.RoundToInt(totalHP).ToString();
+            }
+
+            if (profilePopupDmgText != null)
+            {
+                profilePopupDmgText.text = Mathf.RoundToInt(totalDmg).ToString();
+            }
+
+            if (profilePopupObject != null)
+            {
+                profilePopupObject.SetActive(true);
+            }
+
+            if (profilePopupNameInputField != null)
+            {
+                profilePopupNameInputField.gameObject.SetActive(false);
+            }
+
+            if (profilePopupNameText != null)
+            {
+                profilePopupNameText.gameObject.SetActive(true);
+            }
+        }
+
+        private void HideProfilePopup()
+        {
+            if (profilePopupObject != null)
+            {
+                profilePopupObject.SetActive(false);
+            }
+        }
+
+        private void OnEditProfileNameClicked()
+        {
+            if (profilePopupNameInputField != null && profilePopupNameText != null)
+            {
+                profilePopupNameText.gameObject.SetActive(false);
+                profilePopupNameInputField.gameObject.SetActive(true);
+                profilePopupNameInputField.text = PlayerPrefs.GetString("PlayerProfileName", "User Name");
+                profilePopupNameInputField.ActivateInputField();
+            }
+        }
+
+        private void OnProfileNameInputEndEdit(string newName)
+        {
+            if (string.IsNullOrEmpty(newName))
+            {
+                newName = "User Name";
+            }
+
+            PlayerPrefs.SetString("PlayerProfileName", newName);
+            PlayerPrefs.Save();
+
+            UpdateProfileUI();
+
+            if (profilePopupNameInputField != null)
+            {
+                profilePopupNameInputField.gameObject.SetActive(false);
+            }
+
+            if (profilePopupNameText != null)
+            {
+                profilePopupNameText.gameObject.SetActive(true);
+            }
         }
 
         public void UpdateLevelText()
@@ -144,6 +314,7 @@ namespace Watermelon
 
         public override void PlayShowAnimation()
         {
+            UpdateProfileUI();
             IAPManager.OnPurchaseComplete += OnPurchaseComplete;
 
             if (characterUpgradeTutorial != null && !characterUpgradeTutorial.IsFinished)

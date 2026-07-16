@@ -151,7 +151,7 @@ MonoBehaviour:
   container: {fileID: 1338944849}
   roomCustomObjectsContainer: {fileID: 1079873525}
   worldCustomObjectsContainer: {fileID: 1976754759}
-  spawnPoint: {x: 0, y: 0, z: -11}
+  spawnPoint: {x: 0, y: 0, z: -7}
   spawnPointSphereSize: 1.953125
   exitPointSphereSize: 1.953125
   spawnPointColor: {r: 1, g: 1, b: 1, a: 1}
