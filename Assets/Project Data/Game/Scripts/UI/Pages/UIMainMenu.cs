@@ -86,7 +86,19 @@ namespace Watermelon
             characterTab.Initialise();
             weaponTab.Initialise();
 
-            overlayUI.Initialise();
+            if (overlayUI == null)
+            {
+                overlayUI = FindObjectOfType<OverlayUI>();
+            }
+
+            if (overlayUI != null)
+            {
+                overlayUI.Initialise();
+            }
+            else
+            {
+                Debug.LogWarning("[UIMainMenu] overlayUI is null and could not be found in the scene!");
+            }
 
             // Create tutorial components
             if(TutorialController.ActivateCharacterTutorial)
