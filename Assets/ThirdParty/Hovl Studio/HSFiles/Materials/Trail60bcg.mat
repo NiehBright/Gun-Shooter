@@ -37,7 +37,8 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Trail60bcg
-  m_Shader: {fileID: -6465566751694194690, guid: 00191177e5fd5c4468ad546ce87ef329, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 00191177e5fd5c4468ad546ce87ef329,
+    type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
@@ -170,6 +171,7 @@ Material:
     - _DoubleSidedGIMode: 0
     - _DoubleSidedNormalMode: 2
     - _DstBlend: 10
+    - _DstBlendAlpha: 10
     - _Emission: 3
     - _EnableBlendModePreserveSpecularLighting: 0
     - _EnableFogOnTransparent: 1
@@ -189,6 +191,7 @@ Material:
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 5
+    - _SrcBlendAlpha: 1
     - _StencilRef: 0
     - _StencilRefDepth: 1
     - _StencilRefDistortionVec: 4
@@ -212,6 +215,7 @@ Material:
     - _Usecenterglow: 0
     - _Usedark: 0
     - _Usedepth: 0
+    - _XRMotionVectorsPass: 1
     - _ZTest: 4
     - _ZTestDepthEqualForOpaque: 4
     - _ZTestTransparent: 4

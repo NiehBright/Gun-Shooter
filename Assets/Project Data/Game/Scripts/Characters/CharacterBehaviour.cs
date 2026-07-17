@@ -94,6 +94,12 @@ namespace Watermelon.SquadShooter
         public float DashCooldownTimeLeft => dashCooldownTimeLeft;
         public float DashCooldown => dashCooldown;
 
+        // Active Skill Variables
+        private float skillCooldownTimeLeft;
+        public float SkillCooldownTimeLeft => skillCooldownTimeLeft;
+        public float SkillCooldown => CharactersController.SelectedCharacter != null && CharactersController.SelectedCharacter.SkillData != null ? CharactersController.SelectedCharacter.SkillData.Cooldown : 1f;
+        public bool IsSkillReady => skillCooldownTimeLeft <= 0;
+
         private Vector3 movementVelocity;
         public Vector3 MovementVelocity => movementVelocity;
 
@@ -632,6 +638,11 @@ namespace Watermelon.SquadShooter
                 dashCooldownTimeLeft -= Time.deltaTime;
             }
 
+            if (skillCooldownTimeLeft > 0)
+            {
+                skillCooldownTimeLeft -= Time.deltaTime;
+            }
+
 
 
             if (!isActive)
@@ -995,6 +1006,47 @@ namespace Watermelon.SquadShooter
                 Tween.DelayedCall(dashDuration, () => trail.emitting = false);
             }
 
+            AudioController.PlaySound(AudioController.Sounds.buttonSound);
+        }
+
+        public void ActivateSkill()
+        {
+            var character = CharactersController.SelectedCharacter;
+            if (character == null || character.SkillData == null || character.SkillData.VFXPrefab == null || !IsSkillReady) return;
+
+            var skill = character.SkillData;
+            skillCooldownTimeLeft = skill.Cooldown;
+
+            // Spawn VFX at the current character feet (fixed position)
+            Vector3 spawnPos = transform.position;
+            GameObject vfxObj = Instantiate(skill.VFXPrefab, spawnPos, Quaternion.identity);
+
+            // Calculate damage scaled with character level
+            int upgradeLevel = character.Save != null ? character.Save.UpgradeLevel : 0;
+            float charLevel = upgradeLevel + 1;
+
+            float baseDmg = 100f;
+            var activeWeapon = WeaponsController.Database.Weapons[WeaponsController.SelectedWeaponIndex];
+            if (activeWeapon != null)
+            {
+                var stage = UpgradesController.GetUpgrade<BaseWeaponUpgrade>(activeWeapon.UpgradeType).GetCurrentStage();
+                if (stage != null)
+                {
+                    baseDmg = (stage.Damage.firstValue + stage.Damage.secondValue) / 2f;
+                }
+            }
+
+            float charDmgMult = Stats.BaseBulletDamageMultiplier;
+            float finalBaseDmg = baseDmg * charDmgMult;
+
+            // Damage per tick scales up by 15% per character level
+            float damagePerTick = finalBaseDmg * skill.DamageMultiplier * (1f + (charLevel - 1) * 0.15f);
+
+            // Add BlackHoleBehaviour component to handle pulling and damage ticks
+            var blackHole = vfxObj.AddComponent<BlackHoleBehaviour>();
+            blackHole.Initialise(skill.AoeRadius, skill.PullSpeed, damagePerTick, skill.TickInterval, skill.Duration);
+
+            // Play sound
             AudioController.PlaySound(AudioController.Sounds.buttonSound);
         }
 

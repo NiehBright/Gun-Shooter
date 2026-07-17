@@ -1,0 +1,12 @@
+THIRD-PARTY NOTICES
+
+This asset package contains third-party content used under the following licenses:
+
+1. T_space_nebula_6k
+   Title: FREE - SkyBox Space Nebula
+   License: CC Attribution (Creative Commons Attribution: https://creativecommons.org/licenses/by/4.0/)
+   Source URL: https://skfb.ly/oIIYS
+   Attribution: Provided by Paul on Sketchfab
+
+All third-party components included in this asset are compatible with the Unity Asset Store EULA.  
+For more information, please visit: https://unity.com/legal/asset-store-content-transparency

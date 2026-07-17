@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: a1dd0b3056413a54ba15cde1313b8be0
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 356686
+  packageName: Black Hole Effect
+  packageVersion: 1.0.0
+  assetPath: Assets/Solodream/BlackHoleEffect/PostProcessingVolume/ForURP/URP_BloomVolume.asset
+  uploadId: 849882

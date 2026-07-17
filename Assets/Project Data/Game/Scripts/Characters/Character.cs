@@ -24,6 +24,10 @@ namespace Watermelon.SquadShooter
         [SerializeField] CharacterUpgrade[] upgrades;
         public CharacterUpgrade[] Upgrades => upgrades;
 
+        [Header("Skill")]
+        [SerializeField] CharacterSkillData skillData;
+        public CharacterSkillData SkillData => skillData;
+
         private CharacterSave save;
         public CharacterSave Save => save;
 
