@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 395e241bd8cce44409394cf1e88242f3
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 356686
+  packageName: Black Hole Effect
+  packageVersion: 1.0.0
+  assetPath: Assets/Solodream/BlackHoleEffect/Materials/M_Fresnel.mat
+  uploadId: 849882

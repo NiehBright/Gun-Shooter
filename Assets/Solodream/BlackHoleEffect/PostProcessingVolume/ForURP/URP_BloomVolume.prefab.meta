@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 30a5dbc2059252f4f8967da30f24df42
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 356686
+  packageName: Black Hole Effect
+  packageVersion: 1.0.0
+  assetPath: Assets/Solodream/BlackHoleEffect/PostProcessingVolume/ForURP/URP_BloomVolume.prefab
+  uploadId: 849882

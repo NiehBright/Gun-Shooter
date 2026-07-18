@@ -18,6 +18,11 @@ namespace Watermelon
         [SerializeField] Button dashButton;
         [SerializeField] Image dashCooldownOverlay;
 
+        [Header("Skill Control")]
+        [SerializeField] Button skillButton;
+        [SerializeField] Image skillCooldownOverlay;
+        [SerializeField] Image skillIconImage;
+
         [Header("Auto Shoot")]
         [SerializeField] Sprite autoShootActiveSprite;
         [SerializeField] Sprite autoShootDisableSprite;
@@ -96,6 +101,25 @@ namespace Watermelon
                 autoShootButton.onClick.AddListener(OnAutoShootButtonClicked);
                 Debug.Log("[UIGame] Found and registered click listener for Auto Shoot Button.");
             }
+
+            if (skillButton == null)
+            {
+                Transform trans = FindChildRecursive(transform, "Skill Button");
+                if (trans != null)
+                {
+                    skillButton = trans.GetComponent<Button>();
+                    Transform iconTrans = FindChildRecursive(trans, "Icon");
+                    if (iconTrans != null) skillIconImage = iconTrans.GetComponent<Image>();
+                    Transform overlayTrans = FindChildRecursive(trans, "Cooldown Overlay");
+                    if (overlayTrans != null) skillCooldownOverlay = overlayTrans.GetComponent<Image>();
+                }
+            }
+
+            if (skillButton != null)
+            {
+                skillButton.onClick.AddListener(OnSkillButtonClicked);
+                Debug.Log("[UIGame] Found and registered click listener for Skill Button.");
+            }
         }
 
         private void Start()
@@ -144,6 +168,18 @@ namespace Watermelon
                 UIGamepadButton.EnableTag(UIGamepadButtonTag.Game);
                 UIGamepadButton.DisableTag(UIGamepadButtonTag.MainMenu);
             });
+
+            // Initialize/Show Skill Button depending on if the selected character has a skill
+            var character = CharactersController.SelectedCharacter;
+            if (character != null && character.SkillData != null && character.SkillData.VFXPrefab != null)
+            {
+                if (skillButton != null) skillButton.gameObject.SetActive(true);
+                if (skillIconImage != null) skillIconImage.sprite = character.SkillData.ButtonIcon;
+            }
+            else
+            {
+                if (skillButton != null) skillButton.gameObject.SetActive(false);
+            }
         }
 
         public void InitRoomsUI(RoomData[] rooms)
@@ -245,6 +281,20 @@ namespace Watermelon
                     dashCooldownOverlay.gameObject.SetActive(false);
                 }
             }
+
+            if (skillCooldownOverlay != null)
+            {
+                var behavior = CharacterBehaviour.GetBehaviour();
+                if (behavior != null && behavior.SkillCooldownTimeLeft > 0)
+                {
+                    skillCooldownOverlay.gameObject.SetActive(true);
+                    skillCooldownOverlay.fillAmount = behavior.SkillCooldownTimeLeft / behavior.SkillCooldown;
+                }
+                else
+                {
+                    skillCooldownOverlay.gameObject.SetActive(false);
+                }
+            }
         }
 
 
@@ -263,6 +313,17 @@ namespace Watermelon
             if (!behavior.IsDashing && behavior.DashCooldownTimeLeft <= 0)
             {
                 behavior.PerformDash();
+            }
+        }
+
+        private void OnSkillButtonClicked()
+        {
+            var behavior = CharacterBehaviour.GetBehaviour();
+            if (behavior == null) return;
+
+            if (behavior.IsSkillReady)
+            {
+                behavior.ActivateSkill();
             }
         }
 

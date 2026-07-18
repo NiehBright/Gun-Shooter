@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 28cd81c44f6923c4da1854d1d4b088d2
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 625f186215c104763be7675aa2d941aa, type: 3}
+AssetOrigin:
+  serializedVersion: 1
+  productId: 356686
+  packageName: Black Hole Effect
+  packageVersion: 1.0.0
+  assetPath: Assets/Solodream/BlackHoleEffect/Shaders/Distortion.shadergraph
+  uploadId: 849882
