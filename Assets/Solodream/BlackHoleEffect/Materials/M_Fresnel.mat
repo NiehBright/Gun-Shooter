@@ -17,7 +17,7 @@ Material:
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 2011
   stringTagMap: {}
   disabledShaderPasses:
   - MOTIONVECTORS
@@ -42,10 +42,10 @@ Material:
     - _Float: 1
     - _FrenelPower: 5
     - _QueueControl: 0
-    - _QueueOffset: 0
+    - _QueueOffset: 11
     - _XRMotionVectorsPass: 1
     m_Colors:
-    - _FrenelColor: {r: 3.5050313, g: 1.1091871, b: 8.47419, a: 1}
+    - _FrenelColor: {r: 0.920091, g: 0, b: 2.828427, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &5558627815065183150

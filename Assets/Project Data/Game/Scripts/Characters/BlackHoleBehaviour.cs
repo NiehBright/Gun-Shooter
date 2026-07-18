@@ -4,14 +4,31 @@ namespace Watermelon.SquadShooter
 {
     public class BlackHoleBehaviour : MonoBehaviour
     {
-        private float radius;
-        private float pullSpeed;
-        private float damagePerTick;
-        private float tickInterval;
-        private float duration;
+        [Header("Black Hole Settings")]
+        [SerializeField] private float radius = 6f;
+        [SerializeField] private float pullSpeed = 4f;
+        [SerializeField] private float damagePerTick = 20f;
+        [SerializeField] private float tickInterval = 0.5f;
+        [SerializeField] private float duration = 5f;
+
+        public float Radius { get => radius; set => radius = value; }
+        public float PullSpeed { get => pullSpeed; set => pullSpeed = value; }
+        public float DamagePerTick { get => damagePerTick; set => damagePerTick = value; }
+        public float TickInterval { get => tickInterval; set => tickInterval = value; }
+        public float Duration { get => duration; set => duration = value; }
 
         private float lifetime;
         private float nextDamageTime;
+        private bool isInitialised = false;
+
+        private void Start()
+        {
+            if (!isInitialised)
+            {
+                // Đồng bộ kích thước VFX theo bán kính được chỉnh sửa trong Editor
+                transform.localScale = new Vector3(radius * 2f, 1f, radius * 2f);
+            }
+        }
 
         public void Initialise(float radius, float pullSpeed, float damagePerTick, float tickInterval, float duration)
         {
@@ -23,6 +40,7 @@ namespace Watermelon.SquadShooter
 
             this.lifetime = 0f;
             this.nextDamageTime = 0f;
+            this.isInitialised = true;
 
             // Đồng bộ kích thước VFX theo bán kính
             transform.localScale = new Vector3(radius * 2f, 1f, radius * 2f);
@@ -73,5 +91,17 @@ namespace Watermelon.SquadShooter
                 }
             }
         }
+
+#if UNITY_EDITOR
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = new Color(0.5f, 0f, 1f, 0.4f); // Purple wire sphere
+            Gizmos.DrawWireSphere(transform.position, radius);
+
+            // Draw a solid circle on the ground for better visual feedback
+            UnityEditor.Handles.color = new Color(0.5f, 0f, 1f, 0.12f);
+            UnityEditor.Handles.DrawSolidDisc(transform.position, Vector3.up, radius);
+        }
+#endif
     }
 }

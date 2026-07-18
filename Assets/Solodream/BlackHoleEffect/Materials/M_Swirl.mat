@@ -50,7 +50,7 @@ Material:
     - _TwirlStrength: 12.5
     - _XRMotionVectorsPass: 1
     m_Colors:
-    - _Color: {r: 150.04051, g: 0, b: 1245.9886, a: 1}
+    - _Color: {r: 2023.222, g: 0, b: 2220.893, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &8536331803764823454
