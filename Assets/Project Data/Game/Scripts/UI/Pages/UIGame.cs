@@ -110,6 +110,7 @@ namespace Watermelon
                     skillButton = trans.GetComponent<Button>();
                     Transform iconTrans = FindChildRecursive(trans, "Icon");
                     if (iconTrans != null) skillIconImage = iconTrans.GetComponent<Image>();
+                    else skillIconImage = trans.GetComponent<Image>();
                     Transform overlayTrans = FindChildRecursive(trans, "Cooldown Overlay");
                     if (overlayTrans != null) skillCooldownOverlay = overlayTrans.GetComponent<Image>();
                 }
