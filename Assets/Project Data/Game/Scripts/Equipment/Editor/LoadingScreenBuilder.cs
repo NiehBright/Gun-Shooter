@@ -91,6 +91,7 @@ namespace Watermelon.SquadShooter
                     textRect.sizeDelta = new Vector2(400f, 60f);
                     
                     var tmpText = textObj.AddComponent<TMPro.TextMeshProUGUI>();
+                    tmpText.font = TMPro.TMP_Settings.defaultFontAsset;
                     tmpText.text = "LOADING...";
                     tmpText.fontSize = 32;
                     tmpText.alignment = TMPro.TextAlignmentOptions.Center;
