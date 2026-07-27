@@ -6,6 +6,7 @@ namespace Watermelon.SquadShooter
 {
     public class LevelProgressionPanel : MonoBehaviour
     {
+        [SerializeField] bool isAlwaysHidden = true;
         [SerializeField] Transform levelPreviewContainer;
 
         [Space]
@@ -55,7 +56,7 @@ namespace Watermelon.SquadShooter
             // Reset arrow object
             arrowRectTransform.SetParent(transform);
 
-            if (currentWorld != null)
+            if (currentWorld != null && !isAlwaysHidden)
             {
                 // Enable panel
                 gameObject.SetActive(true);
@@ -115,6 +116,8 @@ namespace Watermelon.SquadShooter
 
         public void Show()
         {
+            if (isAlwaysHidden) return;
+
             fadeTweenCase.KillActive();
 
             fadeTweenCase = canvasGroup.DOFade(1.0f, 0.3f).SetEasing(Ease.Type.CircIn);
@@ -122,6 +125,8 @@ namespace Watermelon.SquadShooter
 
         public void Hide()
         {
+            if (isAlwaysHidden) return;
+
             fadeTweenCase.KillActive();
 
             fadeTweenCase = canvasGroup.DOFade(0.0f, 0.3f).SetEasing(Ease.Type.CircIn);
