@@ -395,17 +395,19 @@ namespace Watermelon.SquadShooter
             // Character Center Preview
             var charPreview = CreateImage(slotsArea.transform, "CharacterPreviewImage", Color.white);
             RectTransform charPreviewRect = charPreview.GetComponent<RectTransform>();
-            charPreviewRect.anchorMin = new Vector2(0.32f, 0.08f);
-            charPreviewRect.anchorMax = new Vector2(0.68f, 0.78f);
-            charPreviewRect.offsetMin = Vector2.zero;
-            charPreviewRect.offsetMax = Vector2.zero;
+            charPreviewRect.anchorMin = new Vector2(0.5f, 0.5f);
+            charPreviewRect.anchorMax = new Vector2(0.5f, 0.5f);
+            charPreviewRect.pivot = new Vector2(0.5f, 0.5f);
+            charPreviewRect.anchoredPosition = new Vector2(0, -25f);
+            charPreviewRect.sizeDelta = new Vector2(180f, 260f); // Kích thước cố định cho ảnh nhân vật
             charPreview.preserveAspect = true;
 
             // 4 Slots surrounding the preview (Top-Left: Hat, Bottom-Left: Gloves, Top-Right: Armor, Bottom-Right: Shoes)
-            EquipmentSlotUI hatSlot = CreateSlotWithFrame(slotsArea.transform, "Hat", 0.03f, 0.28f, 0.52f, 0.75f, framePrefab);
-            EquipmentSlotUI glovesSlot = CreateSlotWithFrame(slotsArea.transform, "Gloves", 0.03f, 0.28f, 0.15f, 0.38f, framePrefab);
-            EquipmentSlotUI armorSlot = CreateSlotWithFrame(slotsArea.transform, "Armor", 0.72f, 0.97f, 0.52f, 0.75f, framePrefab);
-            EquipmentSlotUI shoesSlot = CreateSlotWithFrame(slotsArea.transform, "Shoes", 0.72f, 0.97f, 0.15f, 0.38f, framePrefab);
+            Vector2 slotSize = new Vector2(100f, 100f);
+            EquipmentSlotUI hatSlot = CreateSlotWithFrame(slotsArea.transform, "Hat", new Vector2(0, 0.5f), new Vector2(0, 0.5f), new Vector2(0, 0.5f), new Vector2(25f, 65f), slotSize, framePrefab);
+            EquipmentSlotUI glovesSlot = CreateSlotWithFrame(slotsArea.transform, "Gloves", new Vector2(0, 0.5f), new Vector2(0, 0.5f), new Vector2(0, 0.5f), new Vector2(25f, -75f), slotSize, framePrefab);
+            EquipmentSlotUI armorSlot = CreateSlotWithFrame(slotsArea.transform, "Armor", new Vector2(1, 0.5f), new Vector2(1, 0.5f), new Vector2(1, 0.5f), new Vector2(-25f, 65f), slotSize, framePrefab);
+            EquipmentSlotUI shoesSlot = CreateSlotWithFrame(slotsArea.transform, "Shoes", new Vector2(1, 0.5f), new Vector2(1, 0.5f), new Vector2(1, 0.5f), new Vector2(-25f, -75f), slotSize, framePrefab);
 
             // ============================
             // AREA PHAI: INVENTORY & FILTERS
@@ -584,21 +586,25 @@ namespace Watermelon.SquadShooter
             return btn;
         }
 
-        // Tạo slot thiết bị sử dụng Prefab Khung lồng nhau (Nested Prefab)
-        private EquipmentSlotUI CreateSlotWithFrame(Transform parent, string slotName, float xMin, float xMax, float yMin, float yMax, GameObject framePrefab)
+        // Tạo slot thiết bị sử dụng Prefab Khung lồng nhau (Nested Prefab) với neo và kích thước cố định
+        private EquipmentSlotUI CreateSlotWithFrame(Transform parent, string slotName, Vector2 anchorMin, Vector2 anchorMax, Vector2 pivot, Vector2 anchoredPosition, Vector2 size, GameObject framePrefab)
         {
             GameObject slotObj = new GameObject("Slot_" + slotName);
             slotObj.transform.SetParent(parent, false);
             RectTransform slotRect = slotObj.AddComponent<RectTransform>();
-            slotRect.anchorMin = new Vector2(xMin, yMin);
-            slotRect.anchorMax = new Vector2(xMax, yMax);
-            slotRect.offsetMin = Vector2.zero;
-            slotRect.offsetMax = Vector2.zero;
+            slotRect.anchorMin = anchorMin;
+            slotRect.anchorMax = anchorMax;
+            slotRect.pivot = pivot;
+            slotRect.anchoredPosition = anchoredPosition;
+            slotRect.sizeDelta = size;
 
             slotObj.AddComponent<Button>();
 
             // Lồng Prefab Khung vật phẩm vào bên trong
             GameObject frameInstance = (GameObject)PrefabUtility.InstantiatePrefab(framePrefab, slotObj.transform);
+            RectTransform frameRect = frameInstance.GetComponent<RectTransform>();
+            SetAnchorsStretch(frameRect); // Đảm bảo khung luôn co giãn khít hoàn toàn với slot cha
+
             var bgImg = frameInstance.transform.Find("Background").GetComponent<Image>();
             var border = frameInstance.transform.Find("Border").GetComponent<Image>();
             var icon = frameInstance.transform.Find("Icon").GetComponent<Image>();
@@ -831,6 +837,9 @@ namespace Watermelon.SquadShooter
 
             // Lồng Prefab Khung vật phẩm vào bên trong
             GameObject frameInstance = (GameObject)PrefabUtility.InstantiatePrefab(framePrefab, itemObj.transform);
+            RectTransform frameRect = frameInstance.GetComponent<RectTransform>();
+            SetAnchorsStretch(frameRect); // Đảm bảo khung luôn co giãn khít hoàn toàn với cell cha
+
             var bgImg = frameInstance.transform.Find("Background").GetComponent<Image>();
             var border = frameInstance.transform.Find("Border").GetComponent<Image>();
             var icon = frameInstance.transform.Find("Icon").GetComponent<Image>();
