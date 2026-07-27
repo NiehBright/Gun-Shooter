@@ -60,6 +60,11 @@ namespace Watermelon
         {
             roomIndicatorsPool = new PoolGeneric<UIRoomIndicator>(new PoolSettings(roomIndicatorUIPrefab.name, roomIndicatorUIPrefab, 3, true, roomsHolder));
 
+            if (roomsHolder != null)
+            {
+                roomsHolder.gameObject.SetActive(false);
+            }
+
             pauseButton.onClick.AddListener(OnPauseButtonClicked);
             pauseExitButton.onClick.AddListener(OnPauseExitButtonClicked);
             pauseResumeButton.onClick.AddListener(OnPauseResumeButtonClicked);
