@@ -82,8 +82,9 @@ namespace Watermelon.SquadShooter
             var mainMenu = UIController.GetPage<UIMainMenu>();
             if (mainMenu == null || !mainMenu.IsPageDisplayed)
             {
-                // Reset trạng thái khi tắt hoặc bắt đầu chơi
-                isPlayerInside = false;
+                // KHÔNG reset isPlayerInside tại đây. 
+                // Khi bảng nâng cấp mở ra, MainMenu sẽ bị ẩn. Nếu ta reset về false tại đây,
+                // lúc đóng bảng nâng cấp (MainMenu hiển thị lại), code sẽ tưởng Player mới đi vào vòng và mở lại UI lập tức.
                 return;
             }
 
