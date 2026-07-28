@@ -1854,6 +1854,9 @@ namespace Watermelon.SquadShooter
 
         private void DrawItemCallback(Rect rect, int index, bool isActive, bool isFocused)
         {
+            if (itemsProperty == null || index < 0 || index >= itemsProperty.arraySize)
+                return;
+
             backupColor = GUI.backgroundColor;
 
             if (invalidIndexesList.Contains(index))
