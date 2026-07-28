@@ -65,10 +65,52 @@ namespace Watermelon.SquadShooter
             panelCanvasGroup = GetComponent<CanvasGroup>();
             if (panelCanvasGroup == null) panelCanvasGroup = gameObject.AddComponent<CanvasGroup>();
 
+            if (closeButton == null)
+            {
+                // Tìm tự động đối tượng CloseButton trong các con để đề phòng mất liên kết Reference trong Inspector
+                Transform closeBtnTrans = null;
+                foreach (Transform child in GetComponentsInChildren<Transform>(true))
+                {
+                    if (child.name == "CloseButton")
+                    {
+                        closeBtnTrans = child;
+                        break;
+                    }
+                }
+
+                if (closeBtnTrans != null)
+                {
+                    closeButton = closeBtnTrans.GetComponent<Button>();
+                    if (closeButton == null)
+                    {
+                        closeButton = closeBtnTrans.gameObject.AddComponent<Button>();
+                    }
+                }
+            }
+
             if (closeButton != null)
             {
+                var img = closeButton.GetComponent<Image>();
+                if (img != null)
+                {
+                    img.raycastTarget = true; // Đảm bảo nút CloseButton luôn nhận được sự kiện click chuột
+                }
                 closeButton.onClick.RemoveAllListeners();
                 closeButton.onClick.AddListener(Close);
+                Debug.Log("[EquipmentPanelUI] Close button bound successfully!");
+            }
+            else
+            {
+                Debug.LogError("[EquipmentPanelUI] Close button not found in hierarchy!");
+            }
+
+            // Tự động tắt Raycast Target trên các thành phần Text tĩnh để tránh chặn click chuột của các nút (như nút Close ở góc)
+            foreach (var txt in GetComponentsInChildren<Text>(true))
+            {
+                if (txt.GetComponentInParent<Button>() == null)
+                {
+                    txt.raycastTarget = false;
+                }
             }
 
 #if UNITY_EDITOR

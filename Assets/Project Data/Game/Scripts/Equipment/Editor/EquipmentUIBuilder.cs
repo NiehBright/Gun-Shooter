@@ -533,6 +533,7 @@ namespace Watermelon.SquadShooter
             obj.AddComponent<RectTransform>();
             Image img = obj.AddComponent<Image>();
             img.color = color;
+            img.raycastTarget = false; // Tắt raycastTarget mặc định để tránh chặn click chuột
             return img;
         }
 
@@ -547,6 +548,7 @@ namespace Watermelon.SquadShooter
             txt.alignment = alignment;
             txt.color = Color.white;
             txt.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            txt.raycastTarget = false; // Tắt raycastTarget mặc định cho text tĩnh
             return obj;
         }
 
