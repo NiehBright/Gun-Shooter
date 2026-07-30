@@ -23,7 +23,7 @@ namespace Watermelon.SquadShooter
         [Header("Character Stats Area")]
         [SerializeField] Image charPreviewImage;
         [SerializeField] TMPro.TMP_Text charNameText;
-        [SerializeField] TMPro.TMP_Text charStarsText;
+        [SerializeField] UnityEngine.UI.Text charStarsText;
         [SerializeField] TMPro.TMP_Text charHpValueText;
         [SerializeField] TMPro.TMP_Text charDmgValueText;
         [SerializeField] TMPro.TMP_Text coinsText; // Ô hiển thị vàng ở góc phải
