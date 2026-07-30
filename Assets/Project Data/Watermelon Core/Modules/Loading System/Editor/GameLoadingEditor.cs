@@ -19,7 +19,7 @@ namespace Watermelon
             {
                 if (!IsInitScene(currentScene.name))
                 {
-                    Initialiser initialiser = Object.FindObjectOfType<Initialiser>();
+                    Initialiser initialiser = Object.FindAnyObjectByType<Initialiser>();
                     if (initialiser == null)
                     {
                         GameObject initialiserPrefab = EditorUtils.GetAsset<GameObject>("Initialiser");

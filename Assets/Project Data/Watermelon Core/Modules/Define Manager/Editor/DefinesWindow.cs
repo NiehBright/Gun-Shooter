@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEditor;
 using System;
 using System.Reflection;
@@ -14,6 +14,15 @@ namespace Watermelon
 
         private bool isDefinesSame;
         private bool isRequireInit;
+
+        private static UnityEditor.Build.NamedBuildTarget ActiveTarget
+        {
+            get
+            {
+                BuildTargetGroup group = BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget);
+                return UnityEditor.Build.NamedBuildTarget.FromBuildTargetGroup(group);
+            }
+        }
 
         [MenuItem("Tools/Editor/Define Manager")]
         public static void ShowWindow()
@@ -32,7 +41,7 @@ namespace Watermelon
                 
         private string[] GetActiveStaticDefines()
         {
-            string definesLine = PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget));
+            string definesLine = PlayerSettings.GetScriptingDefineSymbols(ActiveTarget);
 
             if (!string.IsNullOrEmpty(definesLine))
             {
@@ -111,7 +120,7 @@ namespace Watermelon
             }
 
             List<RegisteredDefine> registeredDefines = DefinesSettings.GetDynamicDefines();
-            string defineLine = PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget));
+            string defineLine = PlayerSettings.GetScriptingDefineSymbols(ActiveTarget);
             string[] currentDefinesArray = defineLine.Split(';');
             for(int i = 0; i < currentDefinesArray.Length; i++)
             {
@@ -135,7 +144,7 @@ namespace Watermelon
 
         private void LoadActiveDefines()
         {
-            string defineLine = PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget));
+            string defineLine = PlayerSettings.GetScriptingDefineSymbols(ActiveTarget);
 
             string[] currentDefinesArray = defineLine.Split(';');
 
@@ -170,12 +179,12 @@ namespace Watermelon
 
         private void SaveDefines(string definesLine)
         {
-            PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget), definesLine);
+            PlayerSettings.SetScriptingDefineSymbols(ActiveTarget, definesLine);
         }
 
         private bool CompareDefines()
         {
-            string[] currentDefinesArray = PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget)).Split(';');
+            string[] currentDefinesArray = PlayerSettings.GetScriptingDefineSymbols(ActiveTarget).Split(';');
 
             for (int i = 0; i < projectDefines.Length; i++)
             {
@@ -247,7 +256,7 @@ namespace Watermelon
                             {
                                 if (EditorUtility.DisplayDialog("Remove define", "Are you sure you want to remove define?", "Remove", "Cancel"))
                                 {
-                                    string defineLine = PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget));
+                                    string defineLine = PlayerSettings.GetScriptingDefineSymbols(ActiveTarget);
                                     string[] currentDefinesArray = defineLine.Split(';');
 
                                     defineLine = "";

@@ -27,11 +27,13 @@ namespace Watermelon
         {
             SetupGuideInfo setupGuideInfo = EditorUtils.GetAsset<SetupGuideInfo>();
 
-            //We use EditorApplication.timeSinceStartup to make sure to avoid  showing window every time script assembly gets reloaded
+            // Đã vô hiệu hóa việc tự động mở cửa sổ khi load dự án
+            /*
             if ((setupGuideInfo != null) && (EditorApplication.timeSinceStartup < 30)) 
             {
                 EditorApplication.delayCall += ShowWindow;
             }
+            */
         }
 
         [MenuItem("Tools/Squad Shooter/Project Setup Guide")]
@@ -147,10 +149,13 @@ namespace Watermelon
             if (EditorPrefs.HasKey("ShowStartupGuide"))
                 return;
 
+            // Đã vô hiệu hóa việc tự động mở cửa sổ khi khởi động
+            /*
             EditorApplication.delayCall += delegate
             {
                 SetupGuideWindow.ShowWindow();
             };
+            */
 
             EditorPrefs.SetBool("ShowStartupGuide", true);
 

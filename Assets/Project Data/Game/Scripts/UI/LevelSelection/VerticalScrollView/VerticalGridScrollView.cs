@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -91,7 +91,7 @@ namespace Watermelon
 
             // Creaating pool of items if it is not null
 
-            gridItemPoolName = $"grid_item_{GetInstanceID()}";
+            gridItemPoolName = $"grid_item_{GetHashCode()}";
 
             if(gridItem != null)
             {

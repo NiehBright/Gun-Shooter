@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEditor;
 using System;
 using System.Reflection;
@@ -8,16 +8,25 @@ namespace Watermelon
 {
     public static class DefineManager
     {
+        private static UnityEditor.Build.NamedBuildTarget ActiveTarget
+        {
+            get
+            {
+                BuildTargetGroup group = BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget);
+                return UnityEditor.Build.NamedBuildTarget.FromBuildTargetGroup(group);
+            }
+        }
+
         public static bool HasDefine(string define)
         {
-            string definesLine = PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget));
+            string definesLine = PlayerSettings.GetScriptingDefineSymbols(ActiveTarget);
 
             return Array.FindIndex(definesLine.Split(';'), x => x == define) != -1;
         }
 
         public static void EnableDefine(string define)
         {
-            string defineLine = PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget));
+            string defineLine = PlayerSettings.GetScriptingDefineSymbols(ActiveTarget);
 
             if (Array.FindIndex(defineLine.Split(';'), x => x == define) != -1)
             {
@@ -26,12 +35,12 @@ namespace Watermelon
 
             defineLine = defineLine.Insert(0, define + ";");
 
-            PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget), defineLine);
+            PlayerSettings.SetScriptingDefineSymbols(ActiveTarget, defineLine);
         }
 
         public static void DisableDefine(string define)
         {
-            string defineLine = PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget));
+            string defineLine = PlayerSettings.GetScriptingDefineSymbols(ActiveTarget);
             string[] splitedDefines = defineLine.Split(';');
 
             int tempDefineIndex = Array.FindIndex(splitedDefines, x => x == define);
@@ -49,7 +58,7 @@ namespace Watermelon
 
             if (defineLine != tempDefineLine)
             {
-                PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget), tempDefineLine);
+                PlayerSettings.SetScriptingDefineSymbols(ActiveTarget, tempDefineLine);
             }
         }
 

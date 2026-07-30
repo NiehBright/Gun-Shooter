@@ -94,7 +94,7 @@ namespace Watermelon
                         break;
                 }
 
-                tmp.enableWordWrapping = textComp.horizontalOverflow == HorizontalWrapMode.Wrap;
+                tmp.textWrappingMode = textComp.horizontalOverflow == HorizontalWrapMode.Wrap ? TextWrappingModes.Normal : TextWrappingModes.NoWrap;
 
                 tmp.color = textComp.color;
                 tmp.raycastTarget = textComp.raycastTarget;

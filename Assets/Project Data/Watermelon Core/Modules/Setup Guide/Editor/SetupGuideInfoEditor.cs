@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEditor;
 using UnityEngine.Networking;
 using System.Collections;
@@ -155,14 +155,7 @@ namespace Watermelon
                 setupButtons[i].Init();
             }
 
-            if (finishedProject == null)
-            {
-                EditorCoroutines.Execute(instance.GetRequest(PROTOTYPE_URL));
-            }
-            else
-            {
-                finishedProject.LoadTexture();
-            }
+            // Đã loại bỏ lệnh tự động tải quảng cáo từ xa để tránh làm chậm Editor
         }
         
         public override void OnInspectorGUI()
@@ -235,33 +228,7 @@ namespace Watermelon
                 GUILayout.Space(-10);
             }
 
-            EditorGUILayoutCustom.Header("NEW TEMPLATE!");
-
-            EditorGUILayout.BeginHorizontal();
-
-            if (finishedProject != null)
-            {
-                GUILayout.FlexibleSpace();
-
-                EditorGUILayout.BeginVertical();
-                if (GUILayout.Button(new GUIContent(finishedProject.gameTexture, finishedProject.name), gameButtonStyle, GUILayout.Height(246), GUILayout.Width(450)))
-                {
-                    Application.OpenURL(finishedProject.url);
-                }
-                EditorGUILayout.EndVertical();
-
-                GUILayout.FlexibleSpace();
-            }
-            else
-            {
-                EditorGUILayout.BeginVertical();
-                GUILayout.FlexibleSpace();
-                EditorGUILayout.LabelField("Loading templates..", textGamesStyle);
-                GUILayout.FlexibleSpace();
-                EditorGUILayout.EndVertical();
-            }
-            EditorGUILayout.EndHorizontal();
-            GUILayout.Space(5);
+            // Đã loại bỏ hoàn toàn phần quảng cáo NEW TEMPLATE! tại đây
 
             EditorGUILayout.EndVertical();
 

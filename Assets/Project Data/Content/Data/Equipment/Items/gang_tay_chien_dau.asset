@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Watermelon.SquadShooter.EquipmentData
   itemName: Gang Tay Chien Dau
   itemID: gang_tay_chien_dau
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 3f73308af087e724387a140fcb82e01c, type: 3}
   equipmentType: 2
   rarity: 0
   baseStats:
