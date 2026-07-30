@@ -7,28 +7,30 @@ namespace Watermelon.SquadShooter
     {
         [Header("UI Elements")]
         [SerializeField] GameObject popupPanel;
-        [SerializeField] Text itemNameText;
-        [SerializeField] Text itemLevelText;
+        [SerializeField] TMPro.TMP_Text itemNameText;
+        [SerializeField] TMPro.TMP_Text itemLevelText;
         [SerializeField] Image itemIconImage;
-        [SerializeField] Text itemStatsText;
+        [SerializeField] TMPro.TMP_Text itemStatsText;
         [SerializeField] Image rarityBgImage;
         [SerializeField] Button blockerButton; // Nút nền để đóng khi ấn ra ngoài
 
         [Header("Equip Elements")]
         [SerializeField] GameObject equipGroup;
         [SerializeField] Button equipButton;
-        [SerializeField] Text equipButtonText;
+        [SerializeField] TMPro.TMP_Text equipButtonText;
 
         [Header("Upgrade Elements")]
         [SerializeField] GameObject upgradeGroup;
         [SerializeField] Button unequipButton;
         [SerializeField] Button upgradeButton;
-        [SerializeField] Text coinCostText;
+        [SerializeField] TMPro.TMP_Text coinCostText;
         [SerializeField] Image coinIcon;
 
         private EquipmentData currentItem;
         private EquipmentType currentSlotType;
+#pragma warning disable 0414
         private bool isForEquipped;
+#pragma warning restore 0414
 
         private void Start()
         {

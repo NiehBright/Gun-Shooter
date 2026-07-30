@@ -110,7 +110,7 @@ namespace Watermelon.SquadShooter
                 UnityEngine.SceneManagement.Scene activeScene = EditorSceneManager.OpenScene(SCENE_PATH);
                 
                 // Find Canvas with UIController
-                UIController uiController = FindObjectOfType<UIController>();
+                UIController uiController = FindAnyObjectByType<UIController>();
                 if (uiController == null)
                 {
                     EditorUtility.DisplayDialog("Error", "Khong tim thay UIController trong scene Game.unity!", "OK");

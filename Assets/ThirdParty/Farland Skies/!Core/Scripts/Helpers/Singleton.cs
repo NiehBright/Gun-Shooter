@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
 namespace Borodar.FarlandSkies.Core.Helpers
@@ -14,7 +14,7 @@ namespace Borodar.FarlandSkies.Core.Helpers
             {
                 if (_instance == null)
                 {
-                    var instances = FindObjectsOfType<T>();
+                    var instances = FindObjectsByType<T>(FindObjectsInactive.Exclude);
 
                     if (instances.Length == 1)
                     {

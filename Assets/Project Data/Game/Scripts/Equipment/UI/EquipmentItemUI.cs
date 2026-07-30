@@ -11,10 +11,18 @@ namespace Watermelon.SquadShooter
         [SerializeField] Image iconImage;
         [SerializeField] Image borderImage;
         [SerializeField] Image backgroundImage;
-        [SerializeField] Text levelText;
-        [SerializeField] Text nameText;
+        [SerializeField] TMPro.TMP_Text levelText;
+        [SerializeField] TMPro.TMP_Text nameText;
         [SerializeField] GameObject equippedBadge; // Badge "Đang mặc"
         [SerializeField] Button button;
+
+        [Header("Rarity Frame Customisation")]
+        [SerializeField] Sprite commonBorderSprite;
+        [SerializeField] Sprite rareBorderSprite;
+        [SerializeField] Sprite epicBorderSprite;
+        [SerializeField] Sprite commonBgSprite;
+        [SerializeField] Sprite rareBgSprite;
+        [SerializeField] Sprite epicBgSprite;
 
         private EquipmentData itemData;
         private bool isEquipped;
@@ -46,21 +54,31 @@ namespace Watermelon.SquadShooter
                 iconImage.enabled = data.Icon != null;
             }
 
-            // Border theo rarity
+            // Cấu hình khung viền (Border) theo độ hiếm bằng Sprite tùy chọn của người dùng
             if (borderImage != null)
-                borderImage.color = RARITY_COLORS[(int)data.Rarity];
-
-            // Background nhạt theo rarity
-            if (backgroundImage != null)
             {
-                Color c = RARITY_COLORS[(int)data.Rarity];
-                backgroundImage.color = new Color(c.r, c.g, c.b, 0.2f);
+                if (data.Rarity == EquipmentRarity.Common && commonBorderSprite != null)
+                    borderImage.sprite = commonBorderSprite;
+                else if (data.Rarity == EquipmentRarity.Rare && rareBorderSprite != null)
+                    borderImage.sprite = rareBorderSprite;
+                else if (data.Rarity == EquipmentRarity.Epic && epicBorderSprite != null)
+                    borderImage.sprite = epicBorderSprite;
             }
 
-            // Level badge
+            // Cấu hình nền (Background) theo độ hiếm bằng Sprite tùy chọn của người dùng
+            if (backgroundImage != null)
+            {
+                if (data.Rarity == EquipmentRarity.Common && commonBgSprite != null)
+                    backgroundImage.sprite = commonBgSprite;
+                else if (data.Rarity == EquipmentRarity.Rare && rareBgSprite != null)
+                    backgroundImage.sprite = rareBgSprite;
+                else if (data.Rarity == EquipmentRarity.Epic && epicBgSprite != null)
+                    backgroundImage.sprite = epicBgSprite;
+            }
+
             if (levelText != null)
             {
-                levelText.text = level > 0 ? $"+{level}" : "";
+                levelText.text = level > 0 ? level.ToString() : "";
                 levelText.enabled = level > 0;
             }
 

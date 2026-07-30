@@ -104,7 +104,7 @@ namespace Watermelon
 
             if (overlayUI == null)
             {
-                overlayUI = FindObjectOfType<OverlayUI>();
+                overlayUI = FindAnyObjectByType<OverlayUI>();
             }
 
             if (overlayUI != null)

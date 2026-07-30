@@ -450,7 +450,7 @@ namespace Watermelon.LevelSystem
 
         private static void LoadPedestal()
         {
-            if(PedestalBehavior == null) PedestalBehavior = Object.FindObjectOfType<PedestalBehavior>();
+            if(PedestalBehavior == null) PedestalBehavior = Object.FindAnyObjectByType<PedestalBehavior>();
 
             PedestalBehavior.PlaceCharacter();
         }
@@ -673,7 +673,7 @@ namespace Watermelon.LevelSystem
             }
 
             // Mở Loading Screen chuyển tiếp mượt mà
-            UILoadingScreen loadingScreen = Object.FindObjectOfType<UILoadingScreen>(true);
+            UILoadingScreen loadingScreen = Object.FindAnyObjectByType<UILoadingScreen>(FindObjectsInactive.Include);
             if (loadingScreen != null)
             {
                 // Tạm thời vô hiệu hóa di chuyển của nhân vật trong lúc chuyển tiếp

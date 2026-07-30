@@ -1,4 +1,4 @@
-﻿#pragma warning disable 649
+#pragma warning disable 649
 
 using UnityEngine;
 using UnityEditor;
@@ -56,7 +56,7 @@ namespace Watermelon.SquadShooter
 
             if (!IsEnabled) return;
 
-            LevelEditorEnemy[] allEnemies = Object.FindObjectsByType<LevelEditorEnemy>(FindObjectsSortMode.None);
+            LevelEditorEnemy[] allEnemies = Object.FindObjectsByType<LevelEditorEnemy>(FindObjectsInactive.Exclude);
             if (allEnemies == null || allEnemies.Length == 0)
             {
                 Handles.BeginGUI();

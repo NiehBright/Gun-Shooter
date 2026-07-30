@@ -156,7 +156,7 @@ namespace Watermelon
 
             // Enabling gamepad icon images in every UIGamepadButton on the scene.
             // WILL NOT ENABLE THEM INSIDE PREFABS!
-            FindObjectsByType<UIGamepadButton>(FindObjectsInactive.Include, FindObjectsSortMode.None).ForEach(button => button.gamepadButtonIcon.enabled = true);
+            FindObjectsByType<UIGamepadButton>(FindObjectsInactive.Include).ForEach(button => button.gamepadButtonIcon.enabled = true);
         }
 
         [Button]
@@ -166,7 +166,7 @@ namespace Watermelon
 
             // Disabling gamepad icon images in every UIGamepadButton on the scene.
             // WILL NOT DISABLE THEM INSIDE PREFABS!
-            FindObjectsByType<UIGamepadButton>(FindObjectsInactive.Include, FindObjectsSortMode.None).ForEach(button => button.gamepadButtonIcon.enabled = false);
+            FindObjectsByType<UIGamepadButton>(FindObjectsInactive.Include).ForEach(button => button.gamepadButtonIcon.enabled = false);
         }
 
         [Button]

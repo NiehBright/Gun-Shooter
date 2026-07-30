@@ -1,4 +1,4 @@
-﻿#pragma warning disable 0414
+#pragma warning disable 0414
 
 using System;
 using UnityEngine;
@@ -46,8 +46,8 @@ namespace Watermelon
             if (instance != null)
                 return;
 
-            if(poolManager == null)
-                poolManager = FindObjectOfType<PoolManager>();
+            if (poolManager == null)
+                poolManager = FindAnyObjectByType<PoolManager>();
 
             if (poolManager != null)
             {

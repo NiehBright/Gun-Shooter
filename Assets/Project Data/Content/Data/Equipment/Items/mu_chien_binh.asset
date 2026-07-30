@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Watermelon.SquadShooter.EquipmentData
   itemName: Mu Chien Binh
   itemID: mu_chien_binh
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 0922e3273854ffc41af03ba7b7bceb15, type: 3}
   equipmentType: 0
   rarity: 0
   baseStats:

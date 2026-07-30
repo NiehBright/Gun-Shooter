@@ -1,4 +1,4 @@
-﻿using UnityEditor;
+using UnityEditor;
 using System.Collections.Generic;
 using System.Text;
 using System;
@@ -10,9 +10,18 @@ namespace Watermelon
         private string defineLine;
         private List<string> defineList;
 
+        private static UnityEditor.Build.NamedBuildTarget ActiveTarget
+        {
+            get
+            {
+                BuildTargetGroup group = BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget);
+                return UnityEditor.Build.NamedBuildTarget.FromBuildTargetGroup(group);
+            }
+        }
+
         public DefinesString()
         {
-            defineLine = PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget));
+            defineLine = PlayerSettings.GetScriptingDefineSymbols(ActiveTarget);
 
             defineList = new List<string>(defineLine.Split(';'));
         }
@@ -63,7 +72,7 @@ namespace Watermelon
 
             if (defineLine != newDefineLine)
             {
-                PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget), newDefineLine);
+                PlayerSettings.SetScriptingDefineSymbols(ActiveTarget, newDefineLine);
             }
         }
     }

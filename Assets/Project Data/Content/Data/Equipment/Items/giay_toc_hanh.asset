@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Watermelon.SquadShooter.EquipmentData
   itemName: Giay Toc Hanh
   itemID: giay_toc_hanh
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: b5dd4fc6cbfe6bc48b0f3a3ac3f7de3c, type: 3}
   equipmentType: 3
   rarity: 2
   baseStats:

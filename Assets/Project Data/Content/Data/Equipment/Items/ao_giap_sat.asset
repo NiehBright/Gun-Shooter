@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Watermelon.SquadShooter.EquipmentData
   itemName: Ao Giap Sat
   itemID: ao_giap_sat
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 4eee4665b7ea8984e94182bd832eed77, type: 3}
   equipmentType: 1
   rarity: 1
   baseStats:

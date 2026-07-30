@@ -24,7 +24,7 @@ namespace Watermelon.SquadShooter
             EditorGUILayout.Space(10);
 
             bool prefabExists = AssetDatabase.LoadAssetAtPath<GameObject>(PREFAB_PATH) != null;
-            var existingInScene = Object.FindFirstObjectByType<EquipmentPanelUI>();
+            var existingInScene = Object.FindAnyObjectByType<EquipmentPanelUI>();
             bool existsInScene = existingInScene != null;
 
             if (existsInScene)
@@ -105,7 +105,7 @@ namespace Watermelon.SquadShooter
 
         private void PlacePrefabInScene()
         {
-            Canvas mainCanvas = Object.FindFirstObjectByType<Canvas>();
+            Canvas mainCanvas = Object.FindAnyObjectByType<Canvas>();
             if (mainCanvas == null)
             {
                 EditorUtility.DisplayDialog("Loi", "Khong tim thay Canvas trong scene!", "OK");
@@ -234,7 +234,7 @@ namespace Watermelon.SquadShooter
 
         private void BuildEquipmentUI()
         {
-            Canvas mainCanvas = Object.FindFirstObjectByType<Canvas>();
+            Canvas mainCanvas = Object.FindAnyObjectByType<Canvas>();
             if (mainCanvas == null)
             {
                 EditorUtility.DisplayDialog("Loi", "Khong tim thay Canvas!", "OK");

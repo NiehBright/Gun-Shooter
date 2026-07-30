@@ -59,7 +59,8 @@ namespace Watermelon
             stringBuilder.Append("Defines");
             stringBuilder.AppendLine();
 
-            string definesLine = PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget));
+            BuildTargetGroup group = BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget);
+            string definesLine = PlayerSettings.GetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.FromBuildTargetGroup(group));
 
             if (!string.IsNullOrEmpty(definesLine))
             {

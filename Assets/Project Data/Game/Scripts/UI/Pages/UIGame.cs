@@ -236,7 +236,7 @@ namespace Watermelon
 
             UIController.HidePage<UIGame>();
 
-            ItemDropBehaviour[] dropItems = FindObjectsByType<ItemDropBehaviour>(FindObjectsInactive.Exclude, FindObjectsSortMode.InstanceID);
+            ItemDropBehaviour[] dropItems = FindObjectsByType<ItemDropBehaviour>(FindObjectsInactive.Exclude);
             for (int i = 0; i < dropItems.Length; i++)
             {
                 dropItems[i].ItemDisable();
