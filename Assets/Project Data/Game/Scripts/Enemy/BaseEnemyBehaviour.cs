@@ -72,6 +72,8 @@ namespace Watermelon.SquadShooter
 
         public bool CanPursue { get; set; }
         public bool CanMove { get; set; }
+        [SerializeField] bool isDummy;
+        public bool IsDummy { get => isDummy; set => isDummy = value; }
         public bool IsAttacking { get; set; }
 
         // Health
@@ -236,11 +238,21 @@ namespace Watermelon.SquadShooter
 
             HasTakenDamage = false;
 
-            StateMachine.StartMachine();
-
-            for(int i = 0; i < weapons.Count; i++)
+            if (!IsDummy)
             {
-                if (weapons[i] != null) weapons[i].enabled = true;  
+                StateMachine.StartMachine();
+                for (int i = 0; i < weapons.Count; i++)
+                {
+                    if (weapons[i] != null) weapons[i].enabled = true;
+                }
+            }
+            else
+            {
+                navMeshAgent.enabled = false;
+                for (int i = 0; i < weapons.Count; i++)
+                {
+                    if (weapons[i] != null) weapons[i].enabled = false;
+                }
             }
         }
 
@@ -254,6 +266,11 @@ namespace Watermelon.SquadShooter
 
         public void OnNavMeshUpdated()
         {
+            if (IsDummy)
+            {
+                navMeshAgent.enabled = false;
+                return;
+            }
             navMeshAgent.enabled = true;
             navMeshAgent.stoppingDistance = stats.PreferedDistanceToPlayer;
             navMeshAgent.speed = stats.MoveSpeed;
@@ -292,7 +309,18 @@ namespace Watermelon.SquadShooter
             lastProjectilePosition = projectilePosition - projectileDirection;
 
             if (currentHealth <= 0)
-                OnDeath();
+            {
+                if (IsDummy)
+                {
+                    currentHealth = MaxHealth;
+                    healthbarBehaviour.OnHealthChanged();
+                    FloatingTextController.SpawnFloatingText("Regen", "Regen!", transform.position + Vector3.up * 2f, Quaternion.identity, 1.2f);
+                }
+                else
+                {
+                    OnDeath();
+                }
+            }
 
             transform.position += (transform.position - target.position).normalized * 0.15f * hitOffsetMult;
             hitOffsetMult *= 0.8f;

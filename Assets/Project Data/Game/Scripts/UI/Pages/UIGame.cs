@@ -354,7 +354,11 @@ namespace Watermelon
         {
             if (attackButton != null)
             {
-                if (LevelController.IsLobbyMode)
+                if (LobbyCombatController.IsCombatModeActive)
+                {
+                    attackButton.gameObject.SetActive(!CharacterBehaviour.IsAutoShootActive);
+                }
+                else if (LevelController.IsLobbyMode)
                 {
                     attackButton.gameObject.SetActive(false);
                 }
