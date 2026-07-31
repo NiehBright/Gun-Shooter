@@ -165,6 +165,35 @@ namespace Watermelon.SquadShooter
 
         private static void ConvertTextToTMPRecursive(GameObject obj, SerializedObject panelSo, SerializedObject popupSo, EquipmentSlotUI[] slots)
         {
+            // Nếu là đối tượng chứa sao của nhân vật, bắt buộc phải dùng Text thường để hiển thị ký tự đặc biệt Unicode
+            if (obj.name == "CharStarsText")
+            {
+                TextMeshProUGUI tmpText = obj.GetComponent<TextMeshProUGUI>();
+                if (tmpText != null)
+                {
+                    string txtValue = tmpText.text;
+                    int fontSize = (int)tmpText.fontSize;
+                    Color txtColor = tmpText.color;
+                    bool raycast = tmpText.raycastTarget;
+
+                    Object.DestroyImmediate(tmpText, true);
+                    Text newText = obj.AddComponent<Text>();
+                    newText.text = txtValue;
+                    newText.fontSize = fontSize;
+                    newText.color = txtColor;
+                    newText.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+                    newText.raycastTarget = raycast;
+                    newText.alignment = TextAnchor.MiddleLeft;
+
+                    if (panelSo != null)
+                    {
+                        panelSo.FindProperty("charStarsText").objectReferenceValue = newText;
+                        panelSo.ApplyModifiedProperties();
+                    }
+                }
+                return;
+            }
+
             Text oldText = obj.GetComponent<Text>();
             if (oldText != null)
             {
