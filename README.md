@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://readme-typing-svg.herokuapp.com?font=JetBrains+Mono&size=28&pause=1000&color=00D4FF&center=true&vCenter=true&width=600&lines=🎮+GunShooter+(Squad+Shooter);Unity+3D+Top-Down+Action;Dự+án+Solo+Dev+bởi+Nieh" alt="Typing SVG" />
+<img src="https://readme-typing-svg.herokuapp.com?font=JetBrains+Mono&size=28&pause=1000&color=00D4FF&center=true&vCenter=true&width=600&lines=🎮+Gun+shooter;Unity+3D+Top-Down+Action;Dự+án+Solo+Dev+bởi+Nieh" alt="Typing SVG" />
 
 <br/>
 
@@ -17,7 +17,7 @@
 
 <br/>
 
-![Demo Preview](https://via.placeholder.com/900x450/0d1117/00d4ff?text=🎮+GunShooter+Gameplay+Demo)
+![Demo Preview](https://via.placeholder.com/900x450/0d1117/00d4ff?text=🎮+Gun+shooter+Gameplay+Demo)
 
 </div>
 
@@ -38,17 +38,14 @@
 
 ## ✨ Tính năng nổi bật
 
-| Tính năng | Mô tả |
-|-----------|-------|
-| 🔮 **Hố Đen Trọng Lực (Levi)** | Triệu hồi hố đen trọng lực hút toàn bộ kẻ địch vào tâm và phát nổ gây sát thương diện rộng. |
-| 🛠️ **Custom Level Editor** | Trình thiết kế màn chơi trực quan dạng kéo thả, tích hợp sẵn trong Unity Editor. |
-| 🔥 **Bản Đồ Nhiệt (Heatmap)** | Visual hóa mật độ phân bổ quái vật dạng Heatmap màu ngay trong Editor để cân bằng độ khó. |
-| 🎯 **Bia Tập Bắn Bất Tử** | Đặt quái ở Lobby và tích chọn `Is Dummy` để biến nó thành quái đứng yên, tự hồi đầy máu (`Regen!`) để test damage. |
-| 🛡️ **Advanced Equipment UI** | Neo giữ khung ô sảnh trống và hiển thị động 3 khung Rarity (Common, Rare, Epic) của vật phẩm tùy biến. |
-| 🖥️ **TextMeshPro (TMP)** | Nâng cấp toàn bộ hệ thống chữ chỉ số, cấp độ sang TMP sắc nét, dễ dàng thay đổi Font Asset. |
-| ⚡ **Lobby Combat Mode** | Bấm nút ở sảnh để lập tức ẩn UI sảnh chính (tránh click nhầm) và bật UI HUD Game (Joystick, Dash, bắn). |
-| 🚶 **UI Interaction Zone** | Vòng tương tác VFX dưới chân, bước vào tự động kích hoạt chuyển cảnh mở bảng nâng cấp. |
-| 🧼 **Mã nguồn sạch sẽ** | Sửa sạch 100% cảnh báo biên dịch cũ (`Obsolete Warning CS0618`), tối ưu hóa hiệu năng Runtime. |
+| Loại | Tính năng nổi bật | Chi tiết |
+| :--- | :--- | :--- |
+| 🎮 **Gameplay** | **Cơ chế chiến đấu** | Điều khiển bắn súng góc nhìn Top-down mượt mà, hỗ trợ Joystick di chuyển, lướt Dash linh hoạt và cơ chế bắn tự động/thủ công. |
+| | **Kỹ năng chủ động** | Nhân vật sở hữu kỹ năng kích hoạt riêng biệt (Ví dụ: Levi triệu hồi hố đen hút kẻ địch diện rộng và phát nổ). |
+| | **Chế độ Thử Sát Thương** | Bật chế độ Combat ngay tại Lobby, tự nhắm bắn và sử dụng kỹ năng lên các Bia tập bắn (Dummy) bất tử để test chỉ số. |
+| 🛠️ **Level Editor** | **Thiết kế trực quan** | Cửa sổ Custom Level Editor tích hợp sẵn giúp kéo thả bố trí các phòng chơi, cổng dịch chuyển, chướng ngại vật dễ dàng. |
+| | **Đường tuần tra (Paths)** | Thiết lập trực tiếp các điểm di chuyển tuần tra (Waypoints) cho quái vật ngay trên giao diện Editor trực quan. |
+| | **Bản đồ nhiệt (Heatmap)** | Visual hóa mật độ phân bổ quái vật dưới dạng bản đồ nhiệt (Heatmap) giúp nhà phát triển dễ dàng cân bằng độ khó. |
 
 ---
 
