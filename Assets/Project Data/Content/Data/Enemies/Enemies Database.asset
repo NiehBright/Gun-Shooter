@@ -303,7 +303,7 @@ MonoBehaviour:
       hitTextOffsetForward: 0.15625
     icon: {fileID: 2800000, guid: a477e2341de09874996a28d296ab386e, type: 3}
     iconTint: {r: 1, g: 1, b: 1, a: 1}
-  - enemyType: 101
+  - enemyType: 50
     prefab: {fileID: 4796623966293115903, guid: d128ba4885b79204fb0f1a78297d6028,
       type: 3}
     stats:

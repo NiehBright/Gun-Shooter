@@ -219,7 +219,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24e3bcb29fc83b341a669e68b9797c59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
+  type: 50
   tier: 0
   animatorRef: {fileID: 4433119253003132001}
   healthbarBehaviour: {fileID: 6658223778522967136}
@@ -236,6 +236,7 @@ MonoBehaviour:
   deathExplosionForce: 1093.75
   deathExplosionRadius: 15.625
   isDummy: 1
+  dummyType: 50
   bulletPrefab: {fileID: 1865428060180637695, guid: 237fecf1150515c4aa65b1ac03f527fb,
     type: 3}
   bulletSpeed: 12.5

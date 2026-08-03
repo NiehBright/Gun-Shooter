@@ -1,4 +1,4 @@
-﻿namespace Watermelon.SquadShooter
+namespace Watermelon.SquadShooter
 {
     public enum EnemyType
     {
@@ -12,6 +12,7 @@
         Grenader = 11,
         Shotguner = 12,
 
+        Dummy = 50,
 
         BossBomber = 100,
         BossSniper = 101,
