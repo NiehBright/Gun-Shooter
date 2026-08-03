@@ -224,7 +224,12 @@ namespace Watermelon.SquadShooter
             currentHealth = MaxHealth;
 
             // Initialise healthbar
-            healthbarBehaviour.Initialise(transform, this, true, healthbarBehaviour.HealthbarOffset, LevelController.CurrentLevelData.EnemiesLevel, Tier == EnemyTier.Elite);
+            int enemyLevel = 1;
+            if (LevelController.CurrentLevelData != null)
+            {
+                enemyLevel = LevelController.CurrentLevelData.EnemiesLevel;
+            }
+            healthbarBehaviour.Initialise(transform, this, true, healthbarBehaviour.HealthbarOffset, enemyLevel, Tier == EnemyTier.Elite);
 
             isDead = false;
             chaseMode = false;
@@ -343,6 +348,16 @@ namespace Watermelon.SquadShooter
 
         protected virtual void FixedUpdate()
         {
+            if (IsDummy && isDead && CharacterBehaviour.GetBehaviour() != null)
+            {
+                Initialise();
+                if (animatorRef != null)
+                {
+                    animatorRef.SetBool(ANIMATOR_RUN_HASH, false);
+                    animatorRef.SetFloat(ANIMATOR_SPEED_HASH, 0f);
+                }
+            }
+
             if (hitOffsetMult < 1 && lastDamagedTime + 0.5f < Time.realtimeSinceStartup)
             {
                 hitOffsetMult += Time.fixedDeltaTime;
