@@ -327,7 +327,10 @@ namespace Watermelon.SquadShooter
                 }
             }
 
-            transform.position += (transform.position - target.position).normalized * 0.15f * hitOffsetMult;
+            if (!IsDummy)
+            {
+                transform.position += (transform.position - target.position).normalized * 0.15f * hitOffsetMult;
+            }
             hitOffsetMult *= 0.8f;
 
             HitEffect();
