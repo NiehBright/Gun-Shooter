@@ -74,6 +74,8 @@ namespace Watermelon.SquadShooter
         public bool CanMove { get; set; }
         [SerializeField] bool isDummy;
         public bool IsDummy { get => isDummy; set => isDummy = value; }
+        [SerializeField] EnemyType dummyType = EnemyType.Dummy;
+        public EnemyType DummyType { get => dummyType; set => dummyType = value; }
         public bool IsAttacking { get; set; }
 
         // Health
@@ -205,6 +207,50 @@ namespace Watermelon.SquadShooter
 
         public virtual void Initialise()
         {
+            if (stats == null)
+            {
+                var db = EnemyController.Database;
+                if (db != null && db.Enemies != null)
+                {
+                    if (IsDummy)
+                    {
+                        foreach (var data in db.Enemies)
+                        {
+                            if (data != null && data.EnemyType == dummyType)
+                            {
+                                this.enemyData = data;
+                                this.stats = data.Stats;
+                                this.visionRange = data.Stats.VisionRange;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (stats == null)
+                    {
+                        foreach (var data in db.Enemies)
+                        {
+                            if (data != null && data.Prefab != null)
+                            {
+                                var behavior = data.Prefab.GetComponent<BaseEnemyBehavior>();
+                                if (behavior != null && behavior.GetType() == this.GetType())
+                                {
+                                    this.enemyData = data;
+                                    this.stats = data.Stats;
+                                    this.visionRange = data.Stats.VisionRange;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (stats == null)
+            {
+                return;
+            }
+
             characterBehaviour = CharacterBehaviour.GetBehaviour();
             target = characterBehaviour.transform;
             hitOffsetMult = 1f;
