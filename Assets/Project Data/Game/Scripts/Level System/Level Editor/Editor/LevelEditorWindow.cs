@@ -999,6 +999,13 @@ namespace Watermelon.SquadShooter
             if (!isWorldLoaded)
                 return;
 
+            if (levelsList == null)
+            {
+                OpenWorld();
+                if (levelsList == null)
+                    return;
+            }
+
             // ── NÂNG CẤP 2: Global Validation luôn hiển thị trên cùng tab ──
             DrawGlobalValidationPanel();
 
@@ -1917,6 +1924,18 @@ namespace Watermelon.SquadShooter
 
         public void DisplayWorldSettingsTab()
         {
+            if (worldSerializedObject == null)
+            {
+                OpenWorld();
+                if (worldSerializedObject == null)
+                    return;
+            }
+
+            if (itemsReordableList == null)
+            {
+                InitStuffForWorldSettingsTab();
+            }
+
             worldSerializedObject.Update();
             EditorGUILayout.PropertyField(previewSpriteProperty, previewSprite);
             EditorGUILayout.PropertyField(musicProperty, new GUIContent("Nhạc nền (Music):"));

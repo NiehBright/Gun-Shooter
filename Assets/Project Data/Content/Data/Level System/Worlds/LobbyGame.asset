@@ -19,7 +19,13 @@ MonoBehaviour:
   - type: 0
     rooms:
     - spawnPoint: {x: 0, y: 0, z: -7}
-      enemyEntities: []
+      enemyEntities:
+      - EnemyType: 101
+        Position: {x: -7.72, y: 0, z: 8.12}
+        Rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+        Scale: {x: 1, y: 1, z: 1}
+        IsElite: 0
+        PathPoints: []
       itemEntities:
       - Hash: -2065064135
         Position: {x: -11.8, y: -0.2599998, z: 3.9}

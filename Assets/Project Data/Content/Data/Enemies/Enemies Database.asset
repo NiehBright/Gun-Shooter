@@ -303,3 +303,32 @@ MonoBehaviour:
       hitTextOffsetForward: 0.15625
     icon: {fileID: 2800000, guid: a477e2341de09874996a28d296ab386e, type: 3}
     iconTint: {r: 1, g: 1, b: 1, a: 1}
+  - enemyType: 101
+    prefab: {fileID: 4796623966293115903, guid: d128ba4885b79204fb0f1a78297d6028,
+      type: 3}
+    stats:
+      hp: 1400
+      visionRange: 12.5
+      attackDistance: 15.625
+      fleeDistance: 0
+      damage:
+        firstValue: 80
+        secondValue: 110
+      aimDuration: 0
+      moveSpeed: 6.25
+      patrollingSpeed: 1.5625
+      patrollingMutliplier: 0.58
+      patrollingIdleDuration: 2
+      angularSpeed: 400
+      preferedDistanceToPlayer: 0.78125
+      level: 1
+      eliteHealthMult: 2.5
+      eliteDamageMult: 1.1
+      healForPlayer:
+        firstValue: 40
+        secondValue: 70
+      targetRingSize: 1.1
+      hitTextOffsetY: 2.65625
+      hitTextOffsetForward: 0.15625
+    icon: {fileID: 2800000, guid: a013c74af4c1e344b936d5bce051a12b, type: 3}
+    iconTint: {r: 1, g: 1, b: 1, a: 1}
