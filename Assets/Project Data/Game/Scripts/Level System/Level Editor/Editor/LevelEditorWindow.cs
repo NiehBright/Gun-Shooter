@@ -653,14 +653,42 @@ namespace Watermelon.SquadShooter
 
         private void DisplayLevelFields()
         {
+            EnsureUpgradeStyles();
+            
+            float oldLabelWidth = EditorGUIUtility.labelWidth;
+            EditorGUIUtility.labelWidth = 230f; // Prevent label text truncation
+            
+            // Section 1: Cấu Hình Màn Chơi (General Config)
+            EditorGUILayout.BeginVertical(_boxStyle);
+            EditorGUILayout.LabelField("🎮  Cấu Hình Màn Chơi (General Config)", _headerStyle);
+            EditorGUILayout.Space(2);
             EditorGUILayout.PropertyField(selectedLevelRepresentation.levelTypeProperty, new GUIContent("Loại màn chơi (Level Type)"));
-            EditorGUILayout.PropertyField(selectedLevelRepresentation.xpAmountProperty, new GUIContent("Điểm XP nhận được (XP Amount)"));
-            EditorGUILayout.PropertyField(selectedLevelRepresentation.requiredUpgProperty, new GUIContent("Cấp độ súng yêu cầu (Required Upgrade)"));
-            EditorGUILayout.PropertyField(selectedLevelRepresentation.enemiesLevelProperty, new GUIContent("Cấp độ kẻ địch (Enemies Level)"));
+            EditorGUILayout.PropertyField(selectedLevelRepresentation.requiredUpgProperty, new GUIContent("Cấp độ súng yêu cầu (Req Weapon Level)"));
             EditorGUILayout.PropertyField(selectedLevelRepresentation.hasCharacterSuggestionProperty, new GUIContent("Có gợi ý nhân vật"));
+            EditorGUILayout.EndVertical();
+
+            EditorGUILayout.Space(6);
+
+            // Section 2: Thử Thách & Phần Thưởng (Rewards & Difficulty)
+            EditorGUILayout.BeginVertical(_boxStyle);
+            EditorGUILayout.LabelField("🏆  Thử Thách & Phần Thưởng (Rewards & Difficulty)", _headerStyle);
+            EditorGUILayout.Space(2);
+            EditorGUILayout.PropertyField(selectedLevelRepresentation.xpAmountProperty, new GUIContent("Điểm XP nhận được (XP Amount)"));
+            EditorGUILayout.PropertyField(selectedLevelRepresentation.enemiesLevelProperty, new GUIContent("Cấp độ kẻ địch (Enemies Level)"));
             EditorGUILayout.PropertyField(selectedLevelRepresentation.healSpawnPercentProperty, new GUIContent("Tỷ lệ rơi bình máu (%)"));
+            EditorGUILayout.EndVertical();
+
+            EditorGUILayout.Space(6);
+
+            // Section 3: Cấu HÌnh Nâng Cao (Advanced Settings)
+            EditorGUILayout.BeginVertical(_boxStyle);
+            EditorGUILayout.LabelField("⚙️  Cấu Hình Nâng Cao (Advanced Settings)", _headerStyle);
+            EditorGUILayout.Space(2);
             EditorGUILayout.PropertyField(selectedLevelRepresentation.dropDataProperty, new GUIContent("Vật phẩm rơi ra (Drop Data)"));
             EditorGUILayout.PropertyField(selectedLevelRepresentation.specialBehavioursProperty, new GUIContent("Hành vi đặc biệt"));
+            EditorGUILayout.EndVertical();
+            
+            EditorGUIUtility.labelWidth = oldLabelWidth;
         }
 
         private void CollectDataFromLevelsSettings()
@@ -807,15 +835,43 @@ namespace Watermelon.SquadShooter
 
         private void ElementCallback(Rect rect, int index, bool isActive, bool isFocused)
         {
-            if (levelsProperty.GetArrayElementAtIndex(index).FindPropertyRelative("rooms").arraySize == 0)
+            var element = levelsProperty.GetArrayElementAtIndex(index);
+            int roomCount = element.FindPropertyRelative("rooms").arraySize;
+            
+            var levelTypeProp = element.FindPropertyRelative("levelType");
+            string typeStr = "Default";
+            if (levelTypeProp != null)
             {
-                GUI.Label(rect, $"Level #{index + 1} | [Empty]");
+                typeStr = levelTypeProp.enumDisplayNames[levelTypeProp.enumValueIndex];
+            }
+
+            string labelText = $"Level #{index + 1}  •  {typeStr}";
+            string infoText = roomCount == 0 ? "Empty" : $"{roomCount} Room{(roomCount > 1 ? "s" : "")}";
+
+            float rightWidth = 60f;
+            Rect leftRect = new Rect(rect.x, rect.y, rect.width - rightWidth - 5, rect.height);
+            Rect rightRect = new Rect(rect.xMax - rightWidth, rect.y, rightWidth, rect.height);
+
+            GUIStyle labelStyle = new GUIStyle(EditorStyles.label);
+            if (isActive)
+            {
+                labelStyle.normal.textColor = Color.white;
+                labelStyle.fontStyle = FontStyle.Bold;
+            }
+
+            GUI.Label(leftRect, labelText, labelStyle);
+
+            GUIStyle infoStyle = new GUIStyle(EditorStyles.miniLabel);
+            infoStyle.alignment = TextAnchor.MiddleRight;
+            if (roomCount == 0)
+            {
+                infoStyle.normal.textColor = new Color(0.9f, 0.45f, 0.45f);
             }
             else
             {
-                GUI.Label(rect, "Level #" + (index + 1));
+                infoStyle.normal.textColor = isActive ? Color.white * 0.9f : new Color(0.4f, 0.75f, 0.95f);
             }
-
+            GUI.Label(rightRect, infoText, infoStyle);
         }
 
         private void RemoveCallback(ReorderableList list)
@@ -831,7 +887,9 @@ namespace Watermelon.SquadShooter
 
         private void HeaderCallback(Rect rect)
         {
-            GUI.Label(rect, "Số lượng level: " + levelsProperty.arraySize);
+            GUIStyle headerStyle = new GUIStyle(EditorStyles.boldLabel);
+            headerStyle.normal.textColor = new Color(0.1f, 0.7f, 1f);
+            GUI.Label(rect, $"📊  Màn Chơi: {levelsProperty.arraySize} Levels", headerStyle);
         }
 
 
@@ -903,21 +961,62 @@ namespace Watermelon.SquadShooter
                 return;
             }
 
-            EditorGUILayout.BeginVertical(GUILayout.MaxWidth(400));
-            DisplayDatabaseRef();
+            EnsureUpgradeStyles();
+
+            // ── TOP HEADER PANEL ──
+            EditorGUILayout.BeginVertical(_boxStyle);
+            
+            // Row 1: Game Settings & Enemies Database on the same line to save space
+            EditorGUILayout.BeginHorizontal();
+            
+            float oldLabelWidth = EditorGUIUtility.labelWidth;
+            EditorGUIUtility.labelWidth = 110f;
+            
+            EditorGUI.BeginChangeCheck();
+            gameSettings = EditorGUILayout.ObjectField("⚙️ Game Settings:", gameSettings, typeof(GameSettings), false) as GameSettings;
+            if (EditorGUI.EndChangeCheck())
+            {
+                CollectDataFromLevelsSettings();
+                OpenWorld();
+            }
+
+            GUILayout.Space(12);
+
+            EditorGUI.BeginChangeCheck();
+            enemiesDatabase = EditorGUILayout.ObjectField("👾 Enemies DB:", enemiesDatabase, typeof(EnemiesDatabase), false) as EnemiesDatabase;
+            if (EditorGUI.EndChangeCheck())
+            {
+                CollectDataFromEnemiesDatabase();
+                OpenWorld();
+            }
+
+            EditorGUILayout.EndHorizontal();
 
             if (!isDatabaseLoaded)
+            {
+                EditorGUILayout.EndVertical();
+                EditorGUIUtility.labelWidth = oldLabelWidth;
                 return;
+            }
 
+            EditorGUILayout.Space(4);
+
+            // Row 2: World Navigation
             DisplayArea();
 
             EditorGUILayout.EndVertical();
+            
+            EditorGUIUtility.labelWidth = oldLabelWidth;
+
+            // Display main tab handler
             tabHandler.DisplayTab();
         }
 
 
-
-
+        private void DisplayDatabaseRef()
+        {
+            // Deprecated: Drawing is now handled inline in DrawContent for side-by-side design.
+        }
 
         private void DrawOpenEditorScene()
         {
@@ -932,36 +1031,15 @@ namespace Watermelon.SquadShooter
             EditorGUILayout.EndVertical();
         }
 
-        private void DisplayDatabaseRef()
-        {
-
-            EditorGUI.BeginChangeCheck();
-            gameSettings = EditorGUILayout.ObjectField("Game Settings: ", gameSettings, typeof(GameSettings), false) as GameSettings;
-
-            if (EditorGUI.EndChangeCheck())
-            {
-                CollectDataFromLevelsSettings();
-                OpenWorld();
-            }
-
-            EditorGUI.BeginChangeCheck();
-            enemiesDatabase = EditorGUILayout.ObjectField("Enemies database: ", enemiesDatabase, typeof(EnemiesDatabase), false) as EnemiesDatabase;
-
-            if (EditorGUI.EndChangeCheck())
-            {
-                CollectDataFromEnemiesDatabase();
-                OpenWorld();
-            }
-
-
-        }
-
         private void DisplayArea()
         {
+            EnsureUpgradeStyles();
             EditorGUILayout.BeginHorizontal();
-            EditorGUI.BeginDisabledGroup(selectedWorldIndex == 0);
+            
+            EditorGUILayout.LabelField("🌍 Chọn Thế Giới:", _labelBoldStyle, GUILayout.Width(110));
 
-            if (GUILayout.Button("◀", GUILayout.MaxWidth(30)))
+            EditorGUI.BeginDisabledGroup(selectedWorldIndex == 0);
+            if (GUILayout.Button("◀", GUILayout.Width(35)))
             {
                 selectedWorldIndex--;
                 OpenWorld();
@@ -1010,15 +1088,19 @@ namespace Watermelon.SquadShooter
             DrawGlobalValidationPanel();
 
             EditorGUILayout.BeginHorizontal();
-            //sidebar 
+            
+            // Sidebar
             EditorGUILayout.BeginVertical(GUI.skin.box, GUILayout.MaxWidth(SIDEBAR_WIDTH));
+            EditorGUILayout.LabelField("🗺️  Danh Sách Level", _headerStyle);
+            EditorGUILayout.Space(4);
             levelsList.DoLayoutList();
+            EditorGUILayout.Space(4);
             DisplaySidebarButtons();
             EditorGUILayout.EndVertical();
 
             GUILayout.Space(8);
 
-            //level content
+            // Level content
             EditorGUILayout.BeginVertical(GUI.skin.box);
             DisplaySelectedLevel();
             EditorGUILayout.EndVertical();
@@ -1028,12 +1110,14 @@ namespace Watermelon.SquadShooter
 
         private void DisplaySidebarButtons()
         {
-            if (GUILayout.Button(REMOVE_SELECTION, WatermelonEditor.Styles.button_01))
+            if (GUILayout.Button("🚫  " + REMOVE_SELECTION, WatermelonEditor.Styles.button_01))
             {
                 RemoveSelection();
             }
+            
+            EditorGUILayout.Space(2);
 
-            if (GUILayout.Button(OPEN_GAME_SCENE_LABEL, WatermelonEditor.Styles.button_01))
+            if (GUILayout.Button("🎬  " + OPEN_GAME_SCENE_LABEL, WatermelonEditor.Styles.button_02))
             {
                 RemoveSelection();
                 OpenScene(GAME_SCENE_PATH);
@@ -1061,7 +1145,7 @@ namespace Watermelon.SquadShooter
                 return;
             }
 
-            if (GUILayout.Button(TEST_LEVEL, WatermelonEditor.Styles.button_01, GUILayout.Height(EditorGUIUtility.singleLineHeight * 2)))
+            if (GUILayout.Button("▶️  " + TEST_LEVEL, WatermelonEditor.Styles.button_03, GUILayout.Height(EditorGUIUtility.singleLineHeight * 2)))
             {
                 RewriteSave(selectedWorldIndex, levelsList.index);
             }
@@ -1499,27 +1583,35 @@ namespace Watermelon.SquadShooter
 
         private void DisplyLevelObjectMenagementSection()
         {
-            EditorGUILayout.LabelField(OBJECT_MANAGEMENT);
+            EnsureUpgradeStyles();
+            EditorGUILayout.BeginVertical(_boxStyle);
+            EditorGUILayout.LabelField("📦  Quản Lý Đối Tượng Trong Scene", _headerStyle);
+            EditorGUILayout.Space(4);
+            
             EditorGUILayout.BeginHorizontal();
 
-            if (GUILayout.Button(CLEAR_SCENE, WatermelonEditor.Styles.button_04, GUILayout.Height(EditorGUIUtility.singleLineHeight * 2)))
+            if (GUILayout.Button("🗑️  " + CLEAR_SCENE, WatermelonEditor.Styles.button_04, GUILayout.Height(EditorGUIUtility.singleLineHeight * 2)))
             {
-                ClearScene();
+                if (EditorUtility.DisplayDialog("Cảnh báo", "Bạn có chắc chắn muốn xóa sạch toàn bộ đối tượng trong scene hiện tại không? Hành động này không thể hoàn tác.", "Xóa sạch", "Hủy"))
+                {
+                    ClearScene();
+                }
             }
 
-            EditorGUILayout.Space();
+            GUILayout.Space(8);
 
-            if (GUILayout.Button(LOAD, WatermelonEditor.Styles.button_03, GUILayout.Height(EditorGUIUtility.singleLineHeight * 2)))
+            if (GUILayout.Button("📥  " + LOAD, WatermelonEditor.Styles.button_03, GUILayout.Height(EditorGUIUtility.singleLineHeight * 2)))
             {
                 LoadRoom();
             }
 
-            if (GUILayout.Button(SAVE, WatermelonEditor.Styles.button_02, GUILayout.Height(EditorGUIUtility.singleLineHeight * 2)))
+            if (GUILayout.Button("💾  " + SAVE, WatermelonEditor.Styles.button_02, GUILayout.Height(EditorGUIUtility.singleLineHeight * 2)))
             {
                 SaveRoom();
             }
 
             EditorGUILayout.EndHorizontal();
+            EditorGUILayout.EndVertical();
         }
 
         private void LoadRoom()
