@@ -43,6 +43,7 @@ namespace Watermelon.SquadShooter
 
         private List<EquipmentItemUI> inventoryItems = new List<EquipmentItemUI>();
         private static EquipmentPanelUI instance;
+        private static bool isShowing = false;
         public static EquipmentPanelUI Instance => instance;
 
         private Canvas panelCanvas;
@@ -130,7 +131,10 @@ namespace Watermelon.SquadShooter
             }
 
             BindFilterButtons();
-            HideImmediate();
+            if (!isShowing)
+            {
+                HideImmediate();
+            }
         }
 
         private void OnEnable()
@@ -182,21 +186,69 @@ namespace Watermelon.SquadShooter
         public static void Show()
         {
             Debug.Log("[EquipmentPanelUI] Show static method called.");
-            if (instance == null)
+            isShowing = true;
+            try
             {
-                Debug.LogError("[EquipmentPanelUI] Show failed: instance is null! Is the script active in the scene?");
-                return;
+                if (instance == null)
+                {
+                    instance = Object.FindAnyObjectByType<EquipmentPanelUI>(FindObjectsInactive.Include);
+                    if (instance != null)
+                    {
+                        Debug.Log("[EquipmentPanelUI] Instance restored from scene (including inactive objects).");
+                    }
+                }
+
+                if (instance == null)
+                {
+                    Debug.LogError("[EquipmentPanelUI] Show failed: instance is null! Is the script active in the scene?");
+                    return;
+                }
+
+                // Activate the panel and all of its parent hierarchy to ensure it's active in the scene
+                try
+                {
+                    Transform currentTransform = instance.transform;
+                    while (currentTransform != null)
+                    {
+                        if (currentTransform.gameObject != null && !currentTransform.gameObject.activeSelf)
+                        {
+                            currentTransform.gameObject.SetActive(true);
+                        }
+                        currentTransform = currentTransform.parent;
+                    }
+                }
+                catch (System.Exception ex)
+                {
+                    Debug.LogWarning("[EquipmentPanelUI] Parent activation warning: " + ex.Message);
+                }
+
+                // Bulletproof dynamic retrieval of UI components
+                if (instance.panelCanvas == null) instance.panelCanvas = instance.GetComponent<Canvas>();
+                if (instance.panelCanvas == null) instance.panelCanvas = instance.gameObject.AddComponent<Canvas>();
+
+                if (instance.panelRaycaster == null) instance.panelRaycaster = instance.GetComponent<GraphicRaycaster>();
+                if (instance.panelRaycaster == null) instance.panelRaycaster = instance.gameObject.AddComponent<GraphicRaycaster>();
+
+                if (instance.panelCanvasGroup == null) instance.panelCanvasGroup = instance.GetComponent<CanvasGroup>();
+                if (instance.panelCanvasGroup == null) instance.panelCanvasGroup = instance.gameObject.AddComponent<CanvasGroup>();
+
+                instance.panelCanvas.enabled = true;
+                instance.panelRaycaster.enabled = true;
+                instance.panelCanvasGroup.alpha = 1f;
+                instance.panelCanvasGroup.blocksRaycasts = true;
+                instance.panelCanvasGroup.interactable = true;
+
+                instance.currentFilter = null;
+                instance.RefreshUI();
+                instance.UpdateFilterBtnColors();
+
+                // Force layout update immediately to prevent first-frame ScrollRect AABB warnings
+                Canvas.ForceUpdateCanvases();
             }
-
-            instance.panelCanvas.enabled = true;
-            instance.panelRaycaster.enabled = true;
-            instance.panelCanvasGroup.alpha = 1f;
-            instance.panelCanvasGroup.blocksRaycasts = true;
-            instance.panelCanvasGroup.interactable = true;
-
-            instance.currentFilter = null;
-            instance.RefreshUI();
-            instance.UpdateFilterBtnColors();
+            finally
+            {
+                isShowing = false;
+            }
         }
 
         public void Close()
@@ -219,6 +271,7 @@ namespace Watermelon.SquadShooter
                 panelCanvasGroup.blocksRaycasts = false;
                 panelCanvasGroup.interactable = false;
             }
+            gameObject.SetActive(false);
         }
 
         public void RefreshUI()
