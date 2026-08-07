@@ -147,7 +147,11 @@ namespace Watermelon
 
         public static T GetPage<T>() where T : UIPage
         {
-            return pagesLink[typeof(T)] as T;
+            if (pagesLink != null && pagesLink.ContainsKey(typeof(T)))
+            {
+                return pagesLink[typeof(T)] as T;
+            }
+            return null;
         }
 
         public static void OnPopupWindowOpened(IPopupWindow popupWindow)
