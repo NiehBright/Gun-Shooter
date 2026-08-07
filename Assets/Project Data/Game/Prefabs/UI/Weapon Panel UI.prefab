@@ -2267,9 +2267,9 @@ MonoBehaviour:
   upgradesBuyButton: {fileID: 1630860726741003344}
   upgradesBuyButtonImage: {fileID: 3453351746638511706}
   upgradesBuyButtonText: {fileID: 4771126283437761537}
-  upgradesBuyButtonActiveSprite: {fileID: 21300000, guid: 3ce5e155a0b233e499426d4a6fbf960c,
+  upgradesBuyButtonActiveSprite: {fileID: 21300000, guid: c91b271930e3c46e7933d5b2fd3e54c8,
     type: 3}
-  upgradesBuyButtonDisableSprite: {fileID: 21300000, guid: c8ab3727ebb7f284db5a4f9c81d4d791,
+  upgradesBuyButtonDisableSprite: {fileID: 21300000, guid: 6008c1e9e5405496085ba3c4ebcb707a,
     type: 3}
   upgradesMaxObject: {fileID: 4458743045846413386}
 --- !u!1 &7474703611723968178
