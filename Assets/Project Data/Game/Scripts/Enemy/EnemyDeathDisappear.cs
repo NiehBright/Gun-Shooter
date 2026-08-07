@@ -39,10 +39,13 @@ namespace Watermelon.SquadShooter
             Rigidbody[] rigidbodies = enemy.GetComponentsInChildren<Rigidbody>();
             foreach (var rb in rigidbodies)
             {
+                if (!rb.isKinematic)
+                {
+                    rb.linearVelocity = Vector3.zero;
+                    rb.angularVelocity = Vector3.zero;
+                }
                 rb.isKinematic = true;
                 rb.useGravity = false;
-                rb.linearVelocity = Vector3.zero;
-                rb.angularVelocity = Vector3.zero;
             }
 
             // Tắt Animator để không bị xung đột

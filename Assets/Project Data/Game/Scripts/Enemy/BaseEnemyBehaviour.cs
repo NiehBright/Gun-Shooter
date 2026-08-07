@@ -39,6 +39,39 @@ namespace Watermelon.SquadShooter
 
         [SerializeField]
         protected Animator animatorRef;
+        protected System.Collections.Generic.HashSet<int> animatorParamsCache = new System.Collections.Generic.HashSet<int>();
+
+        protected void SetAnimatorBoolSafe(int parameterHash, bool value)
+        {
+            if (animatorRef != null && animatorParamsCache.Contains(parameterHash))
+            {
+                animatorRef.SetBool(parameterHash, value);
+            }
+        }
+
+        protected void SetAnimatorFloatSafe(int parameterHash, float value)
+        {
+            if (animatorRef != null && animatorParamsCache.Contains(parameterHash))
+            {
+                animatorRef.SetFloat(parameterHash, value);
+            }
+        }
+
+        protected void SetAnimatorTriggerSafe(int parameterHash)
+        {
+            if (animatorRef != null && animatorParamsCache.Contains(parameterHash))
+            {
+                animatorRef.SetTrigger(parameterHash);
+            }
+        }
+
+        protected void SetAnimatorIntegerSafe(int parameterHash, int value)
+        {
+            if (animatorRef != null && animatorParamsCache.Contains(parameterHash))
+            {
+                animatorRef.SetInteger(parameterHash, value);
+            }
+        }
         public Animator Animator => animatorRef;
 
         [SerializeField]
@@ -305,6 +338,15 @@ namespace Watermelon.SquadShooter
                     if (weapons[i] != null) weapons[i].enabled = false;
                 }
             }
+
+            if (animatorRef != null)
+            {
+                animatorParamsCache.Clear();
+                foreach (var param in animatorRef.parameters)
+                {
+                    animatorParamsCache.Add(param.nameHash);
+                }
+            }
         }
 
         public virtual void OnRoomDone()
@@ -317,6 +359,8 @@ namespace Watermelon.SquadShooter
 
         public void OnNavMeshUpdated()
         {
+            if (navMeshAgent == null) return;
+
             if (IsDummy)
             {
                 navMeshAgent.enabled = false;
@@ -402,8 +446,8 @@ namespace Watermelon.SquadShooter
                 Initialise();
                 if (animatorRef != null)
                 {
-                    animatorRef.SetBool(ANIMATOR_RUN_HASH, false);
-                    animatorRef.SetFloat(ANIMATOR_SPEED_HASH, 0f);
+                    SetAnimatorBoolSafe(ANIMATOR_RUN_HASH, false);
+                    SetAnimatorFloatSafe(ANIMATOR_SPEED_HASH, 0f);
                 }
             }
 
@@ -499,8 +543,8 @@ namespace Watermelon.SquadShooter
 
         protected void HitAnimation(int animationIndex)
         {
-            animatorRef.SetTrigger(ANIMATOR_HIT_HASH);
-            animatorRef.SetInteger(ANIMATOR_HIT_INDEX_HASH, animationIndex);
+            SetAnimatorTriggerSafe(ANIMATOR_HIT_HASH);
+            SetAnimatorIntegerSafe(ANIMATOR_HIT_INDEX_HASH, animationIndex);
 
             hitAnimationTime = Time.time + ANIMATOR_HIT_COOLDOWN;
         }
@@ -628,7 +672,7 @@ namespace Watermelon.SquadShooter
 
         public void SetAnimMovementMultiplier(float speedMultiplier)
         {
-            animatorRef.SetFloat(ANIMATOR_SPEED_HASH, navMeshAgent.velocity.magnitude / RunningSpeed * speedMultiplier);
+            SetAnimatorFloatSafe(ANIMATOR_SPEED_HASH, navMeshAgent.velocity.magnitude / RunningSpeed * speedMultiplier);
         }
 
         public void SetPatrollingPoints(Vector3[] points)

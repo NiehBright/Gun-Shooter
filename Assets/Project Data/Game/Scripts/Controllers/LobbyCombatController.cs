@@ -122,15 +122,27 @@ namespace Watermelon.SquadShooter
             // 1. Kích hoạt lại LobbyMode trên nhân vật
             CharacterBehaviour.IsLobbyModeActive = true;
 
-            // 2. Mở lại giao diện sảnh chính (UIMainMenu) và ẩn giao diện chiến đấu (UIGame)
+            // 2. Mở lại giao diện sảnh chính (UIMainMenu) (UIGame luôn mở để hiện Joystick di chuyển)
             UIController.ShowPage<UIMainMenu>();
-            UIController.HidePage<UIGame>();
 
-            // 3. Cập nhật lại hiển thị nút bấm
+            // 3. Tắt hiển thị Notch Panel và Attack Button trong UIGame
             var uiGame = UIController.GetPage<UIGame>();
             if (uiGame != null)
             {
+                Transform notchPanel = uiGame.transform.Find("Notch Panel");
+                if (notchPanel != null)
+                {
+                    notchPanel.gameObject.SetActive(false);
+                }
+
+                Transform attackButton = uiGame.transform.Find("Attack Button");
+                if (attackButton != null)
+                {
+                    attackButton.gameObject.SetActive(false);
+                }
+
                 uiGame.UpdateAttackButtonVisibility();
+                uiGame.UpdateAutoShootButtonUI();
             }
         }
     }

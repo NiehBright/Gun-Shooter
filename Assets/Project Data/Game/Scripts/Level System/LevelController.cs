@@ -676,6 +676,7 @@ namespace Watermelon.LevelSystem
             UILoadingScreen loadingScreen = Object.FindAnyObjectByType<UILoadingScreen>(FindObjectsInactive.Include);
             if (loadingScreen != null)
             {
+                loadingScreen.gameObject.SetActive(true);
                 // Tạm thời vô hiệu hóa di chuyển của nhân vật trong lúc chuyển tiếp
                 Control.DisableMovementControl();
                 characterBehaviour.DisableAgent();
