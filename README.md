@@ -27,6 +27,7 @@
 
 - [✨ Tính năng nổi bật](#-tính-năng-nổi-bật)
 - [🏗️ Kiến trúc hệ thống](#️-kiến-trúc-hệ-thống)
+- [🚀 Các nâng cấp & Tối ưu hóa gần đây](#-các-nâng-cấp--tối-ưu-hóa-gần-đây)
 - [⚙️ Yêu cầu hệ thống](#️-yêu-cầu-hệ-thống)
 - [🚀 Hướng dẫn cài đặt](#-hướng-dẫn-cài-đặt)
 - [🛠️ Công cụ hỗ trợ Editor](#️-công-cụ-hỗ-trợ-editor)
@@ -84,6 +85,28 @@
 - **Tránh trùng lặp UI:** Khi vào chế độ Test, sảnh chính `UIMainMenu` tắt hoàn toàn, loại bỏ 100% xung đột click đè nút với các thanh nâng cấp.
 - **Tận dụng tối đa Codebase:** Bằng cách tắt cờ `CharacterBehaviour.IsLobbyModeActive`, nhân vật tự rút súng, tự nhắm bắn và xả skill y hệt như đang đi phụ bản thật mà không cần viết lại logic AI điều khiển.
 - **Bảo toàn dữ liệu màn chơi:** Bia tập bắn có cơ chế tự phục hồi máu mà không bao giờ trigger sự kiện `OnDeath()` để tránh gây lỗi cho hệ thống ghi nhận kết thúc màn chơi của Level Controller.
+
+---
+
+## 🚀 Các nâng cấp & Tối ưu hóa gần đây
+
+Dưới đây là danh sách các cải tiến quan trọng về tính ổn định, hiệu năng và sửa lỗi hệ thống đã được tối ưu hóa thành công trong các đợt phát triển gần đây:
+
+### 🎒 Giao diện Trang bị (Equipment UI Panel)
+- **Tối ưu hóa vòng đời UI:** Thay thế cơ chế ẩn cũ bằng việc kích hoạt/tắt động hoàn toàn `gameObject.SetActive(false)`. Điều này giúp các thành phần cuộn (`ScrollRect`) con ngừng chạy cập nhật khung hình khi bảng đang đóng, tiết kiệm tài nguyên CPU.
+- **Kích hoạt phân cấp cha thông minh:** Tự động đi ngược cây thư mục và kích hoạt tất cả các đối tượng cha đang bị ẩn để đảm bảo gọi thành công hàm `Awake()` của các panel.
+- **Khắc phục lỗi Invalid AABB:** Sử dụng phương thức ép buộc dựng lại lưới giao diện `Canvas.ForceUpdateCanvases()` ngay khi mở bảng, loại bỏ hoàn toàn hiện tượng cảnh báo lỗi tính toán kích thước của khung cuộn.
+
+### 🕹️ Đồng bộ hóa Chế độ Thử Sát Thương (Lobby Combat Mode)
+- **Bảo toàn nút di chuyển (Joystick):** Giữ cho `UIGame` luôn mở khi thoát chế độ tập luyện để người chơi tiếp tục di chuyển quanh sảnh chờ mà không bị mất cần điều khiển Joystick.
+- **Đóng/Mở linh hoạt các nút chiến đấu:** Tự động ẩn `Notch Panel` (bảng phím tắt kỹ năng) và `Attack Button` (nút bắn) khi quay về chế độ sảnh, giúp màn hình luôn gọn gàng và không bị chồng chéo nút bấm.
+
+### 🧟 Quản lý Quái vật & Vật lý (Enemies & Physics)
+- **Dọn sạch lỗi NavMeshAgent:** Bổ sung kiểm tra an toàn `navMeshAgent == null` trong phương thức `OnNavMeshUpdated()` của quái vật. Tránh hoàn toàn lỗi `MissingReferenceException` khi quái bị phá hủy hoặc dọn dẹp do chuyển cảnh.
+- **Tối ưu hóa hiệu ứng chết (Death Disappear):** Điều chỉnh lại thứ tự tắt vật lý của quái vật. Chỉ gán lực (`linearVelocity` và `angularVelocity`) về 0 khi Rigidbody còn là Dynamic, sau đó mới khóa thành Kinematic. Khắc phục triệt để lỗi cảnh báo gán lực sai trạng thái của Unity.
+
+### ⏳ Chuyển tiếp màn chơi (Level Transition)
+- **Sửa lỗi kẹt màn hình Loading:** Tự động kích hoạt GameObject của `UILoadingScreen` trước khi thực hiện chuyển cảnh tải màn chơi, đảm bảo các callback và hiệu ứng mờ dần (Tween) hoạt động chính xác và không bị đứng game giữa chừng.
 
 ---
 
