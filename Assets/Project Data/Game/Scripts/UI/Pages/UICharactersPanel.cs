@@ -4,9 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using Watermelon;
 
+using UnityEngine.EventSystems;
+
 namespace Watermelon.SquadShooter
 {
-    public class UICharactersPanel : UIUpgradesAbstractPage<CharacterPanelUI, CharacterType>
+    public class UICharactersPanel : UIUpgradesAbstractPage<CharacterPanelUI, CharacterType>, IDragHandler
     {
         [Space]
         [SerializeField] GameObject stageStarPrefab;
@@ -14,6 +16,7 @@ namespace Watermelon.SquadShooter
         private CharactersDatabase charactersDatabase;
 
         private Pool stageStarPool;
+        private Quaternion originalPlayerRotation;
 
         protected override int SelectedIndex => Mathf.Clamp(CharactersController.GetCharacterIndex(CharactersController.SelectedCharacter.Type), 0, int.MaxValue);
 
@@ -169,14 +172,94 @@ namespace Watermelon.SquadShooter
         {
             ResetAnimations();
 
-            base.PlayShowAnimation();
+            // Subscribe events
+            for (int i = 0; i < CurrenciesController.Currencies.Length; i++)
+            {
+                CurrenciesController.Currencies[i].OnCurrencyChanged += OnCurrencyAmountChanged;
+            }
+
+            backgroundPanelRectTransform.anchoredPosition = new Vector2(0, -1500);
+            backgroundPanelRectTransform.DOAnchoredPosition(Vector2.zero, 0.3f).SetCustomEasing(Ease.GetCustomEasingFunction("BackOutLight"));
+
+            // Dat vi tri Scroll View ve (0, 0) va dung cuon
+            scrollView.content.anchoredPosition = Vector2.zero;
+            scrollView.StopMovement();
+
+            for (int i = 0; i < itemPanels.Count; i++)
+            {
+                RectTransform panelTransform = itemPanels[i].RectTransform;
+
+                panelTransform.localScale = Vector2.zero;
+
+                if (i == SelectedIndex)
+                {
+                    panelTransform.DOScale(Vector3.one, 0.3f, 0.2f).SetCurveEasing(selectedPanelScaleAnimationCurve);
+                }
+                else
+                {
+                    panelTransform.DOScale(Vector3.one, 0.3f, 0.3f).SetCurveEasing(panelScaleAnimationCurve);
+                }
+
+                itemPanels[i].OnPanelOpened();
+            }
+
+            UIGeneralPowerIndicator.Show();
+
+            UIMainMenu.DotsBackground.gameObject.SetActive(false); // An background de thay ro 3D character
+
+            Tween.DelayedCall(0.9f, () => {
+                EnableGamepadButtonTag();
+                UIController.OnPageOpened(this);
+            });
 
             StartAnimations();
+
+            // Xoay nhan vat doi dien camera va kích hoat camera bay cận canh
+            CharacterBehaviour characterBehaviour = CharacterBehaviour.GetBehaviour();
+            if (characterBehaviour != null)
+            {
+                originalPlayerRotation = characterBehaviour.transform.rotation;
+
+                Vector3 playerPos = characterBehaviour.transform.position;
+                Vector3 defaultCamPos = CameraController.MainCamera.transform.position;
+                Vector3 dirToCam = defaultCamPos - playerPos;
+                dirToCam.y = 0;
+                if (dirToCam.sqrMagnitude > 0.01f)
+                {
+                    Vector3 lookDir = dirToCam.normalized;
+                    characterBehaviour.transform.rotation = Quaternion.LookRotation(lookDir);
+                    
+                    // Kich hoat camera bay den vi tri phia truoc và lech phai (gip nhan vat dung ben trai man hinh)
+                    Vector3 right = Vector3.Cross(Vector3.up, lookDir).normalized; // Right vector local
+                    CameraController.EnterCharacterSelection(playerPos, lookDir, right, Vector3.up);
+                }
+
+                // Tat di chuyen va agent de tranh nguoi choi dieu khien nhan vat trong khi mo UI
+                Control.DisableMovementControl();
+                characterBehaviour.DisableAgent();
+            }
+        }
+
+        protected override void Update()
+        {
+            if (!Canvas.enabled) return;
+            // Bo qua logic update ngang tu gamepad cua base class
         }
 
         public override void PlayHideAnimation()
         {
             base.PlayHideAnimation();
+
+            // Khoi phuc huong xoay nhan vat va tra quyen kiem soat cho Cinemachine
+            CharacterBehaviour characterBehaviour = CharacterBehaviour.GetBehaviour();
+            if (characterBehaviour != null)
+            {
+                characterBehaviour.transform.rotation = originalPlayerRotation;
+                // Bat lai di chuyen va agent cua nhan vat
+                Control.EnableMovementControl();
+                characterBehaviour.ActivateAgent();
+            }
+            CameraController.ExitCharacterSelection();
 
             backgroundPanelRectTransform.DOAnchoredPosition(new Vector2(0, -1500), 0.3f).SetEasing(Ease.Type.CubicIn).OnComplete(delegate
             {
@@ -198,6 +281,17 @@ namespace Watermelon.SquadShooter
             }
 
             return null;
+        }
+
+        public void OnDrag(PointerEventData eventData)
+        {
+            CharacterBehaviour characterBehaviour = CharacterBehaviour.GetBehaviour();
+            if (characterBehaviour != null)
+            {
+                // Xoay nhan vat theo truc Y
+                float rotationSpeed = -0.5f;
+                characterBehaviour.transform.Rotate(Vector3.up, eventData.delta.x * rotationSpeed, Space.World);
+            }
         }
 
         #endregion

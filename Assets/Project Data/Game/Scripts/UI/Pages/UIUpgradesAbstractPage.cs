@@ -160,7 +160,7 @@ namespace Watermelon
 
         }
 
-        private void OnCurrencyAmountChanged(Currency currency, int difference)
+        protected void OnCurrencyAmountChanged(Currency currency, int difference)
         {
             for (int i = 0; i < itemPanels.Count; i++)
             {
