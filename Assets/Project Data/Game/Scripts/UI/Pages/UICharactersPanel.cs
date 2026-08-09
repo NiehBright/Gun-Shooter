@@ -4,9 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using Watermelon;
 
+using UnityEngine.EventSystems;
+
 namespace Watermelon.SquadShooter
 {
-    public class UICharactersPanel : UIUpgradesAbstractPage<CharacterPanelUI, CharacterType>
+    public class UICharactersPanel : UIUpgradesAbstractPage<CharacterPanelUI, CharacterType>, IDragHandler
     {
         [Space]
         [SerializeField] GameObject stageStarPrefab;
@@ -203,7 +205,7 @@ namespace Watermelon.SquadShooter
 
             UIGeneralPowerIndicator.Show();
 
-            UIMainMenu.DotsBackground.gameObject.SetActive(true);
+            UIMainMenu.DotsBackground.gameObject.SetActive(false); // An background de thay ro 3D character
 
             Tween.DelayedCall(0.9f, () => {
                 EnableGamepadButtonTag();
@@ -279,6 +281,17 @@ namespace Watermelon.SquadShooter
             }
 
             return null;
+        }
+
+        public void OnDrag(PointerEventData eventData)
+        {
+            CharacterBehaviour characterBehaviour = CharacterBehaviour.GetBehaviour();
+            if (characterBehaviour != null)
+            {
+                // Xoay nhan vat theo truc Y
+                float rotationSpeed = -0.5f;
+                characterBehaviour.transform.Rotate(Vector3.up, eventData.delta.x * rotationSpeed, Space.World);
+            }
         }
 
         #endregion

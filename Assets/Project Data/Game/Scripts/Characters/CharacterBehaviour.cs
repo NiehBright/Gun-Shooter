@@ -628,7 +628,10 @@ namespace Watermelon.SquadShooter
             {
                 if (UnityEngine.InputSystem.Keyboard.current.leftShiftKey.wasPressedThisFrame)
                 {
-                    PerformDash();
+                    if (Control.IsMovementControlActive)
+                    {
+                        PerformDash();
+                    }
                 }
             }
 #endif
@@ -917,7 +920,7 @@ namespace Watermelon.SquadShooter
 
         public void PerformDash()
         {
-            if (isDashing || dashCooldownTimeLeft > 0 || !isActive) return;
+            if (isDashing || dashCooldownTimeLeft > 0 || !isActive || !Control.IsMovementControlActive) return;
 
             isDashing = true;
             dashTimeLeft = dashDuration;

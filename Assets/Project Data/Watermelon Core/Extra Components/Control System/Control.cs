@@ -1,10 +1,11 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace Watermelon
 {
     public static class Control
     {
         public static InputType InputType { get; private set; }
+        public static bool IsMovementControlActive { get; private set; } = true;
 
         public static IControlBehavior CurrentControl { get; private set; }
 
@@ -65,6 +66,7 @@ namespace Watermelon
             }
 #endif
 
+            IsMovementControlActive = true;
             CurrentControl.EnableMovementControl();
         }
 
@@ -79,6 +81,7 @@ namespace Watermelon
             }
 #endif
 
+            IsMovementControlActive = false;
             CurrentControl.DisableMovementControl();
         }
     }

@@ -160,9 +160,10 @@ namespace Watermelon
 
             // Tinh toan vi tri camera (dung truoc mat va lech phai nhan vat de nhan vat lech trai khung hinh)
             Vector3 targetPos = playerPos + playerForward * cameraController.selectionDistance 
-                                          + playerRight * cameraController.selectionHorizontalOffset 
+                                          - playerRight * cameraController.selectionHorizontalOffset 
                                           + playerUp * cameraController.selectionHeight;
-            Vector3 lookAtTarget = playerPos + playerUp * cameraController.selectionLookAtHeight;
+            Vector3 lookAtTarget = playerPos - playerRight * cameraController.selectionHorizontalOffset 
+                                             + playerUp * cameraController.selectionLookAtHeight;
             Quaternion targetRot = Quaternion.LookRotation((lookAtTarget - targetPos).normalized);
 
             Vector3 startPos = mainCamera.transform.position;
