@@ -29,6 +29,12 @@ namespace Watermelon
         [SerializeField] float enemyShiftZ = 1f;
         [SerializeField] float enemyShiftLerpMultiplier = 4f;
 
+        [Header("Character Selection Camera")]
+        [SerializeField] float selectionDistance = 2.2f;
+        [SerializeField] float selectionHorizontalOffset = 0.75f;
+        [SerializeField] float selectionHeight = 1.35f;
+        [SerializeField] float selectionLookAtHeight = 1.0f;
+
         private static Dictionary<CameraType, int> virtualCamerasLink;
 
         private static Camera mainCamera;
@@ -47,6 +53,7 @@ namespace Watermelon
         private Vector3 forward = Vector3.zero;
         private static Vector3 enemyDirection = Vector3.zero;
         private static BaseEnemyBehavior targetEnemy;
+        private TweenCase selectionTweenCase;
 
         private void Awake()
         {
@@ -142,6 +149,41 @@ namespace Watermelon
 
             activeVirtualCamera = cameraController.virtualCameras[virtualCamerasLink[cameraType]];
             activeVirtualCamera.VirtualCamera.Priority = ACTIVE_CAMERA_PRIORITY;
+        }
+
+        public static void EnterCharacterSelection(Vector3 playerPos, Vector3 playerForward, Vector3 playerRight, Vector3 playerUp)
+        {
+            if (cameraController == null) return;
+
+            // Tam thoi tat Cinemachine de di chuyen camera tu do
+            cameraController.cameraBrain.enabled = false;
+
+            // Tinh toan vi tri camera (dung truoc mat va lech phai nhan vat de nhan vat lech trai khung hinh)
+            Vector3 targetPos = playerPos + playerForward * cameraController.selectionDistance 
+                                          + playerRight * cameraController.selectionHorizontalOffset 
+                                          + playerUp * cameraController.selectionHeight;
+            Vector3 lookAtTarget = playerPos + playerUp * cameraController.selectionLookAtHeight;
+            Quaternion targetRot = Quaternion.LookRotation((lookAtTarget - targetPos).normalized);
+
+            Vector3 startPos = mainCamera.transform.position;
+            Quaternion startRot = mainCamera.transform.rotation;
+
+            cameraController.selectionTweenCase.KillActive();
+            cameraController.selectionTweenCase = Tween.DoFloat(0f, 1f, 0.5f, (float t) =>
+            {
+                mainCamera.transform.position = Vector3.Lerp(startPos, targetPos, t);
+                mainCamera.transform.rotation = Quaternion.Slerp(startRot, targetRot, t);
+            });
+        }
+
+        public static void ExitCharacterSelection()
+        {
+            if (cameraController == null) return;
+
+            cameraController.selectionTweenCase.KillActive();
+
+            // Bat lai Cinemachine de no tu dong blend muot ma ve camera sanh cho
+            cameraController.cameraBrain.enabled = true;
         }
     }
 }
