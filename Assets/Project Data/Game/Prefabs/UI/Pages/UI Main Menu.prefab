@@ -6794,7 +6794,7 @@ MonoBehaviour:
   tabImage: {fileID: 9172483933213118344}
   defaultColor: {r: 0.32156864, g: 0.654902, b: 0.92156863, a: 1}
   notificationColor: {r: 1, g: 0.6784314, b: 0.11764706, a: 1}
-  disabledColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  disabledColor: {r: 1, g: 1, b: 1, a: 1}
   notificationObject: {fileID: 1519212049816267241}
 --- !u!114 &4653501409755950206
 MonoBehaviour:

@@ -89,7 +89,7 @@ namespace Watermelon.SquadShooter
                     notchPanel.gameObject.SetActive(true);
                 }
 
-                Transform attackButton = uiGame.transform.Find("Attack Button");
+                Transform attackButton = uiGame.transform.Find("Button Game Attack");
                 if (attackButton != null)
                 {
                     attackButton.gameObject.SetActive(true);
@@ -135,7 +135,7 @@ namespace Watermelon.SquadShooter
                     notchPanel.gameObject.SetActive(false);
                 }
 
-                Transform attackButton = uiGame.transform.Find("Attack Button");
+                Transform attackButton = uiGame.transform.Find("Button Game Attack");
                 if (attackButton != null)
                 {
                     attackButton.gameObject.SetActive(false);

@@ -156,7 +156,7 @@ namespace Watermelon.SquadShooter
         {
             if (pageType == typeof(UIMainMenu))
             {
-                if (ActiveRoom.CurrentLevelIndex >= 2)
+                if (ActiveRoom.CurrentLevelIndex >= 1)
                 {
                     BaseUpgradeStage stage = weaponUpgrade.NextStage;
                     if(stage != null)
