@@ -352,13 +352,33 @@ namespace Watermelon
 
         public void UpdateAttackButtonVisibility()
         {
+            Transform parentAttackBtn = transform.Find("Button Game Attack");
+            bool isCombatMode = LobbyCombatController.IsCombatModeActive;
+            bool isLobby = LevelController.IsLobbyMode;
+
+            if (parentAttackBtn != null)
+            {
+                if (isCombatMode)
+                {
+                    parentAttackBtn.gameObject.SetActive(true);
+                }
+                else if (isLobby)
+                {
+                    parentAttackBtn.gameObject.SetActive(false);
+                }
+                else
+                {
+                    parentAttackBtn.gameObject.SetActive(true);
+                }
+            }
+
             if (attackButton != null)
             {
-                if (LobbyCombatController.IsCombatModeActive)
+                if (isCombatMode)
                 {
-                    attackButton.gameObject.SetActive(!CharacterBehaviour.IsAutoShootActive);
+                    attackButton.gameObject.SetActive(true);
                 }
-                else if (LevelController.IsLobbyMode)
+                else if (isLobby)
                 {
                     attackButton.gameObject.SetActive(false);
                 }

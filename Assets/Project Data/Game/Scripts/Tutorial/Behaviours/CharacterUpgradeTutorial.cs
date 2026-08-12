@@ -149,7 +149,7 @@ namespace Watermelon.SquadShooter
 
             if (pageType == typeof(UIMainMenu))
             {
-                if (ActiveRoom.CurrentLevelIndex >= 1)
+                if (ActiveRoom.CurrentLevelIndex >= 2)
                 {
                     CharacterUpgrade nextStage = firstCharacter.GetNextUpgrade();
                     if(nextStage != null)
