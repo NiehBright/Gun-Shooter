@@ -145,7 +145,6 @@ namespace Watermelon.SquadShooter
 
         private void OnMainMenuPageOpened(UIPage page, System.Type pageType)
         {
-            weaponTab.Disable();
 
             if (pageType == typeof(UIMainMenu))
             {

@@ -16,10 +16,10 @@ MonoBehaviour:
   - type: 0
     name: Levi
     requiredLevel: 0
-    lockedSprite: {fileID: 21300000, guid: 2f3d18b5571311645ae5c0ab7af86963, type: 3}
+    lockedSprite: {fileID: 21300000, guid: d9160e82ec0bf3945859614fd0062209, type: 3}
     stages:
-    - previewSprite: {fileID: 21300000, guid: a842f55cf52485f449e7d48964d1b4e6, type: 3}
-      lockedSprite: {fileID: 21300000, guid: 2f3d18b5571311645ae5c0ab7af86963, type: 3}
+    - previewSprite: {fileID: 21300000, guid: f12995910ce92234f8966d5ffa282c8f, type: 3}
+      lockedSprite: {fileID: 21300000, guid: d9160e82ec0bf3945859614fd0062209, type: 3}
       prefab: {fileID: 619098105319580482, guid: 0dbf0192706e97b459bd1d7422a170b6,
         type: 3}
       healthBarOffset: {x: 0, y: 2.34375, z: 0}
@@ -93,10 +93,10 @@ MonoBehaviour:
   - type: 1
     name: Nieh
     requiredLevel: 2
-    lockedSprite: {fileID: 21300000, guid: d4321a8adb26e7c479f9dbaf87594f69, type: 3}
+    lockedSprite: {fileID: 21300000, guid: d9160e82ec0bf3945859614fd0062209, type: 3}
     stages:
-    - previewSprite: {fileID: 21300000, guid: 02200322b8cad0f4ab1c5d3c0eb9a128, type: 3}
-      lockedSprite: {fileID: 21300000, guid: d4321a8adb26e7c479f9dbaf87594f69, type: 3}
+    - previewSprite: {fileID: 21300000, guid: f12995910ce92234f8966d5ffa282c8f, type: 3}
+      lockedSprite: {fileID: 21300000, guid: d9160e82ec0bf3945859614fd0062209, type: 3}
       prefab: {fileID: 3223435925775249473, guid: e7ada6aba0ba3de49b2cb73cdcb9659d,
         type: 3}
       healthBarOffset: {x: 0, y: 2.8125, z: 0}
