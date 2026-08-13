@@ -17,27 +17,27 @@ MonoBehaviour:
     type: 0
     upgradeType: 0
     rarity: 0
-    icon: {fileID: 21300000, guid: 96f48177d01e5c0419ff1e59b578c5ee, type: 3}
+    icon: {fileID: 0}
   - name: SHOTGUN
     type: 3
     upgradeType: 1
     rarity: 0
-    icon: {fileID: 21300000, guid: 3a51fb644e3b61f44aeefd3157e165e0, type: 3}
+    icon: {fileID: 0}
   - name: LAVA GUN
     type: 1
     upgradeType: 3
     rarity: 1
-    icon: {fileID: 21300000, guid: b5f1a70cce958d14c8be56bde5c89019, type: 3}
+    icon: {fileID: 0}
   - name: TESLA GUN
     type: 2
     upgradeType: 2
     rarity: 4
-    icon: {fileID: 21300000, guid: 696461dadb27aa249a1c814e7fca4f57, type: 3}
+    icon: {fileID: 0}
   - name: Sword
     type: 4
     upgradeType: 4
     rarity: 4
-    icon: {fileID: 21300000, guid: 696461dadb27aa249a1c814e7fca4f57, type: 3}
+    icon: {fileID: 0}
   raritySettings:
   - rarity: 0
     name: COMMON

@@ -645,7 +645,7 @@ MonoBehaviour:
     - dropType: 1
       currencyType: 0
       cardType: 3
-      amount: 2
+      amount: 5
     specialBehaviours: []
   - type: 0
     rooms:

@@ -158,49 +158,14 @@ namespace Watermelon.SquadShooter
             {
                 if (ActiveRoom.CurrentLevelIndex >= 1)
                 {
-                    BaseUpgradeStage stage = weaponUpgrade.NextStage;
-                    if(stage != null)
-                    {
-                        // Player has enough money to upgrade first weapon
-                        if (CurrenciesController.HasAmount(stage.CurrencyType, stage.Price))
-                        {
-                            UIController.OnPageOpenedEvent -= OnMainMenuPageOpened;
-
-                            stepNumber = STEP_TUTORIAL_ACTIVATED;
-
-                            weaponTab.Activate();
-                            weaponTab.Button.onClick.AddListener(OnWeaponTabOpened);
-
-                            TutorialCanvasController.ActivateTutorialCanvas(weaponTab.RectTransform, false, true);
-
-                            if (Control.InputType == InputType.Gamepad)
-                            {
-                                activatedGamepadButton = weaponTab.GamepadButton;
-                                if (activatedGamepadButton != null)
-                                    activatedGamepadButton.StartHighlight();
-
-                                if (characterTab.GamepadButton != null)
-                                    characterTab.GamepadButton.SetFocus(false);
-
-                                if (noAdsGamepadButton != null)
-                                    noAdsGamepadButton.SetFocus(false);
-
-                                if (settingsGamepadButton != null)
-                                    settingsGamepadButton.SetFocus(false);
-
-                                if (playGamepadButton != null)
-                                    playGamepadButton.SetFocus(false);
-                            }
-                            else
-                            {
-                                TutorialCanvasController.ActivatePointer(weaponTab.RectTransform.position + new Vector3(0, 0.1f, 0), TutorialCanvasController.POINTER_TOPDOWN);
-                            }
-                        }
-                        else
-                        {
-                            weaponTab.Disable();
-                        }
-                    }
+                    UIController.OnPageOpenedEvent -= OnMainMenuPageOpened;
+                    weaponTab.Activate();
+                    characterTab.Activate();
+                    FinishTutorial();
+                }
+                else
+                {
+                    weaponTab.Disable();
                 }
             }
         }
