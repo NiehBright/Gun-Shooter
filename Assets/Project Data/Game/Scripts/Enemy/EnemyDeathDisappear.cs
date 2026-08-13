@@ -3,17 +3,14 @@ using UnityEngine;
 
 namespace Watermelon.SquadShooter
 {
-    /// <summary>
-
-    /// </summary>
     public class EnemyDeathDisappear : MonoBehaviour
     {
         [Header("Cài đặt hiệu ứng biến mất")]
         [Tooltip("Thời gian chờ trước khi bắt đầu biến mất (giây)")]
-        [SerializeField] private float delayBeforeDisappear = 0.3f;
+        [SerializeField] private float delayBeforeDisappear = 0.05f;
 
         [Tooltip("Thời gian hiệu ứng thu nhỏ (giây)")]
-        [SerializeField] private float shrinkDuration = 0.5f;
+        [SerializeField] private float shrinkDuration = 0.2f;
 
         private void OnEnable()
         {
@@ -27,70 +24,81 @@ namespace Watermelon.SquadShooter
 
         private void OnEnemyDied(BaseEnemyBehavior enemy)
         {
-            if (enemy == null) return;
+            if (enemy == null || !enemy.gameObject.activeInHierarchy) return;
 
-            // Ngay lập tức tắt ragdoll để không bị kéo giãn
+            // 1. Reset xương về vị trí chuẩn ban đầu ngay lập tức để xóa bỏ hoàn toàn hiện tượng kéo giãn model
             if (enemy.Ragdoll != null)
             {
+                enemy.Ragdoll.Reset();
                 enemy.Ragdoll.Disable();
             }
 
-            // Tắt tất cả Rigidbody trên xương để chặn vật lý
+            // 2. Chặn tất cả lực vật lý trên các xương
             Rigidbody[] rigidbodies = enemy.GetComponentsInChildren<Rigidbody>();
             foreach (var rb in rigidbodies)
             {
-                if (!rb.isKinematic)
+                if (rb != null)
                 {
                     rb.linearVelocity = Vector3.zero;
                     rb.angularVelocity = Vector3.zero;
+                    rb.isKinematic = true;
+                    rb.useGravity = false;
                 }
-                rb.isKinematic = true;
-                rb.useGravity = false;
             }
 
-            // Tắt Animator để không bị xung đột
+            // 3. Tắt Animator để giữ nguyên hình dạng chuẩn
             if (enemy.Animator != null)
             {
                 enemy.Animator.enabled = false;
             }
 
-            // Bắt đầu hiệu ứng biến mất
+            // 4. Bắt đầu coroutine thu nhỏ và biến mất nhanh chóng
             StartCoroutine(DisappearCoroutine(enemy));
         }
 
         private IEnumerator DisappearCoroutine(BaseEnemyBehavior enemy)
         {
+            if (enemy == null) yield break;
+
             Transform enemyTransform = enemy.transform;
-
-            // Chờ một chút trước khi biến mất (để người chơi thấy quái đã chết)
-            yield return new WaitForSeconds(delayBeforeDisappear);
-
             if (enemyTransform == null) yield break;
 
-            // Lưu scale ban đầu
+            if (delayBeforeDisappear > 0)
+            {
+                yield return new WaitForSeconds(delayBeforeDisappear);
+            }
+
+            if (enemyTransform == null || !enemy.gameObject.activeInHierarchy) yield break;
+
             Vector3 originalScale = enemyTransform.localScale;
+            if (originalScale.sqrMagnitude < 0.01f) originalScale = Vector3.one;
+
             float elapsed = 0f;
 
-            // Thu nhỏ dần về 0
+            // Thu nhỏ mượt mà về 0 trong 0.2 giây
             while (elapsed < shrinkDuration)
             {
-                if (enemyTransform == null) yield break;
+                if (enemyTransform == null || !enemy.gameObject.activeInHierarchy) yield break;
 
                 elapsed += Time.deltaTime;
-                float t = elapsed / shrinkDuration;
+                float t = Mathf.Clamp01(elapsed / shrinkDuration);
 
-                // Easing: bắt đầu chậm, cuối nhanh (ease-in)
-                float scale = 1f - (t * t);
+                float scale = 1f - t;
                 enemyTransform.localScale = originalScale * scale;
 
                 yield return null;
             }
 
-            // Ẩn hoàn toàn
-            if (enemyTransform != null)
+            if (enemyTransform != null && enemy.gameObject.activeInHierarchy)
             {
-                enemyTransform.localScale = Vector3.zero;
-                enemyTransform.gameObject.SetActive(false);
+                // Reset xương và khôi phục scale ban đầu cho Object Pool tái sử dụng
+                if (enemy.Ragdoll != null)
+                {
+                    enemy.Ragdoll.Reset();
+                }
+
+                enemyTransform.localScale = originalScale;
+                enemy.gameObject.SetActive(false);
             }
         }
     }
