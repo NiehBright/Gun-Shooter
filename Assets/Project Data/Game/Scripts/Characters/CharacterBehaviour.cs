@@ -214,8 +214,11 @@ namespace Watermelon.SquadShooter
 
             aimRingBehavior.Init(transform);
 
-            targetRing = Instantiate(targetRingPrefab, new Vector3(0f, 0f, -999f), Quaternion.identity);
-            targetRingRenderer = targetRing.GetComponent<Renderer>();
+            if (targetRing == null)
+            {
+                targetRing = Instantiate(targetRingPrefab, new Vector3(0f, 0f, -999f), Quaternion.identity);
+                targetRingRenderer = targetRing.GetComponent<Renderer>();
+            }
 
             aimRingBehavior.Hide();
 
@@ -740,7 +743,14 @@ namespace Watermelon.SquadShooter
                 transform.LookAt(new Vector3(playerTarget.position.x, transform.position.y, playerTarget.position.z));
             }
 
-            targetRing.transform.rotation = Quaternion.identity;
+            if (targetRing != null)
+            {
+                if (IsCloseEnemyFound)
+                {
+                    targetRing.transform.position = closestEnemyBehaviour.transform.position;
+                }
+                targetRing.transform.rotation = Quaternion.identity;
+            }
 
             if (healthbarBehaviour != null)
                 healthbarBehaviour.FollowUpdate();
@@ -777,9 +787,7 @@ namespace Watermelon.SquadShooter
 
                 ringTweenCase.KillActive();
 
-                targetRing.transform.SetParent(enemyBehavior.transform);
                 targetRing.transform.localScale = Vector3.one * enemyBehavior.Stats.TargetRingSize * 1.4f;
-                targetRing.transform.localPosition = Vector3.zero;
 
                 ringTweenCase = targetRing.transform.DOScale(Vector3.one * enemyBehavior.Stats.TargetRingSize, 0.2f).SetEasing(Ease.Type.BackIn);
 

@@ -165,7 +165,7 @@ namespace Watermelon
 
         private static void ShowMainMenuAfterLevelComplete()
         {
-            AdsManager.ShowInterstitial(null);
+            // AdsManager.ShowInterstitial(null);
 
             CustomMusicController.ToggleMusic(AudioController.Music.menuMusic, 0.3f, 0.3f);
 
@@ -205,7 +205,7 @@ namespace Watermelon
         {
             if (pageType == typeof(UIGameOver))
             {
-                AdsManager.ShowInterstitial(null);
+                // AdsManager.ShowInterstitial(null);
 
                 UIController.OnPageOpenedEvent -= OnFailedPageOpened;
             }

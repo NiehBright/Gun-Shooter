@@ -14,6 +14,20 @@ namespace Watermelon.SquadShooter
 
         protected BaseEnemyBehavior currentTarget;
 
+        protected Rigidbody rigidBody;
+        private SimpleCallback disableBulletCallback;
+
+        protected virtual void Awake()
+        {
+            rigidBody = GetComponent<Rigidbody>();
+            disableBulletCallback = DisableBullet;
+        }
+
+        private void DisableBullet()
+        {
+            gameObject.SetActive(false);
+        }
+
         public virtual void Initialise(float damage, float speed, BaseEnemyBehavior currentTarget, float autoDisableTime, bool autoDisableOnHit = true)
         {
             this.damage = damage;
@@ -24,26 +38,21 @@ namespace Watermelon.SquadShooter
 
             if (autoDisableTime > 0)
             {
-                disableTweenCase = Tween.DelayedCall(autoDisableTime, delegate
-                {
-                    // Disable bullet
-                    gameObject.SetActive(false);
-                });
+                disableTweenCase = Tween.DelayedCall(autoDisableTime, disableBulletCallback);
             }
         }
 
         protected virtual void FixedUpdate()
         {
             if (speed != 0)
-                transform.position += transform.forward * speed * Time.fixedDeltaTime;
+                rigidBody.MovePosition(rigidBody.position + transform.forward * speed * Time.fixedDeltaTime);
         }
 
         private void OnTriggerEnter(Collider other)
         {
             if (other.gameObject.layer == PhysicsHelper.LAYER_ENEMY)
             {
-                BaseEnemyBehavior baseEnemyBehavior = other.GetComponent<BaseEnemyBehavior>();
-                if (baseEnemyBehavior != null)
+                if (other.TryGetComponent<BaseEnemyBehavior>(out var baseEnemyBehavior))
                 {
                     if (!baseEnemyBehavior.IsDead)
                     {
