@@ -136,7 +136,11 @@ namespace Watermelon.LevelSystem
         #region Enemies
         public static BaseEnemyBehavior SpawnEnemy(EnemyData enemyData, EnemyEntityData enemyEntityData, bool isActive)
         {
-            BaseEnemyBehavior enemy = Object.Instantiate(enemyData.Prefab, enemyEntityData.Position, enemyEntityData.Rotation, levelObject.transform).GetComponent<BaseEnemyBehavior>();
+            GameObject enemyObj = enemyData.Pool.GetPooledObject(false);
+            enemyObj.transform.SetParent(levelObject.transform);
+            enemyObj.transform.SetPositionAndRotation(enemyEntityData.Position, enemyEntityData.Rotation);
+            
+            BaseEnemyBehavior enemy = enemyObj.GetComponent<BaseEnemyBehavior>();
             enemy.transform.localScale = enemyEntityData.Scale;
             enemy.SetEnemyData(enemyData, enemyEntityData.IsElite);
             enemy.SetPatrollingPoints(enemyEntityData.PathPoints);
@@ -144,6 +148,8 @@ namespace Watermelon.LevelSystem
             // Place enemy on the middle of the path if there are two or more waypoints
             if (enemyEntityData.PathPoints.Length > 1)
                 enemy.transform.position = enemyEntityData.PathPoints[0] + (enemyEntityData.PathPoints[1] - enemyEntityData.PathPoints[0]) * 0.5f;
+
+            enemyObj.SetActive(true);
 
             if (isActive)
                 enemy.Initialise();
@@ -165,9 +171,11 @@ namespace Watermelon.LevelSystem
         {
             for (int i = 0; i < enemies.Count; i++)
             {
-                enemies[i].Unload();
-
-                Object.Destroy(enemies[i].gameObject);
+                if (enemies[i] != null)
+                {
+                    enemies[i].Unload();
+                    enemies[i].gameObject.SetActive(false);
+                }
             }
 
             enemies.Clear();

@@ -8,6 +8,14 @@ namespace Watermelon.SquadShooter
         [SerializeField] EnemyData[] enemies;
         public EnemyData[] Enemies => enemies;
 
+        public void InitialisePools()
+        {
+            for (int i = 0; i < enemies.Length; i++)
+            {
+                enemies[i].InitPool();
+            }
+        }
+
         public void InitialiseStatsRealation(int baseCharacterHealth)
         {
             for (int i = 0; i < enemies.Length; i++)
