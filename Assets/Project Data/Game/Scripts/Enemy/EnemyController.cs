@@ -16,6 +16,7 @@ namespace Watermelon.SquadShooter
 
             Character baseCharacter = CharactersController.GetCharacter(CharacterType.Character_01);
             database.InitialiseStatsRealation(baseCharacter.Upgrades[0].Stats.Health);
+            database.InitialisePools();
         }
 
         // set current character and weapon data - to be used in stats calculation for enemies that will be spawned in a moment

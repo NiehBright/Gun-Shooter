@@ -16,6 +16,23 @@ namespace Watermelon.SquadShooter
         protected float distanceTraveled = 0;
 
         protected TweenCase disableTweenCase;
+        protected Rigidbody rigidBody;
+        private SimpleCallback trailRendererCallback;
+        private float trailTimeCache;
+
+        protected virtual void Awake()
+        {
+            rigidBody = GetComponent<Rigidbody>();
+            trailRendererCallback = ResetTrailRenderer;
+        }
+
+        private void ResetTrailRenderer()
+        {
+            trailRenderer.Clear();
+            trailRenderer.gameObject.SetActive(true);
+            trailRenderer.Clear();
+            trailRenderer.time = trailTimeCache;
+        }
 
         public virtual void Initialise(float damage, float speed, float selfDestroyDistance)
         {
@@ -26,23 +43,16 @@ namespace Watermelon.SquadShooter
             distanceTraveled = 0;
 
             trailRenderer.Clear();
-            float time = trailRenderer.time;
+            trailTimeCache = trailRenderer.time;
             trailRenderer.time = 0;
 
             gameObject.SetActive(true);
-            Tween.NextFrame(() =>
-            {
-                trailRenderer.Clear();
-                trailRenderer.gameObject.SetActive(true);
-                trailRenderer.Clear();
-
-                trailRenderer.time = time;
-            });
+            Tween.NextFrame(trailRendererCallback);
         }
 
         protected virtual void FixedUpdate()
         {
-            transform.position += transform.forward * speed * Time.fixedDeltaTime;
+            rigidBody.MovePosition(rigidBody.position + transform.forward * speed * Time.fixedDeltaTime);
 
             if (selfDestroyDistance != -1)
             {
@@ -59,8 +69,7 @@ namespace Watermelon.SquadShooter
         {
             if (other.gameObject.layer == PhysicsHelper.LAYER_PLAYER)
             {
-                CharacterBehaviour characterBehaviour = other.GetComponent<CharacterBehaviour>();
-                if (characterBehaviour != null)
+                if (other.TryGetComponent<CharacterBehaviour>(out var characterBehaviour))
                 {
                     // Deal damage to enemy
                     characterBehaviour.TakeDamage(damage);

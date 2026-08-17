@@ -20,10 +20,16 @@ namespace Watermelon.SquadShooter
         [SerializeField] Ease.Type scaleEasing;
 
         private Vector3 defaultScale;
+        private SimpleCallback onDelayCompleteCallback;
+        private SimpleCallback onRotateCompleteCallback;
+        private SimpleCallback onDisableDelayCompleteCallback;
 
         private void Awake()
         {
             defaultScale = transform.localScale;
+            onDelayCompleteCallback = OnDelayComplete;
+            onRotateCompleteCallback = OnRotateComplete;
+            onDisableDelayCompleteCallback = OnDisableDelayComplete;
         }
 
         public override void Activate(string text, float scale = 1.0f)
@@ -35,17 +41,23 @@ namespace Watermelon.SquadShooter
             transform.localScale = defaultScale * scale * this.scale;
             transform.localRotation = Quaternion.Euler(70, 0, 18 * sign);
 
-            Tween.DelayedCall(delay, delegate
-            {
-                transform.DOLocalRotate(Quaternion.Euler(70, 0, 0), time).SetEasing(easing).OnComplete(delegate
-                {
-                    Tween.DelayedCall(disableDelay, delegate
-                    {
-                        gameObject.SetActive(false);
-                    });
-                });
-                transform.DOScale(defaultScale, scaleTime).SetEasing(scaleEasing);
-            });
+            Tween.DelayedCall(delay, onDelayCompleteCallback);
+        }
+
+        private void OnDelayComplete()
+        {
+            transform.DOLocalRotate(Quaternion.Euler(70, 0, 0), time).SetEasing(easing).OnComplete(onRotateCompleteCallback);
+            transform.DOScale(defaultScale, scaleTime).SetEasing(scaleEasing);
+        }
+
+        private void OnRotateComplete()
+        {
+            Tween.DelayedCall(disableDelay, onDisableDelayCompleteCallback);
+        }
+
+        private void OnDisableDelayComplete()
+        {
+            gameObject.SetActive(false);
         }
     }
 }

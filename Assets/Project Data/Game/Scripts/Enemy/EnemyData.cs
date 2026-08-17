@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace Watermelon.SquadShooter
 {
@@ -10,6 +10,32 @@ namespace Watermelon.SquadShooter
 
         [SerializeField] GameObject prefab;
         public GameObject Prefab => prefab;
+
+        [System.NonSerialized] private Pool pool;
+        public Pool Pool => pool;
+
+        public void InitPool()
+        {
+            if (pool == null)
+            {
+                if (prefab != null)
+                {
+                    string poolName = prefab.name + "_" + enemyType.ToString();
+                    if (PoolManager.PoolExists(poolName))
+                    {
+                        pool = PoolManager.GetPoolByName(poolName);
+                    }
+                    else
+                    {
+                        pool = PoolManager.AddPool(new PoolSettings(poolName, prefab, 3, true));
+                    }
+                }
+                else
+                {
+                    Debug.LogWarning($"[EnemyData] Prefab is missing for enemy type: {enemyType}. Pooling skipped.");
+                }
+            }
+        }
 
         [SerializeField] EnemyStats stats;
         public EnemyStats Stats => stats;
