@@ -11,14 +11,29 @@ namespace Watermelon.SquadShooter
         [SerializeField] GameObject prefab;
         public GameObject Prefab => prefab;
 
-        private Pool pool;
+        [System.NonSerialized] private Pool pool;
         public Pool Pool => pool;
 
         public void InitPool()
         {
             if (pool == null)
             {
-                pool = new Pool(new PoolSettings(prefab.name, prefab, 3, true));
+                if (prefab != null)
+                {
+                    string poolName = prefab.name + "_" + enemyType.ToString();
+                    if (PoolManager.PoolExists(poolName))
+                    {
+                        pool = PoolManager.GetPoolByName(poolName);
+                    }
+                    else
+                    {
+                        pool = PoolManager.AddPool(new PoolSettings(poolName, prefab, 3, true));
+                    }
+                }
+                else
+                {
+                    Debug.LogWarning($"[EnemyData] Prefab is missing for enemy type: {enemyType}. Pooling skipped.");
+                }
             }
         }
 

@@ -136,11 +136,38 @@ namespace Watermelon.LevelSystem
         #region Enemies
         public static BaseEnemyBehavior SpawnEnemy(EnemyData enemyData, EnemyEntityData enemyEntityData, bool isActive)
         {
-            GameObject enemyObj = enemyData.Pool.GetPooledObject(false);
+            GameObject enemyObj = null;
+
+            if (enemyData.Pool != null)
+            {
+                enemyObj = enemyData.Pool.GetPooledObject(false);
+            }
+
+            // Fallback to standard instantiation if pool is unavailable or failed
+            if (enemyObj == null)
+            {
+                if (enemyData.Prefab != null)
+                {
+                    enemyObj = Object.Instantiate(enemyData.Prefab);
+                    enemyObj.SetActive(false);
+                }
+                else
+                {
+                    Debug.LogWarning($"[ActiveRoom] Cannot spawn enemy {enemyData.EnemyType} - Prefab is missing.");
+                    return null;
+                }
+            }
+
             enemyObj.transform.SetParent(levelObject.transform);
             enemyObj.transform.SetPositionAndRotation(enemyEntityData.Position, enemyEntityData.Rotation);
             
             BaseEnemyBehavior enemy = enemyObj.GetComponent<BaseEnemyBehavior>();
+            if (enemy == null)
+            {
+                Debug.LogWarning($"[ActiveRoom] Enemy prefab for {enemyData.EnemyType} is missing BaseEnemyBehavior component.");
+                Object.Destroy(enemyObj);
+                return null;
+            }
             enemy.transform.localScale = enemyEntityData.Scale;
             enemy.SetEnemyData(enemyData, enemyEntityData.IsElite);
             enemy.SetPatrollingPoints(enemyEntityData.PathPoints);
