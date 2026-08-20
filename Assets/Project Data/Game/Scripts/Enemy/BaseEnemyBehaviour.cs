@@ -294,11 +294,18 @@ namespace Watermelon.SquadShooter
             enemyRigidbody.isKinematic = true;
             enemyRigidbody.useGravity = false;
 
-
             enemyCollider.isTrigger = true;
 
-            animatorRef.gameObject.SetActive(true);
+            // Reset ragdoll state when pooling
+            ragdollCase.KillActive();
+                
+            ragdoll?.Disable();
+            ragdoll?.Reset();
 
+            animatorRef.gameObject.SetActive(true);
+            animatorRef.enabled = true;
+            animatorRef.Rebind();
+            animatorRef.Update(0f);
             // health
             currentHealth = MaxHealth;
 
@@ -682,7 +689,7 @@ namespace Watermelon.SquadShooter
 
         public virtual void Unload()
         {
-            healthbarBehaviour.Destroy();
+            healthbarBehaviour.ForceDisable();
 
             if (navMeshAgent.isActiveAndEnabled)
                 navMeshAgent.isStopped = true;

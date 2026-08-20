@@ -56,7 +56,10 @@ namespace Watermelon
 
         public static void SetReloadFill(float t)
         {
-            instance.radialFillImage.fillAmount = t;
+            if (instance != null && instance.radialFillImage != null)
+            {
+                instance.radialFillImage.fillAmount = t;
+            }
         }
     }
 }

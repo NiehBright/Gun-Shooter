@@ -73,14 +73,7 @@ namespace Watermelon.LevelSystem
             activeObjects.Clear();
 
             // Unload enemies
-            for (int i = 0; i < enemies.Count; i++)
-            {
-                enemies[i].Unload();
-
-                Object.Destroy(enemies[i].gameObject);
-            }
-
-            enemies.Clear();
+            ClearEnemies();
 
             if(!exitPoints.IsNullOrEmpty())
             {
@@ -299,6 +292,11 @@ namespace Watermelon.LevelSystem
             }
 
             return true;
+        }
+
+        public static int GetEnemyCount()
+        {
+            return enemies.Count;
         }
         #endregion
 
