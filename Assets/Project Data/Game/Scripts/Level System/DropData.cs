@@ -1,4 +1,4 @@
-﻿using Watermelon;
+using Watermelon;
 
 namespace Watermelon.SquadShooter
 {
@@ -9,6 +9,7 @@ namespace Watermelon.SquadShooter
 
         public CurrencyType currencyType;
         public WeaponType cardType;
+        public DroneType droneType;
 
         public int amount;
 
@@ -21,6 +22,7 @@ namespace Watermelon.SquadShooter
             data.dropType = dropType;
             data.currencyType = currencyType;
             data.cardType = cardType;
+            data.droneType = droneType;
             data.amount = amount;
 
             return data;

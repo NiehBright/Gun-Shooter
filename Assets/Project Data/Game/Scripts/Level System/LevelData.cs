@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 using Watermelon.SquadShooter;
 
@@ -159,6 +159,29 @@ namespace Watermelon.LevelSystem
                         for (int j = 0; j < dropData[i].amount; j++)
                         {
                             result.Add(dropData[i].cardType);
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public List<DroneType> GetDroneCardsReward()
+        {
+            List<DroneType> result = new List<DroneType>();
+
+            for (int i = 0; i < dropData.Count; i++)
+            {
+                if (dropData[i].dropType == DropableItemType.DroneCard)
+                {
+                    bool isDroneUnlocked = DronesController.IsDroneUnlocked(dropData[i].droneType);
+
+                    if (!isDroneUnlocked)
+                    {
+                        for (int j = 0; j < dropData[i].amount; j++)
+                        {
+                            result.Add(dropData[i].droneType);
                         }
                     }
                 }

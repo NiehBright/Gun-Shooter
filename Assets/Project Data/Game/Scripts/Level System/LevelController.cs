@@ -790,6 +790,7 @@ namespace Watermelon.LevelSystem
             CurrenciesController.Add(CurrencyType.Coins, CurrentLevelData.GetCoinsReward());
 
             WeaponsController.AddCards(CurrentLevelData.GetCardsReward());
+            DronesController.AddCards(CurrentLevelData.GetDroneCardsReward());
 
             uiComplete.UpdateExperienceLabel(currentLevelData.XPAmount);
 

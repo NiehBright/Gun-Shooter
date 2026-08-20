@@ -30,6 +30,7 @@ namespace Watermelon
         [Space]
         [SerializeField] CharacterTab characterTab;
         [SerializeField] WeaponTab weaponTab;
+        [SerializeField] DroneTab droneTab;
 
         [Space]
         [SerializeField] OverlayUI overlayUI;
@@ -44,6 +45,7 @@ namespace Watermelon
 
         public CharacterTab CharacterTab => characterTab;
         public WeaponTab WeaponTab => weaponTab;
+        public DroneTab DroneTab => droneTab;
 
         private CharacterUpgradeTutorial characterUpgradeTutorial;
         private WeaponUpgradeTutorial weaponUpgradeTutorial;
@@ -101,6 +103,7 @@ namespace Watermelon
 
             characterTab.Initialise();
             weaponTab.Initialise();
+            if (droneTab != null) droneTab.Initialise();
 
             if (overlayUI == null)
             {
@@ -333,6 +336,7 @@ namespace Watermelon
 
             characterTab.OnWindowOpened();
             weaponTab.OnWindowOpened();
+            if (droneTab != null) droneTab.OnWindowOpened();
 
             levelProgressionPanel.Show();
 
@@ -419,6 +423,7 @@ namespace Watermelon
             {
                 characterTab.OnWindowClosed();
                 weaponTab.OnWindowClosed();
+                if (droneTab != null) droneTab.OnWindowClosed();
             });
 
             Overlay.Show(0.3f, () =>
