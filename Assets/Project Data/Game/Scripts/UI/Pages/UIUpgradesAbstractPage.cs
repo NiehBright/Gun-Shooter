@@ -50,6 +50,9 @@ namespace Watermelon
                 scrollSize.y += 60;
                 backgroundPanelRectTransform.sizeDelta = scrollSize;
             }
+
+            // Disable ScrollRect when page is not visible to prevent "Invalid AABB inAABB"
+            if (scrollView != null) scrollView.enabled = false;
         }
 
         protected T AddNewPanel()
@@ -67,6 +70,13 @@ namespace Watermelon
 
         protected virtual void Update()
         {
+            if (Canvas == null)
+            {
+                // To avoid spamming the console every frame
+                if (Time.frameCount % 60 == 0) Debug.LogError($"[UIUpgradesAbstractPage] Canvas is NULL on GameObject {gameObject.name}! Please add a Canvas component.");
+                return;
+            }
+
             if (!Canvas.enabled) return;
 
             T newSelectedPanel = null;
@@ -106,6 +116,9 @@ namespace Watermelon
 
         public override void PlayShowAnimation()
         {
+            // Enable ScrollRect when page becomes visible
+            if (scrollView != null) scrollView.enabled = true;
+
             // Subscribe events
             for (int i = 0; i < CurrenciesController.Currencies.Length; i++)
             {
@@ -149,6 +162,9 @@ namespace Watermelon
 
         public override void PlayHideAnimation()
         {
+            // Disable ScrollRect to prevent "Invalid AABB inAABB" when page is hidden
+            if (scrollView != null) scrollView.enabled = false;
+
             for (int i = 0; i < CurrenciesController.Currencies.Length; i++)
             {
                 CurrenciesController.Currencies[i].OnCurrencyChanged -= OnCurrencyAmountChanged;

@@ -25,6 +25,7 @@ namespace Watermelon
         private BalanceController balanceController;
         private EnemyController enemyController;
         private TutorialController tutorialController;
+        private DronesController dronesController;
 
         public static GameSettings Settings => instance.settings;
         public GameSettings GameSettings => settings;
@@ -49,6 +50,7 @@ namespace Watermelon
             CacheComponent(out balanceController);
             CacheComponent(out enemyController);
             CacheComponent(out tutorialController);
+            CacheComponent(out dronesController);
         }
 
         private void Start()
@@ -61,6 +63,14 @@ namespace Watermelon
             CustomMusicController.Initialise(AudioController.Music.menuMusic);
 
             uiController.Initialise();
+
+            // Fix Invalid AABB inAABB on all Canvas objects
+            foreach (var canvas in FindObjectsByType<Canvas>(FindObjectsInactive.Include))
+            {
+                if (canvas.GetComponent<AABBFixer>() == null)
+                    canvas.gameObject.AddComponent<AABBFixer>();
+            }
+
             currenciesController.Initialise();
             tutorialController.Initialise();
             upgradesController.Initialise();
@@ -76,6 +86,7 @@ namespace Watermelon
             charactersController.Initialise();
             balanceController.Initialise();
             enemyController.Initialise();
+            if (dronesController != null) dronesController.Initialise();
 
             LevelController.SpawnPlayer();
 

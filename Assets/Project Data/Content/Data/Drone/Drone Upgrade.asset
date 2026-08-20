@@ -1,0 +1,85 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9baf4748ec7ec4646933d616ae81734c, type: 3}
+  m_Name: Drone Upgrade
+  m_EditorClassIdentifier: Assembly-CSharp::Watermelon.Upgrades.BaseDroneUpgrade
+  upgradeType: 5
+  title: 
+  upgrades:
+  - price: 0
+    currencyType: 0
+    previewSprite: {fileID: 0}
+    dronePrefab: {fileID: 366650712974705125, guid: 588fca0d2edef9146bf031b23032112c,
+      type: 3}
+    bulletPrefab: {fileID: 5512187175349329341, guid: 4bc7f675979ba1445858202f430d4c36,
+      type: 3}
+    damage:
+      firstValue: 5
+      secondValue: 10
+    rangeRadius: 10
+    fireRate: 2
+    movementSpeed: 15
+    bulletSpeed:
+      firstValue: 25
+      secondValue: 30
+    power: 10
+  - price: 200
+    currencyType: 0
+    previewSprite: {fileID: 0}
+    dronePrefab: {fileID: 366650712974705125, guid: 588fca0d2edef9146bf031b23032112c,
+      type: 3}
+    bulletPrefab: {fileID: 5512187175349329341, guid: 4bc7f675979ba1445858202f430d4c36,
+      type: 3}
+    damage:
+      firstValue: 7
+      secondValue: 12
+    rangeRadius: 10
+    fireRate: 2
+    movementSpeed: 15
+    bulletSpeed:
+      firstValue: 25
+      secondValue: 30
+    power: 10
+  - price: 200
+    currencyType: 0
+    previewSprite: {fileID: 0}
+    dronePrefab: {fileID: 366650712974705125, guid: 588fca0d2edef9146bf031b23032112c,
+      type: 3}
+    bulletPrefab: {fileID: 5512187175349329341, guid: 4bc7f675979ba1445858202f430d4c36,
+      type: 3}
+    damage:
+      firstValue: 9
+      secondValue: 14
+    rangeRadius: 10
+    fireRate: 2
+    movementSpeed: 15
+    bulletSpeed:
+      firstValue: 25
+      secondValue: 30
+    power: 13
+  - price: 200
+    currencyType: 0
+    previewSprite: {fileID: 0}
+    dronePrefab: {fileID: 366650712974705125, guid: 588fca0d2edef9146bf031b23032112c,
+      type: 3}
+    bulletPrefab: {fileID: 5512187175349329341, guid: 4bc7f675979ba1445858202f430d4c36,
+      type: 3}
+    damage:
+      firstValue: 11
+      secondValue: 16
+    rangeRadius: 10
+    fireRate: 2
+    movementSpeed: 15
+    bulletSpeed:
+      firstValue: 25
+      secondValue: 30
+    power: 15

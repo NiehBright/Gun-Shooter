@@ -10,5 +10,10 @@ namespace Watermelon
         Tesla = 2,
         LavaLauncher = 3,
         Sword = 4,
+
+        // drones
+        Drone_01 = 5,
+        Drone_02 = 6,
+        Drone_03 = 7,
     }
 }

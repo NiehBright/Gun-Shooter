@@ -1,4 +1,4 @@
-﻿namespace Watermelon.SquadShooter
+namespace Watermelon.SquadShooter
 {
     // note add here only reusable items
     // to drop a custom item please use DropableItemSettings.Drop(IDropableItem item...)
@@ -11,5 +11,6 @@
         WeaponCard = 1,
 
         Heal = 2,
+        DroneCard = 3,
     }
 }

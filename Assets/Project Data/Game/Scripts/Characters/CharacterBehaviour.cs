@@ -162,6 +162,8 @@ namespace Watermelon.SquadShooter
         private BaseEnemyBehavior closestEnemyBehaviour;
         public BaseEnemyBehavior ClosestEnemyBehaviour => closestEnemyBehaviour;
 
+        private DroneBehavior currentDrone;
+
         private Transform playerTarget;
         private GameObject targetRing;
         private Renderer targetRingRenderer;
@@ -248,6 +250,8 @@ namespace Watermelon.SquadShooter
 
             healthbarBehaviour.EnableBar(true);
             healthbarBehaviour.RedrawHealth();
+
+            // Drone is now a child of the player, so it doesn't need to be destroyed on reload
 
             enemyDetector.Reload();
 
@@ -438,6 +442,11 @@ namespace Watermelon.SquadShooter
                         gunBehaviour.UpdateHandRig();
                     }
                 }
+            }
+
+            if (currentDrone == null && !IsLobbyModeActive)
+            {
+                currentDrone = DronesController.SpawnDrone(this);
             }
 
             if (gunBehaviour != null)

@@ -37,6 +37,10 @@ namespace Watermelon.LevelSystem
             {
                 EditorGUI.PropertyField(new Rect(x + offset + offset, y, width, height), property.FindPropertyRelative("cardType"), GUIContent.none);
             }
+            else if (dropType == DropableItemType.DroneCard)
+            {
+                EditorGUI.PropertyField(new Rect(x + offset + offset, y, width, height), property.FindPropertyRelative("droneType"), GUIContent.none);
+            }
 
             EditorGUI.EndProperty();
         }
