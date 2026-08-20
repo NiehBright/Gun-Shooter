@@ -234,6 +234,10 @@ namespace Watermelon.LevelSystem
                 uiGame.SetLobbyMode(true);
                 UIController.ShowPage<UIGame>(); // Mở UIGame song song để hiện Joystick
                 Control.EnableMovementControl();
+
+                // Đảm bảo GraphicRaycaster của UIGame được bật (tránh UI bị khoá tương tác)
+                if (uiGame.GraphicRaycaster != null)
+                    uiGame.GraphicRaycaster.enabled = true;
             });
         }
 
@@ -574,6 +578,10 @@ namespace Watermelon.LevelSystem
 
         public static void ActivateExit()
         {
+            // Không kích hoạt exit nếu chưa có quái nào được spawn (tránh auto-complete level do spawn thất bại)
+            if (ActiveRoom.GetEnemyCount() == 0)
+                return;
+
             if (ActiveRoom.AreAllEnemiesDead())
             {
                 List<ExitPointBehaviour> exitPoints = ActiveRoom.ExitPoints;

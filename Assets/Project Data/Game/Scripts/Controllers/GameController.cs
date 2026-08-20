@@ -172,6 +172,8 @@ namespace Watermelon
             CameraController.SetCameraShiftState(false);
             CameraController.EnableCamera(CameraType.Main); // Camera follow cho Lobby
 
+            // Đảm bảo Canvas của UIMainMenu được bật đúng cách thông qua ShowPage (tránh set cứng gây lỗi skip animation)
+
             UIController.ShowPage<UIMainMenu>();
             ExperienceController.GainXPPoints(LevelController.CurrentLevelData.XPAmount);
 
@@ -224,6 +226,7 @@ namespace Watermelon
             UIController.HidePage<UIGameOver>(() =>
             {
                 LevelController.LoadLobby(); // Nạp sảnh chờ Lobby
+                // Đảm bảo Canvas của UIMainMenu được bật đúng cách thông qua ShowPage
                 UIController.ShowPage<UIMainMenu>();
             });
         }
