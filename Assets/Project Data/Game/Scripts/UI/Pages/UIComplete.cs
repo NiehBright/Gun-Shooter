@@ -23,11 +23,13 @@ namespace Watermelon
         [Space]
         [SerializeField] TextMeshProUGUI experienceGainedText;
         [SerializeField] TextMeshProUGUI moneyGainedText;
+        [SerializeField] TextMeshProUGUI gemsGainedText;
 
         private int currentWorld;
         private int currentLevel;
         private int collectedMoney;
         private int collectedExperience;
+        private int collectedGems;
         private List<WeaponType> collectedCards;
 
         private Pool cardsUIPool;
@@ -37,12 +39,13 @@ namespace Watermelon
             cardsUIPool = new Pool(new PoolSettings(dropCardPrefab.name, dropCardPrefab, 1, true, cardsContainerTransform));
         }
 
-        public void SetData(int currentWorld, int currentLevel, int collectedMoney, int collectedExperience, List<WeaponType> collectedCards)
+        public void SetData(int currentWorld, int currentLevel, int collectedMoney, int collectedExperience, int collectedGems, List<WeaponType> collectedCards)
         {
             this.currentWorld = currentWorld;
             this.currentLevel = currentLevel;
             this.collectedMoney = collectedMoney;
             this.collectedExperience = collectedExperience;
+            this.collectedGems = collectedGems;
             this.collectedCards = collectedCards;
         }
 
@@ -76,6 +79,15 @@ namespace Watermelon
             {
                 experienceGainedText.text = string.Format(PLUS_TEXT, result.ToString("00"));
             }, 0.3f);
+            
+            if (gemsGainedText != null)
+            {
+                gemsGainedText.text = "0";
+                Tween.DoFloat(0, collectedGems, 0.4f, (result) =>
+                {
+                    gemsGainedText.text = string.Format(PLUS_TEXT, result.ToString("00"));
+                }, 0.4f);
+            }
 
             bool cardsDropped = !collectedCards.IsNullOrEmpty();
             if(cardsDropped)

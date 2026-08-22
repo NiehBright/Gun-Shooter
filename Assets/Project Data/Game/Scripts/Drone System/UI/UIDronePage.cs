@@ -69,6 +69,7 @@ namespace Watermelon.SquadShooter
         {
             // Enable ScrollRect when page is shown
             if (scrollView != null) scrollView.enabled = true;
+            UpdateUI();
             base.PlayShowAnimation();
         }
 

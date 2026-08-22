@@ -26,6 +26,7 @@ namespace Watermelon
         private EnemyController enemyController;
         private TutorialController tutorialController;
         private DronesController dronesController;
+        private GachaController gachaController;
 
         public static GameSettings Settings => instance.settings;
         public GameSettings GameSettings => settings;
@@ -51,6 +52,7 @@ namespace Watermelon
             CacheComponent(out enemyController);
             CacheComponent(out tutorialController);
             CacheComponent(out dronesController);
+            CacheComponent(out gachaController);
         }
 
         private void Start()
@@ -87,6 +89,7 @@ namespace Watermelon
             balanceController.Initialise();
             enemyController.Initialise();
             if (dronesController != null) dronesController.Initialise();
+            if (gachaController != null) gachaController.Initialise();
 
             LevelController.SpawnPlayer();
 
@@ -133,7 +136,7 @@ namespace Watermelon
             LevelData currentLevel = LevelController.CurrentLevelData;
 
             UIComplete completePage = UIController.GetPage<UIComplete>();
-            completePage.SetData(ActiveRoom.CurrentWorldIndex + 1, ActiveRoom.CurrentLevelIndex + 1, currentLevel.GetCoinsReward(), currentLevel.XPAmount, currentLevel.GetCardsReward());
+            completePage.SetData(ActiveRoom.CurrentWorldIndex + 1, ActiveRoom.CurrentLevelIndex + 1, currentLevel.GetCoinsReward(), currentLevel.XPAmount, currentLevel.GetGemsReward(), currentLevel.GetCardsReward());
 
             UIController.OnPageOpenedEvent += OnCompletePageOpened;
             instance.weaponsController.CheckWeaponUpdateState();

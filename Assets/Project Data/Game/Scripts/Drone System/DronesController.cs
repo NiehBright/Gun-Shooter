@@ -177,6 +177,13 @@ namespace Watermelon.SquadShooter
                 return null;
             }
 
+            // Chỉ spawn drone nếu đã được mở khoá qua Gacha
+            if (!droneData.Save.IsOwned)
+            {
+                Debug.Log("[DronesController] Drone chưa được mở khoá qua Gacha, không spawn.");
+                return null;
+            }
+
             BaseDroneUpgrade upgrade = UpgradesController.GetUpgrade<BaseDroneUpgrade>(droneData.UpgradeType);
 
             if (upgrade == null)
