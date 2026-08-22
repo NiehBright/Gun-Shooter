@@ -46,7 +46,7 @@ namespace Watermelon.SquadShooter
 
 
 
-        public override bool IsUnlocked => true;
+        public override bool IsUnlocked => Data != null && Data.Save != null && Data.Save.IsOwned;
         private int droneIndex;
         public int DroneIndex => droneIndex;
 
@@ -132,10 +132,14 @@ namespace Watermelon.SquadShooter
             if (lockedStateObject != null) lockedStateObject.SetActive(true);
             if (upgradeStateObject != null) upgradeStateObject.SetActive(false);
 
-            int currentAmount = Data.CardsAmount;
-            int target = Upgrade.NextStage.Price; // The first stage price defines cards needed to unlock
+            int currentAmount = Data != null ? Data.CardsAmount : 0;
+            int target = 1;
+            if (Upgrade != null && Upgrade.NextStage != null && Upgrade.NextStage is BaseDroneUpgradeStage)
+            {
+                target = ((BaseDroneUpgradeStage)Upgrade.NextStage).CardsRequired;
+            }
 
-            if (cardsFillImage != null) cardsFillImage.fillAmount = (float)currentAmount / target;
+            if (cardsFillImage != null) cardsFillImage.fillAmount = target > 0 ? (float)currentAmount / target : 1f;
             if (cardsAmountText != null) cardsAmountText.text = currentAmount + "/" + target;
 
             if (powerObject != null) powerObject.SetActive(false);
@@ -147,13 +151,16 @@ namespace Watermelon.SquadShooter
             if (lockedStateObject != null) lockedStateObject.SetActive(false);
             if (upgradeStateObject != null) upgradeStateObject.SetActive(true);
 
-            if (Upgrade.NextStage != null)
+            if (Upgrade != null && Upgrade.NextStage != null)
             {
-                if (upgradePriceText != null) upgradePriceText.text = Upgrade.NextStage.Price.ToString();
+                BaseDroneUpgradeStage nextStage = Upgrade.NextStage as BaseDroneUpgradeStage;
+                if (upgradePriceText != null) upgradePriceText.text = nextStage != null ? nextStage.CardsRequired.ToString() : Upgrade.NextStage.Price.ToString();
+                
                 if (upgradeCurrencyImage != null)
                 {
-                    upgradeCurrencyImage.sprite = CurrenciesController.GetCurrency(Upgrade.NextStage.CurrencyType).Icon;
-                    upgradeCurrencyImage.gameObject.SetActive(true);
+                    // If we use cards, maybe we hide currency image or change it to card icon
+                    // For now, let's just hide it since it uses Cards
+                    upgradeCurrencyImage.gameObject.SetActive(false);
                 }
             }
             else

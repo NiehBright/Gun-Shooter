@@ -144,6 +144,17 @@ namespace Watermelon.LevelSystem
             return 0;
         }
 
+        public int GetGemsReward()
+        {
+            for (int i = 0; i < dropData.Count; i++)
+            {
+                if (dropData[i].dropType == DropableItemType.Currency && dropData[i].currencyType == CurrencyType.Gems)
+                    return dropData[i].amount;
+            }
+
+            return 0;
+        }
+
         public List<WeaponType> GetCardsReward()
         {
             List<WeaponType> result = new List<WeaponType>();

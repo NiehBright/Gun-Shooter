@@ -24,3 +24,14 @@ MonoBehaviour:
       appearAudioClip: {fileID: 8300000, guid: c12dd3c161877364eae18467efae32c6, type: 3}
       collectAudioClip: {fileID: 8300000, guid: 96dc86f212894af42ad3daf4e81f1bfc,
         type: 3}
+  - model: {fileID: 3196047992492047656, guid: e8c1ba3ea00d5b643b0c21ebe6f3d645, type: 3}
+    currencyType: 1
+    icon: {fileID: -4635163780332493390, guid: cf20095ff29f74a4db796682223174c0, type: 3}
+    displayAlways: 1
+    floatingCloud:
+      addToCloud: 1
+      radius: 200
+      specialPrefab: {fileID: 0}
+      appearAudioClip: {fileID: 8300000, guid: c12dd3c161877364eae18467efae32c6, type: 3}
+      collectAudioClip: {fileID: 8300000, guid: 96dc86f212894af42ad3daf4e81f1bfc,
+        type: 3}

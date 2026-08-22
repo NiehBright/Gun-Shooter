@@ -37,6 +37,10 @@ namespace Watermelon.Upgrades
 
         [SerializeField] DuoFloat bulletSpeed;
         public DuoFloat BulletSpeed => bulletSpeed;
+
+        [Header("Upgrade")]
+        [SerializeField, Tooltip("Số Cards cần để nâng lên level này")] int cardsRequired = 5;
+        public int CardsRequired => cardsRequired;
         
         [SerializeField] int power = 10;
         public int Power => power;
