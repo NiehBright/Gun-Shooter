@@ -89,9 +89,9 @@ namespace Watermelon.SquadShooter
         {
             if (IsUnlocked)
             {
-                if (!Upgrade.IsMaxedOut)
+                if (!Upgrade.IsMaxedOut && Upgrade.NextStage is BaseDroneUpgradeStage nextStage)
                 {
-                    if (CurrenciesController.HasAmount(Upgrade.NextStage.CurrencyType, Upgrade.NextStage.Price))
+                    if (Data.CardsAmount >= nextStage.CardsRequired)
                         return true;
                 }
             }
@@ -243,19 +243,22 @@ namespace Watermelon.SquadShooter
 
         public void UpgradeButton()
         {
-            if (CurrenciesController.HasAmount(Upgrade.NextStage.CurrencyType, Upgrade.NextStage.Price))
+            if (Upgrade.NextStage != null && Upgrade.NextStage is BaseDroneUpgradeStage nextStage)
             {
-                Select();
+                if (Data.CardsAmount >= nextStage.CardsRequired)
+                {
+                    Select();
 
-                DronesController.OnUpgradeBuyed(Data);
+                    DronesController.OnUpgradeBuyed(Data);
 
-                AudioController.PlaySound(AudioController.Sounds.buttonSound);
+                    AudioController.PlaySound(AudioController.Sounds.buttonSound);
 
-                UIGeneralPowerIndicator.UpdateText(true);
-            }
-            else
-            {
-                Debug.LogWarning("[DronePanelUI] Không đủ tiền để nâng cấp! Giá: " + Upgrade.NextStage.Price);
+                    UIGeneralPowerIndicator.UpdateText(true);
+                }
+                else
+                {
+                    Debug.LogWarning("[DronePanelUI] Không đủ thẻ để nâng cấp! Cần: " + nextStage.CardsRequired);
+                }
             }
         }
 

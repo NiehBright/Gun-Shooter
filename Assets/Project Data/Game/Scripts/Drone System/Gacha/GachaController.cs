@@ -89,7 +89,14 @@ namespace Watermelon.SquadShooter
             {
                 // Lần đầu: Mở khoá drone
                 selectedDrone.Save.IsOwned = true;
-                Debug.Log($"[Gacha] 🎉 MỞ KHOÁ DRONE MỚI: {selectedDrone.Name}!");
+
+                // Nếu chưa có drone nào được trang bị, tự động trang bị drone này
+                if (DronesController.SelectedDroneIndex == -1)
+                {
+                    DronesController.SelectDrone(selectedDrone.Type);
+                }
+
+                Debug.Log($"[Gacha] MỞ KHOÁ DRONE MỚI: {selectedDrone.Name}!");
             }
             else
             {

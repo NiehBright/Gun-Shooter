@@ -16,12 +16,8 @@ namespace Watermelon.SquadShooter
         [SerializeField] TextMeshProUGUI multiPriceText;
         [SerializeField] TextMeshProUGUI gemsAmountText;
 
-        [Header("Result Panel")]
-        [SerializeField] GameObject resultPanel;
-        [SerializeField] Image resultDroneImage;
-        [SerializeField] TextMeshProUGUI resultTitleText;
-        [SerializeField] TextMeshProUGUI resultDescText;
-        [SerializeField] Button resultCloseButton;
+        [Header("Result Popup")]
+        [SerializeField] UIGachaResultPopup resultPopup;
 
         [Header("Animation")]
         [SerializeField] RectTransform mainPanelRect;
@@ -34,11 +30,8 @@ namespace Watermelon.SquadShooter
                 multiPullButton.onClick.AddListener(OnMultiPullClicked);
             if (backButton != null)
                 backButton.onClick.AddListener(OnBackClicked);
-            if (resultCloseButton != null)
-                resultCloseButton.onClick.AddListener(OnResultCloseClicked);
-
-            if (resultPanel != null)
-                resultPanel.SetActive(false);
+            if (resultPopup != null)
+                resultPopup.gameObject.SetActive(false);
         }
 
         public override void PlayShowAnimation()
@@ -100,7 +93,10 @@ namespace Watermelon.SquadShooter
             GachaResult result = GachaController.PullSingle();
             if (result != null)
             {
-                ShowResult(result);
+                if (resultPopup != null)
+                {
+                    resultPopup.Show(new GachaResult[] { result });
+                }
             }
 
             UpdateUI();
@@ -119,44 +115,13 @@ namespace Watermelon.SquadShooter
             GachaResult[] results = GachaController.PullMulti();
             if (results != null && results.Length > 0)
             {
-                // Show first result (later can implement carousel)
-                ShowResult(results[0]);
+                if (resultPopup != null)
+                {
+                    resultPopup.Show(results);
+                }
             }
 
             UpdateUI();
-        }
-
-        private void ShowResult(GachaResult result)
-        {
-            if (resultPanel == null) return;
-
-            resultPanel.SetActive(true);
-
-            if (resultDroneImage != null && result.Drone.Icon != null)
-                resultDroneImage.sprite = result.Drone.Icon;
-
-            if (result.IsNewDrone)
-            {
-                if (resultTitleText != null)
-                    resultTitleText.text = "MỞ KHOÁ DRONE MỚI!";
-                if (resultDescText != null)
-                    resultDescText.text = result.Drone.Name;
-            }
-            else
-            {
-                if (resultTitleText != null)
-                    resultTitleText.text = "DRONE TRÙNG";
-                if (resultDescText != null)
-                    resultDescText.text = $"+{result.CardsReceived} Cards\n(Tổng: {result.Drone.CardsAmount} Cards)";
-            }
-        }
-
-        private void OnResultCloseClicked()
-        {
-            if (resultPanel != null)
-                resultPanel.SetActive(false);
-
-            AudioController.PlaySound(AudioController.Sounds.buttonSound);
         }
 
         private void OnBackClicked()
