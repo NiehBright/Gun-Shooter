@@ -13,7 +13,6 @@
 <br/>
 
 > **Game bắn súng góc nhìn từ trên xuống (Top-down Shooter) mượt mà phát triển bằng Unity.**
-> Tích hợp hệ thống Kỹ năng chủ động (Active Skills), Bia tập bắn bất tử (Dummy) tại Lobby và Bộ thiết kế màn chơi Custom Level Editor.
 
 
 ---
