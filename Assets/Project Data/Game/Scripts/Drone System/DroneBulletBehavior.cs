@@ -17,6 +17,7 @@ namespace Watermelon.SquadShooter
         private SimpleCallback disableBulletCallback;
 
         [SerializeField] GameObject hitParticlePrefab;
+        private Pool hitParticlePool;
 
         protected virtual void Awake()
         {
@@ -28,7 +29,7 @@ namespace Watermelon.SquadShooter
         {
             if (this != null && gameObject != null)
             {
-                Destroy(gameObject); // Instead of SetActive(false) to prevent memory leaks since it's not pooled
+                gameObject.SetActive(false); // Returned to pool
             }
         }
 
@@ -47,6 +48,15 @@ namespace Watermelon.SquadShooter
             if (autoDisableTime > 0)
             {
                 disableTweenCase = Tween.DelayedCall(autoDisableTime, disableBulletCallback);
+            }
+
+            if (hitParticlePrefab != null && hitParticlePool == null)
+            {
+                hitParticlePool = PoolManager.GetPoolByName(hitParticlePrefab.name);
+                if (hitParticlePool == null)
+                {
+                    hitParticlePool = PoolManager.AddPool(new PoolSettings(hitParticlePrefab.name, hitParticlePrefab, 5, true));
+                }
             }
         }
 
@@ -68,9 +78,11 @@ namespace Watermelon.SquadShooter
 
                         OnEnemyHit(baseEnemyBehavior);
 
-                        if (hitParticlePrefab != null)
+                        if (hitParticlePool != null)
                         {
-                            Instantiate(hitParticlePrefab, transform.position, Quaternion.identity);
+                            GameObject particle = hitParticlePool.GetPooledObject();
+                            particle.transform.position = transform.position;
+                            particle.transform.rotation = Quaternion.identity;
                         }
 
                         if (autoDisableOnHit)
@@ -84,9 +96,11 @@ namespace Watermelon.SquadShooter
             {
                 disableTweenCase.KillActive();
 
-                if (hitParticlePrefab != null)
+                if (hitParticlePool != null)
                 {
-                    Instantiate(hitParticlePrefab, transform.position, Quaternion.identity);
+                    GameObject particle = hitParticlePool.GetPooledObject();
+                    particle.transform.position = transform.position;
+                    particle.transform.rotation = Quaternion.identity;
                 }
 
                 if (autoDisableOnHit)
