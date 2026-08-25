@@ -15,11 +15,6 @@
 > **Game bắn súng góc nhìn từ trên xuống (Top-down Shooter) mượt mà phát triển bằng Unity.**
 > Tích hợp hệ thống Kỹ năng chủ động (Active Skills), Bia tập bắn bất tử (Dummy) tại Lobby và Bộ thiết kế màn chơi Custom Level Editor.
 
-<br/>
-
-![Demo Preview](https://via.placeholder.com/900x450/0d1117/00d4ff?text=🎮+Gun+shooter+Gameplay+Demo)
-
-</div>
 
 ---
 
