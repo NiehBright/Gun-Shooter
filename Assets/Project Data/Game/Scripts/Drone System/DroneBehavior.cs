@@ -25,6 +25,9 @@ namespace Watermelon.SquadShooter
         [SerializeField] float followRadius = 3f; // Max distance from player
 
         private bool exhaustPlaying = false;
+        
+        private Pool bulletPool;
+        private Pool muzzlePool;
 
         public void Initialise(CharacterBehaviour player, BaseDroneUpgradeStage stage)
         {
@@ -65,6 +68,25 @@ namespace Watermelon.SquadShooter
             
             // Start exhaust VFX
             StartExhaust();
+
+            // Init Pools
+            if (currentStage.BulletPrefab != null)
+            {
+                bulletPool = PoolManager.GetPoolByName(currentStage.BulletPrefab.name);
+                if (bulletPool == null)
+                {
+                    bulletPool = PoolManager.AddPool(new PoolSettings(currentStage.BulletPrefab.name, currentStage.BulletPrefab, 10, true));
+                }
+            }
+
+            if (muzzleParticlePrefab != null)
+            {
+                muzzlePool = PoolManager.GetPoolByName(muzzleParticlePrefab.name);
+                if (muzzlePool == null)
+                {
+                    muzzlePool = PoolManager.AddPool(new PoolSettings(muzzleParticlePrefab.name, muzzleParticlePrefab, 5, true));
+                }
+            }
         }
 
         private void StartExhaust()
@@ -184,9 +206,12 @@ namespace Watermelon.SquadShooter
         {
             lastShootTime = Time.time;
 
-            if (currentStage.BulletPrefab != null)
+            if (bulletPool != null)
             {
-                GameObject bulletObj = Instantiate(currentStage.BulletPrefab, shootPoint.position, shootPoint.rotation);
+                GameObject bulletObj = bulletPool.GetPooledObject();
+                bulletObj.transform.position = shootPoint.position;
+                bulletObj.transform.rotation = shootPoint.rotation;
+
                 if (bulletObj != null)
                 {
                     DroneBulletBehavior bulletBehavior = bulletObj.GetComponent<DroneBulletBehavior>();
@@ -199,9 +224,11 @@ namespace Watermelon.SquadShooter
                 }
             }
 
-            if (muzzleParticlePrefab != null)
+            if (muzzlePool != null)
             {
-                Instantiate(muzzleParticlePrefab, shootPoint.position, shootPoint.rotation);
+                GameObject muzzleObj = muzzlePool.GetPooledObject();
+                muzzleObj.transform.position = shootPoint.position;
+                muzzleObj.transform.rotation = shootPoint.rotation;
             }
         }
     }
