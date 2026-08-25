@@ -7,10 +7,12 @@ namespace Watermelon.SquadShooter
     public class UIGachaResultPopup : MonoBehaviour
     {
         [Header("UI Elements")]
-        [SerializeField] Image droneIconImage;
         [SerializeField] TextMeshProUGUI titleText;
-        [SerializeField] TextMeshProUGUI descriptionText;
         [SerializeField] Button continueButton;
+        
+        [Header("Item Spawning")]
+        [SerializeField] Transform itemsContainer;
+        [SerializeField] GameObject itemPrefab;
 
         [Header("Animation")]
         [SerializeField] CanvasGroup canvasGroup;
@@ -22,26 +24,36 @@ namespace Watermelon.SquadShooter
                 continueButton.onClick.AddListener(Hide);
         }
 
-        public void Show(GachaResult result)
+        public void Show(GachaResult[] results)
         {
             gameObject.SetActive(true);
 
-            if (droneIconImage != null && result.Drone.Icon != null)
-                droneIconImage.sprite = result.Drone.Icon;
-
-            if (result.IsNewDrone)
+            if (titleText != null)
             {
-                if (titleText != null)
-                    titleText.text = "MỞ KHOÁ DRONE MỚI!";
-                if (descriptionText != null)
-                    descriptionText.text = result.Drone.Name;
+                titleText.text = "KẾT QUẢ QUAY DRONE";
             }
-            else
+
+            // Clear old items
+            if (itemsContainer != null)
             {
-                if (titleText != null)
-                    titleText.text = "DRONE TRÙNG";
-                if (descriptionText != null)
-                    descriptionText.text = $"+{result.CardsReceived} Cards\n(Tổng: {result.Drone.CardsAmount} Cards)";
+                foreach (Transform child in itemsContainer)
+                {
+                    Destroy(child.gameObject);
+                }
+            }
+
+            // Spawn new items
+            if (itemsContainer != null && itemPrefab != null)
+            {
+                for (int i = 0; i < results.Length; i++)
+                {
+                    GameObject obj = Instantiate(itemPrefab, itemsContainer);
+                    UIGachaResultItem itemScript = obj.GetComponent<UIGachaResultItem>();
+                    if (itemScript != null)
+                    {
+                        itemScript.Init(results[i]);
+                    }
+                }
             }
 
             // Animation

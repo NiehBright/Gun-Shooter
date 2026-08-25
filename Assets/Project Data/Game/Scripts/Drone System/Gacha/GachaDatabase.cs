@@ -9,10 +9,10 @@ namespace Watermelon.SquadShooter
         [SerializeField] int singlePullPrice = 50;
         public int SinglePullPrice => singlePullPrice;
 
-        [SerializeField] int multiPullPrice = 450;
+        [SerializeField] int multiPullPrice = 225;
         public int MultiPullPrice => multiPullPrice;
 
-        [SerializeField] int multiPullCount = 10;
+        [SerializeField] int multiPullCount = 5;
         public int MultiPullCount => multiPullCount;
 
         [Header("Phần thưởng khi trùng")]

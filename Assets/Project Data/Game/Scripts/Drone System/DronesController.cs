@@ -99,6 +99,9 @@ namespace Watermelon.SquadShooter
 
         public static DroneData GetSelectedDroneData()
         {
+            if (SelectedDroneIndex < 0 || SelectedDroneIndex >= drones.Length)
+                return null;
+
             return drones[SelectedDroneIndex];
         }
 
@@ -153,9 +156,13 @@ namespace Watermelon.SquadShooter
 
         public static void OnUpgradeBuyed(DroneData droneData)
         {
-            BaseUpgrade upgrade = UpgradesController.GetUpgrade<BaseUpgrade>(droneData.UpgradeType);
+            BaseDroneUpgrade upgrade = UpgradesController.GetUpgrade<BaseDroneUpgrade>(droneData.UpgradeType);
+            BaseDroneUpgradeStage nextStage = upgrade.NextStage as BaseDroneUpgradeStage;
 
-            CurrenciesController.Substract(upgrade.NextStage.CurrencyType, upgrade.NextStage.Price);
+            if (nextStage != null)
+            {
+                droneData.Save.CardsAmount -= nextStage.CardsRequired;
+            }
 
             upgrade.UpgradeStage();
 
@@ -173,7 +180,7 @@ namespace Watermelon.SquadShooter
             DroneData droneData = GetSelectedDroneData();
             if (droneData == null)
             {
-                Debug.LogError("[DronesController] GetSelectedDroneData() returned null!");
+                // Không có drone nào đang được trang bị
                 return null;
             }
 
@@ -191,18 +198,28 @@ namespace Watermelon.SquadShooter
                 Debug.LogError("[DronesController] UpgradesController returned null for UpgradeType: " + droneData.UpgradeType);
                 return null;
             }
-            
-            if (upgrade.UpgradeLevel <= 0)
-            {
-                Debug.LogError("[DronesController] UpgradeLevel is " + upgrade.UpgradeLevel + " (<= 0), so drone won't spawn!");
-                return null;
-            }
 
             BaseDroneUpgradeStage currentStage = (BaseDroneUpgradeStage)upgrade.GetCurrentStage();
 
-            if (currentStage.DronePrefab != null)
+            // Fallback logic: If the current stage is missing prefabs (e.g. user forgot to assign in Inspector for level > 0),
+            // search backwards to find the latest valid prefab.
+            GameObject validDronePrefab = currentStage.DronePrefab;
+            if (validDronePrefab == null)
             {
-                GameObject droneObj = Object.Instantiate(currentStage.DronePrefab);
+                for (int i = upgrade.UpgradeLevel; i >= 0; i--)
+                {
+                    BaseDroneUpgradeStage stage = (BaseDroneUpgradeStage)upgrade.Upgrades[i];
+                    if (stage.DronePrefab != null)
+                    {
+                        validDronePrefab = stage.DronePrefab;
+                        break;
+                    }
+                }
+            }
+
+            if (validDronePrefab != null)
+            {
+                GameObject droneObj = Object.Instantiate(validDronePrefab);
                 droneObj.SetActive(true);
 
                 DroneBehavior droneBehaviour = droneObj.GetComponent<DroneBehavior>();
@@ -213,12 +230,12 @@ namespace Watermelon.SquadShooter
                 }
                 else
                 {
-                    Debug.LogError("[DronesController] The DronePrefab " + currentStage.DronePrefab.name + " is missing the 'DroneBehavior' script!");
+                    Debug.LogError("[DronesController] The DronePrefab " + validDronePrefab.name + " is missing the 'DroneBehavior' script!");
                 }
             }
             else
             {
-                Debug.LogError("[DronesController] currentStage.DronePrefab is NULL! Please assign a Drone Prefab in the Upgrade Data.");
+                Debug.LogError("[DronesController] validDronePrefab is NULL! Please assign a Drone Prefab in the Upgrade Data.");
             }
 
             return null;
@@ -227,7 +244,7 @@ namespace Watermelon.SquadShooter
         [System.Serializable]
         public class GlobalDronesSave : ISaveObject
         {
-            public int selectedDroneIndex = 0;
+            public int selectedDroneIndex = -1;
 
             public void Flush() { }
         }
