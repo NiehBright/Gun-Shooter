@@ -229,6 +229,11 @@ namespace Watermelon.SquadShooter
                 GameObject muzzleObj = muzzlePool.GetPooledObject();
                 muzzleObj.transform.position = shootPoint.position;
                 muzzleObj.transform.rotation = shootPoint.rotation;
+
+                // Return to pool after 1 second
+                Tween.DelayedCall(1.0f, () => {
+                    if (muzzleObj != null) muzzleObj.SetActive(false);
+                });
             }
         }
     }
