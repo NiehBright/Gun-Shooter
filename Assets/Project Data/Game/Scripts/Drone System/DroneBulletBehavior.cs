@@ -83,6 +83,10 @@ namespace Watermelon.SquadShooter
                             GameObject particle = hitParticlePool.GetPooledObject();
                             particle.transform.position = transform.position;
                             particle.transform.rotation = Quaternion.identity;
+
+                            Tween.DelayedCall(1.0f, () => {
+                                if (particle != null) particle.SetActive(false);
+                            });
                         }
 
                         if (autoDisableOnHit)
@@ -101,6 +105,10 @@ namespace Watermelon.SquadShooter
                     GameObject particle = hitParticlePool.GetPooledObject();
                     particle.transform.position = transform.position;
                     particle.transform.rotation = Quaternion.identity;
+
+                    Tween.DelayedCall(1.0f, () => {
+                        if (particle != null) particle.SetActive(false);
+                    });
                 }
 
                 if (autoDisableOnHit)
