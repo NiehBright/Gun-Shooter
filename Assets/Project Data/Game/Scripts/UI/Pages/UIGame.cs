@@ -376,7 +376,7 @@ namespace Watermelon
             {
                 if (isCombatMode)
                 {
-                    attackButton.gameObject.SetActive(true);
+                    attackButton.gameObject.SetActive(!CharacterBehaviour.IsAutoShootActive);
                 }
                 else if (isLobby)
                 {
@@ -393,6 +393,7 @@ namespace Watermelon
         {
             CharacterBehaviour.IsAutoShootActive = !CharacterBehaviour.IsAutoShootActive;
             UpdateAutoShootButtonUI();
+            UpdateAttackButtonVisibility();
 
             AudioController.PlaySound(AudioController.Sounds.buttonSound);
         }

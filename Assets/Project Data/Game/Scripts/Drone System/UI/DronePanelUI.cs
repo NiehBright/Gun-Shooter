@@ -44,6 +44,10 @@ namespace Watermelon.SquadShooter
         [Space]
         [SerializeField] GameObject upgradesMaxObject;
 
+        [Header("Equip Button (Optional)")]
+        [SerializeField] Button equipButton;
+        [SerializeField] TextMeshProUGUI equipButtonText;
+
 
 
         public override bool IsUnlocked => Data != null && Data.Save != null && Data.Save.IsOwned;
@@ -67,6 +71,11 @@ namespace Watermelon.SquadShooter
             }
 
             this.droneIndex = droneIndex;
+
+            if (equipButton != null)
+            {
+                equipButton.onClick.AddListener(OnEquipButtonClicked);
+            }
 
             if (droneName != null) droneName.text = data.Name;
             if (droneImage != null) droneImage.sprite = data.Icon;
@@ -113,7 +122,8 @@ namespace Watermelon.SquadShooter
 
         private void UpdateSelectionState()
         {
-            if (droneIndex == DronesController.SelectedDroneIndex)
+            bool isSelected = droneIndex == DronesController.SelectedDroneIndex;
+            if (isSelected)
             {
                 if (selectionImage != null) selectionImage.gameObject.SetActive(true);
                 if (backgroundTransform != null) backgroundTransform.localScale = Vector3.one;
@@ -121,9 +131,14 @@ namespace Watermelon.SquadShooter
             else
             {
                 if (selectionImage != null) selectionImage.gameObject.SetActive(false);
-                if (backgroundTransform != null) backgroundTransform.localScale = Vector3.one;
+                if (backgroundTransform != null) backgroundTransform.localScale = Vector3.one * 0.92f;
             }
 
+            if (equipButtonText != null)
+            {
+                equipButtonText.text = isSelected ? "GỠ" : "MANG";
+            }
+            
             UpdateUI();
         }
 
@@ -238,6 +253,24 @@ namespace Watermelon.SquadShooter
                 }
 
                 UIGeneralPowerIndicator.UpdateText();
+            }
+        }
+
+        private void OnEquipButtonClicked()
+        {
+            if (!IsUnlocked) return;
+            
+            if (droneIndex == DronesController.SelectedDroneIndex)
+            {
+                // Already equipped -> Unequip
+                DronesController.UnequipDrone();
+                AudioController.PlaySound(AudioController.Sounds.buttonSound);
+                UIGeneralPowerIndicator.UpdateText();
+            }
+            else
+            {
+                // Equip
+                Select();
             }
         }
 

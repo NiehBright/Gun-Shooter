@@ -72,8 +72,11 @@ namespace Watermelon.SquadShooter
             // Init Pools
             if (currentStage.BulletPrefab != null)
             {
-                bulletPool = PoolManager.GetPoolByName(currentStage.BulletPrefab.name);
-                if (bulletPool == null)
+                if (PoolManager.PoolExists(currentStage.BulletPrefab.name))
+                {
+                    bulletPool = PoolManager.GetPoolByName(currentStage.BulletPrefab.name);
+                }
+                else
                 {
                     bulletPool = PoolManager.AddPool(new PoolSettings(currentStage.BulletPrefab.name, currentStage.BulletPrefab, 10, true));
                 }
@@ -81,8 +84,11 @@ namespace Watermelon.SquadShooter
 
             if (muzzleParticlePrefab != null)
             {
-                muzzlePool = PoolManager.GetPoolByName(muzzleParticlePrefab.name);
-                if (muzzlePool == null)
+                if (PoolManager.PoolExists(muzzleParticlePrefab.name))
+                {
+                    muzzlePool = PoolManager.GetPoolByName(muzzleParticlePrefab.name);
+                }
+                else
                 {
                     muzzlePool = PoolManager.AddPool(new PoolSettings(muzzleParticlePrefab.name, muzzleParticlePrefab, 5, true));
                 }

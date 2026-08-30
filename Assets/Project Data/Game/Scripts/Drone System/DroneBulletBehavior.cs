@@ -52,8 +52,11 @@ namespace Watermelon.SquadShooter
 
             if (hitParticlePrefab != null && hitParticlePool == null)
             {
-                hitParticlePool = PoolManager.GetPoolByName(hitParticlePrefab.name);
-                if (hitParticlePool == null)
+                if (PoolManager.PoolExists(hitParticlePrefab.name))
+                {
+                    hitParticlePool = PoolManager.GetPoolByName(hitParticlePrefab.name);
+                }
+                else
                 {
                     hitParticlePool = PoolManager.AddPool(new PoolSettings(hitParticlePrefab.name, hitParticlePrefab, 5, true));
                 }
