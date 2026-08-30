@@ -128,6 +128,7 @@ namespace Watermelon.LevelSystem
 
             characterBehaviour.SetGraphics(characterStage.Prefab, false, false);
             characterBehaviour.SetGun(WeaponsController.GetCurrentWeapon(), false);
+            characterBehaviour.UpdateDrone();
         }
 
         public static void LoadCurrentLevel()

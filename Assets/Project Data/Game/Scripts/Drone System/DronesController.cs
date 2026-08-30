@@ -94,6 +94,25 @@ namespace Watermelon.SquadShooter
 
             SelectedDroneIndex = droneIndex;
 
+            if (CharacterBehaviour.GetBehaviour() != null)
+            {
+                CharacterBehaviour.GetBehaviour().UpdateDrone();
+            }
+
+            OnNewDroneSelected?.Invoke();
+        }
+
+        public static void UnequipDrone()
+        {
+            if (SelectedDroneIndex == -1) return;
+
+            SelectedDroneIndex = -1;
+
+            if (CharacterBehaviour.GetBehaviour() != null)
+            {
+                CharacterBehaviour.GetBehaviour().UpdateDrone();
+            }
+
             OnNewDroneSelected?.Invoke();
         }
 

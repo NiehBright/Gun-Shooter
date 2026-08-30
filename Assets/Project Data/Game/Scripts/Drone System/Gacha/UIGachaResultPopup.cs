@@ -38,6 +38,7 @@ namespace Watermelon.SquadShooter
             {
                 foreach (Transform child in itemsContainer)
                 {
+                    child.gameObject.SetActive(false);
                     Destroy(child.gameObject);
                 }
             }

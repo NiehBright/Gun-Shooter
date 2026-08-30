@@ -186,6 +186,17 @@ namespace Watermelon.SquadShooter
             agent.enabled = false;
         }
 
+        public void UpdateDrone()
+        {
+            if (currentDrone != null)
+            {
+                Destroy(currentDrone.gameObject);
+                currentDrone = null;
+            }
+
+            currentDrone = DronesController.SpawnDrone(this);
+        }
+
         public void Initialise()
         {
             characterBehaviour = this;
@@ -444,10 +455,7 @@ namespace Watermelon.SquadShooter
                 }
             }
 
-            if (currentDrone == null && !IsLobbyModeActive)
-            {
-                currentDrone = DronesController.SpawnDrone(this);
-            }
+            // Drone spawning has been moved to UpdateDrone()
 
             if (gunBehaviour != null)
             {
