@@ -1,5 +1,7 @@
 using UnityEngine;
 
+using UnityEngine.AddressableAssets;
+
 namespace Watermelon.Upgrades
 {
     [System.Serializable]
@@ -15,11 +17,11 @@ namespace Watermelon.Upgrades
     public class BaseWeaponUpgradeStage : BaseUpgradeStage
     {
         [Header("Prefabs")]
-        [SerializeField] GameObject weaponPrefab;
-        public GameObject WeaponPrefab => weaponPrefab;
+        [SerializeField] AssetReferenceGameObject weaponPrefab;
+        public AssetReferenceGameObject WeaponPrefab => weaponPrefab;
 
-        [SerializeField] GameObject bulletPrefab;
-        public GameObject BulletPrefab => bulletPrefab;
+        [SerializeField] AssetReferenceGameObject bulletPrefab;
+        public AssetReferenceGameObject BulletPrefab => bulletPrefab;
 
         [Header("Data")]
         [SerializeField] DuoInt damage;

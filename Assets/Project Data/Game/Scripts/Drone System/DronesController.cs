@@ -222,23 +222,23 @@ namespace Watermelon.SquadShooter
 
             // Fallback logic: If the current stage is missing prefabs (e.g. user forgot to assign in Inspector for level > 0),
             // search backwards to find the latest valid prefab.
-            GameObject validDronePrefab = currentStage.DronePrefab;
-            if (validDronePrefab == null)
+            UnityEngine.AddressableAssets.AssetReferenceGameObject validDronePrefabRef = currentStage.DronePrefab;
+            if (validDronePrefabRef == null || !validDronePrefabRef.RuntimeKeyIsValid())
             {
                 for (int i = upgrade.UpgradeLevel; i >= 0; i--)
                 {
                     BaseDroneUpgradeStage stage = (BaseDroneUpgradeStage)upgrade.Upgrades[i];
-                    if (stage.DronePrefab != null)
+                    if (stage.DronePrefab != null && stage.DronePrefab.RuntimeKeyIsValid())
                     {
-                        validDronePrefab = stage.DronePrefab;
+                        validDronePrefabRef = stage.DronePrefab;
                         break;
                     }
                 }
             }
 
-            if (validDronePrefab != null)
+            if (validDronePrefabRef != null && validDronePrefabRef.RuntimeKeyIsValid())
             {
-                GameObject droneObj = Object.Instantiate(validDronePrefab);
+                GameObject droneObj = validDronePrefabRef.InstantiateAsync().WaitForCompletion();
                 droneObj.SetActive(true);
 
                 DroneBehavior droneBehaviour = droneObj.GetComponent<DroneBehavior>();
@@ -249,12 +249,12 @@ namespace Watermelon.SquadShooter
                 }
                 else
                 {
-                    Debug.LogError("[DronesController] The DronePrefab " + validDronePrefab.name + " is missing the 'DroneBehavior' script!");
+                    Debug.LogError("[DronesController] The DronePrefab is missing the 'DroneBehavior' script!");
                 }
             }
             else
             {
-                Debug.LogError("[DronesController] validDronePrefab is NULL! Please assign a Drone Prefab in the Upgrade Data.");
+                Debug.LogError("[DronesController] validDronePrefab is NULL or Invalid! Please assign a Drone Prefab in the Upgrade Data.");
             }
 
             return null;

@@ -15,69 +15,6 @@ MonoBehaviour:
   pages:
   - items:
     - globalId:
-        globalObjectIdString: GlobalObjectId_V1-1-1bf15ef4b45967d44a3705795eb9de48-102900000-0
-      _typeString: UnityEditor.DefaultAsset, UnityEditor.CoreModule, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      _obj: {fileID: 102900000, guid: 1bf15ef4b45967d44a3705795eb9de48, type: 3}
-      isSceneGameObject: 0
-      isFolder: 1
-      isAsset: 0
-      _id: 1060562737
-    - globalId:
-        globalObjectIdString: GlobalObjectId_V1-1-3287cf3f526b8bd4fbd6826dd51ff187-102900000-0
-      _typeString: UnityEditor.DefaultAsset, UnityEditor.CoreModule, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      _obj: {fileID: 102900000, guid: 3287cf3f526b8bd4fbd6826dd51ff187, type: 3}
-      isSceneGameObject: 0
-      isFolder: 1
-      isAsset: 0
-      _id: 1050993689
-    - globalId:
-        globalObjectIdString: GlobalObjectId_V1-1-49429e70b6093594abc5f219e0147d36-102900000-0
-      _typeString: UnityEditor.DefaultAsset, UnityEditor.CoreModule, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      _obj: {fileID: 102900000, guid: 49429e70b6093594abc5f219e0147d36, type: 3}
-      isSceneGameObject: 0
-      isFolder: 1
-      isAsset: 0
-      _id: 1048342994
-    - globalId:
-        globalObjectIdString: GlobalObjectId_V1-1-3287cf3f526b8bd4fbd6826dd51ff187-102900000-0
-      _typeString: UnityEditor.DefaultAsset, UnityEditor.CoreModule, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      _obj: {fileID: 102900000, guid: 3287cf3f526b8bd4fbd6826dd51ff187, type: 3}
-      isSceneGameObject: 0
-      isFolder: 1
-      isAsset: 0
-      _id: 1057326193
-    - globalId:
-        globalObjectIdString: GlobalObjectId_V1-1-92d3c8e6862115c4db30abc0c622184e-102900000-0
-      _typeString: UnityEditor.DefaultAsset, UnityEditor.CoreModule, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      _obj: {fileID: 102900000, guid: 92d3c8e6862115c4db30abc0c622184e, type: 3}
-      isSceneGameObject: 0
-      isFolder: 1
-      isAsset: 0
-      _id: 1039136946
-    - globalId:
-        globalObjectIdString: GlobalObjectId_V1-1-4f59d408d1c85114db9830ab7148138e-102900000-0
-      _typeString: UnityEditor.DefaultAsset, UnityEditor.CoreModule, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      _obj: {fileID: 102900000, guid: 4f59d408d1c85114db9830ab7148138e, type: 3}
-      isSceneGameObject: 0
-      isFolder: 1
-      isAsset: 0
-      _id: 1061162230
-    - globalId:
-        globalObjectIdString: GlobalObjectId_V1-1-7b59ed0296ae8f24c81c06991493c1b8-102900000-0
-      _typeString: UnityEditor.DefaultAsset, UnityEditor.CoreModule, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      _obj: {fileID: 102900000, guid: 7b59ed0296ae8f24c81c06991493c1b8, type: 3}
-      isSceneGameObject: 0
-      isFolder: 1
-      isAsset: 0
-      _id: 1051694089
-    - globalId:
         globalObjectIdString: GlobalObjectId_V1-1-3607cb2b40da4a349af381ff34e0efce-102900000-0
       _typeString: UnityEditor.DefaultAsset, UnityEditor.CoreModule, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
@@ -87,14 +24,14 @@ MonoBehaviour:
       isAsset: 0
       _id: 1063145888
     - globalId:
-        globalObjectIdString: GlobalObjectId_V1-1-2d8b9f0b68a16fe4ea14c6403e9b2ad3-102900000-0
+        globalObjectIdString: GlobalObjectId_V1-1-02aa47b593ca3f94c94e0a9a7d5db340-102900000-0
       _typeString: UnityEditor.DefaultAsset, UnityEditor.CoreModule, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
-      _obj: {fileID: 102900000, guid: 2d8b9f0b68a16fe4ea14c6403e9b2ad3, type: 3}
+      _obj: {fileID: 102900000, guid: 02aa47b593ca3f94c94e0a9a7d5db340, type: 3}
       isSceneGameObject: 0
       isFolder: 1
       isAsset: 0
-      _id: 1056170666
+      _id: 1057024871
     - globalId:
         globalObjectIdString: GlobalObjectId_V1-1-cb4017d0239a09c4d8aaa251330b66ae-102900000-0
       _typeString: UnityEditor.DefaultAsset, UnityEditor.CoreModule, Version=0.0.0.0,

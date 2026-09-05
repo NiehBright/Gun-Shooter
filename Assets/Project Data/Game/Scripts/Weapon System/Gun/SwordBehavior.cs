@@ -21,7 +21,12 @@ namespace Watermelon.SquadShooter
             var upgrade = UpgradesController.GetUpgrade<BaseWeaponUpgrade>(data.UpgradeType);
             var stage = upgrade.GetCurrentStage();
 
-            GameObject slashPrefab = stage.BulletPrefab;
+            UnityEngine.AddressableAssets.AssetReferenceGameObject slashRef = stage.BulletPrefab;
+            GameObject slashPrefab = null;
+            if (slashRef != null && slashRef.RuntimeKeyIsValid())
+            {
+                slashPrefab = slashRef.LoadAssetAsync().WaitForCompletion();
+            }
             slashPool = new Pool(new PoolSettings(slashPrefab.name, slashPrefab, 5, true));
 
             RecalculateDamage();

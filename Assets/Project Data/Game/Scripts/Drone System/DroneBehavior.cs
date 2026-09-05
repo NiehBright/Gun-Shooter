@@ -70,15 +70,19 @@ namespace Watermelon.SquadShooter
             StartExhaust();
 
             // Init Pools
-            if (currentStage.BulletPrefab != null)
+            if (currentStage.BulletPrefab != null && currentStage.BulletPrefab.RuntimeKeyIsValid())
             {
-                if (PoolManager.PoolExists(currentStage.BulletPrefab.name))
+                GameObject bulletObj = currentStage.BulletPrefab.LoadAssetAsync().WaitForCompletion();
+                if (bulletObj != null)
                 {
-                    bulletPool = PoolManager.GetPoolByName(currentStage.BulletPrefab.name);
-                }
-                else
-                {
-                    bulletPool = PoolManager.AddPool(new PoolSettings(currentStage.BulletPrefab.name, currentStage.BulletPrefab, 10, true));
+                    if (PoolManager.PoolExists(bulletObj.name))
+                    {
+                        bulletPool = PoolManager.GetPoolByName(bulletObj.name);
+                    }
+                    else
+                    {
+                        bulletPool = PoolManager.AddPool(new PoolSettings(bulletObj.name, bulletObj, 10, true));
+                    }
                 }
             }
 
@@ -198,13 +202,10 @@ namespace Watermelon.SquadShooter
             }
             else
             {
-                // Move towards enemy but keep inside follow radius
-                Vector3 directionToEnemy = (enemy.transform.position - anchorPoint).SetY(0);
-                if (directionToEnemy.magnitude > followRadius)
-                {
-                    directionToEnemy = directionToEnemy.normalized * followRadius;
-                }
-                return anchorPoint + directionToEnemy;
+                // Orbit the player at a fixed distance towards the enemy
+                Vector3 directionToEnemy = (enemy.transform.position - anchorPoint).SetY(0).normalized;
+                float orbitDistance = 1.5f; 
+                return anchorPoint + directionToEnemy * orbitDistance;
             }
         }
 
@@ -216,7 +217,18 @@ namespace Watermelon.SquadShooter
             {
                 GameObject bulletObj = bulletPool.GetPooledObject();
                 bulletObj.transform.position = shootPoint.position;
-                bulletObj.transform.rotation = shootPoint.rotation;
+                
+                if (currentEnemyTarget != null)
+                {
+                    // Force the bullet to point directly at the enemy's chest
+                    Vector3 aimTarget = currentEnemyTarget.transform.position + Vector3.up * 1.0f;
+                    Vector3 aimDirection = (aimTarget - shootPoint.position).normalized;
+                    bulletObj.transform.rotation = Quaternion.LookRotation(aimDirection);
+                }
+                else
+                {
+                    bulletObj.transform.rotation = shootPoint.rotation;
+                }
 
                 if (bulletObj != null)
                 {
