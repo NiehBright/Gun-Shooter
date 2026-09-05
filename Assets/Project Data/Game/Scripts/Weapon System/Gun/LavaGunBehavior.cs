@@ -31,7 +31,12 @@ namespace Watermelon.SquadShooter
             base.Initialise(characterBehaviour, data);
 
             upgrade = UpgradesController.GetUpgrade<LavaLauncherUpgrade>(data.UpgradeType);
-            GameObject bulletObj = (upgrade.CurrentStage as BaseWeaponUpgradeStage).BulletPrefab;
+            UnityEngine.AddressableAssets.AssetReferenceGameObject bulletRef = (upgrade.CurrentStage as BaseWeaponUpgradeStage).BulletPrefab;
+            GameObject bulletObj = null;
+            if (bulletRef != null && bulletRef.RuntimeKeyIsValid())
+            {
+                bulletObj = bulletRef.LoadAssetAsync().WaitForCompletion();
+            }
 
             bulletPool = new Pool(new PoolSettings(bulletObj.name, bulletObj, 5, true));
 
