@@ -161,6 +161,8 @@ namespace Watermelon.SquadShooter
 
             stageStarPool = new Pool(new PoolSettings(stageStarPrefab.name, stageStarPrefab, 1, true));
 
+            stageStarPool.Initialize();
+
             for (int i = 0; i < charactersDatabase.Characters.Length; i++)
             {
                 var newPanel = AddNewPanel();
@@ -237,6 +239,18 @@ namespace Watermelon.SquadShooter
                 // Tat di chuyen va agent de tranh nguoi choi dieu khien nhan vat trong khi mo UI
                 Control.DisableMovementControl();
                 characterBehaviour.DisableAgent();
+
+                // An drone
+                if (characterBehaviour.CurrentDrone != null)
+                {
+                    characterBehaviour.CurrentDrone.gameObject.SetActive(false);
+                }
+
+                // An UI mau tren dau nhan vat
+                if (characterBehaviour.HealthbarBehaviour != null)
+                {
+                    characterBehaviour.HealthbarBehaviour.ForceDisable();
+                }
             }
         }
 
@@ -258,6 +272,18 @@ namespace Watermelon.SquadShooter
                 // Bat lai di chuyen va agent cua nhan vat
                 Control.EnableMovementControl();
                 characterBehaviour.ActivateAgent();
+
+                // Hien lai drone
+                if (characterBehaviour.CurrentDrone != null)
+                {
+                    characterBehaviour.CurrentDrone.gameObject.SetActive(true);
+                }
+
+                // Hien lai UI mau
+                if (characterBehaviour.HealthbarBehaviour != null)
+                {
+                    characterBehaviour.HealthbarBehaviour.EnableBar(true);
+                }
             }
             CameraController.ExitCharacterSelection();
 
@@ -297,3 +323,4 @@ namespace Watermelon.SquadShooter
         #endregion
     }
 }
+

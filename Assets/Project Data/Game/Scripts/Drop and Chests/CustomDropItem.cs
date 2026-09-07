@@ -23,6 +23,8 @@ namespace Watermelon.SquadShooter
         public void Initialise()
         {
             pool = new Pool(new PoolSettings(dropableItemType.ToString(), prefab, 1, true));
+            pool.Initialize();
+
         }
 
         public GameObject GetDropObject(DropData dropData)
@@ -36,3 +38,4 @@ namespace Watermelon.SquadShooter
         }
     }
 }
+

@@ -22,6 +22,7 @@ namespace Watermelon.SquadShooter
             base.Awake();
 
             bulletPool = new Pool(new PoolSettings(bulletPrefab.name, bulletPrefab, 3, true));
+            bulletPool.Initialize();
         }
 
         public override void Attack()
@@ -66,3 +67,4 @@ namespace Watermelon.SquadShooter
         }
     }
 }
+

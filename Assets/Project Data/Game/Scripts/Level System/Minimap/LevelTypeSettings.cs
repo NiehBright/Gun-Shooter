@@ -16,6 +16,9 @@ namespace Watermelon.SquadShooter
         public void Initialise()
         {
             previewPool = new Pool(new PoolSettings(previewObject.name, previewObject, 0, true));
+            previewPool.Initialize();
+
         }
     }
 }
+

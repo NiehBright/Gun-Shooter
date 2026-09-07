@@ -30,8 +30,8 @@ namespace Watermelon
         [SerializeField] float enemyShiftLerpMultiplier = 4f;
 
         [Header("Character Selection Camera")]
-        [SerializeField] float selectionDistance = 2.2f;
-        [SerializeField] float selectionHorizontalOffset = 0.75f;
+        [SerializeField] float selectionDistance = 1.6f;
+        [SerializeField] float selectionHorizontalOffset = 0.6f;
         [SerializeField] float selectionHeight = 1.35f;
         [SerializeField] float selectionLookAtHeight = 1.0f;
 
@@ -54,6 +54,10 @@ namespace Watermelon
         private static Vector3 enemyDirection = Vector3.zero;
         private static BaseEnemyBehavior targetEnemy;
         private TweenCase selectionTweenCase;
+
+        private Vector3 originalCameraPosition;
+        private Quaternion originalCameraRotation;
+        private bool isZoomedIn = false;
 
         private void Awake()
         {
@@ -155,6 +159,13 @@ namespace Watermelon
         {
             if (cameraController == null) return;
 
+            if (!cameraController.isZoomedIn)
+            {
+                cameraController.originalCameraPosition = mainCamera.transform.position;
+                cameraController.originalCameraRotation = mainCamera.transform.rotation;
+                cameraController.isZoomedIn = true;
+            }
+
             // Tam thoi tat Cinemachine de di chuyen camera tu do
             cameraController.cameraBrain.enabled = false;
 
@@ -174,7 +185,7 @@ namespace Watermelon
             {
                 mainCamera.transform.position = Vector3.Lerp(startPos, targetPos, t);
                 mainCamera.transform.rotation = Quaternion.Slerp(startRot, targetRot, t);
-            });
+            }).SetEasing(Ease.Type.QuadOut);
         }
 
         public static void ExitCharacterSelection()
@@ -183,8 +194,19 @@ namespace Watermelon
 
             cameraController.selectionTweenCase.KillActive();
 
-            // Bat lai Cinemachine de no tu dong blend muot ma ve camera sanh cho
-            cameraController.cameraBrain.enabled = true;
+            Vector3 startPos = mainCamera.transform.position;
+            Quaternion startRot = mainCamera.transform.rotation;
+
+            cameraController.selectionTweenCase = Tween.DoFloat(0f, 1f, 0.5f, (float t) =>
+            {
+                mainCamera.transform.position = Vector3.Lerp(startPos, cameraController.originalCameraPosition, t);
+                mainCamera.transform.rotation = Quaternion.Slerp(startRot, cameraController.originalCameraRotation, t);
+            }).SetEasing(Ease.Type.QuadOut).OnComplete(() =>
+            {
+                // Bat lai Cinemachine de no tu dong blend muot ma ve camera sanh cho
+                cameraController.cameraBrain.enabled = true;
+                cameraController.isZoomedIn = false;
+            });
         }
     }
 }

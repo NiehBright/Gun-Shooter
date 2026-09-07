@@ -1,9 +1,10 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using Watermelon.Upgrades;
 
 namespace Watermelon.SquadShooter
 {
-    public class UIDronePage : UIUpgradesAbstractPage<DronePanelUI, DroneType>
+    public class UIDronePage : UIUpgradesAbstractPage<DronePanelUI, DroneType>, IDragHandler
     {
         protected override int SelectedIndex => Mathf.Clamp(DronesController.SelectedDroneIndex, 0, int.MaxValue);
 
@@ -65,12 +66,63 @@ namespace Watermelon.SquadShooter
             }
         }
 
+        private Quaternion originalDroneRotation;
+        private Quaternion originalPlayerRotation;
+        private Vector3 originalDronePosition;
+        private bool isDroneCameraActive = false;
+
         public override void PlayShowAnimation()
         {
             // Enable ScrollRect when page is shown
             if (scrollView != null) scrollView.enabled = true;
             UpdateUI();
             base.PlayShowAnimation();
+
+            CharacterBehaviour characterBehaviour = CharacterBehaviour.GetBehaviour();
+            if (characterBehaviour != null)
+            {
+                // Tat di chuyen va agent de tranh nguoi choi dieu khien nhan vat trong khi mo UI
+                Control.DisableMovementControl();
+                characterBehaviour.DisableAgent();
+
+                // An nhan vat de chi hien thi moi drone
+                if (characterBehaviour.Graphics != null)
+                {
+                    characterBehaviour.Graphics.gameObject.SetActive(false);
+                }
+
+                // Kich hoat camera bay vao Drone, va di chuyen Drone den vi tri trung tam
+                if (characterBehaviour.CurrentDrone != null)
+                {
+                    isDroneCameraActive = true;
+                    characterBehaviour.CurrentDrone.IsUIMode = true;
+                    originalDroneRotation = characterBehaviour.CurrentDrone.transform.rotation;
+                    originalDronePosition = characterBehaviour.CurrentDrone.transform.position;
+                    originalPlayerRotation = characterBehaviour.transform.rotation;
+
+                    // Di chuyen Drone den ngay vi tri cua nguoi choi + 1 ty chieu cao (de no o ngay chinh giua man hinh giong nguoi choi)
+                    Vector3 showcasePos = characterBehaviour.transform.position + Vector3.up * 1.0f;
+                    characterBehaviour.CurrentDrone.transform.position = showcasePos;
+
+                    Vector3 defaultCamPos = CameraController.MainCamera.transform.position;
+                    Vector3 dirToCam = defaultCamPos - showcasePos;
+                    dirToCam.y = 0;
+                    if (dirToCam.sqrMagnitude > 0.01f)
+                    {
+                        Vector3 lookDir = dirToCam.normalized;
+                        characterBehaviour.CurrentDrone.transform.rotation = Quaternion.LookRotation(lookDir);
+                        
+                        Vector3 right = Vector3.Cross(Vector3.up, lookDir).normalized;
+                        CameraController.EnterCharacterSelection(showcasePos, lookDir, right, Vector3.up);
+                    }
+                }
+
+                // An UI mau tren dau nhan vat
+                if (characterBehaviour.HealthbarBehaviour != null)
+                {
+                    characterBehaviour.HealthbarBehaviour.ForceDisable();
+                }
+            }
         }
 
         public override void PlayHideAnimation()
@@ -80,10 +132,56 @@ namespace Watermelon.SquadShooter
 
             base.PlayHideAnimation();
 
+            CharacterBehaviour characterBehaviour = CharacterBehaviour.GetBehaviour();
+            if (characterBehaviour != null)
+            {
+                // Hien lai nhan vat
+                if (characterBehaviour.Graphics != null)
+                {
+                    characterBehaviour.Graphics.gameObject.SetActive(true);
+                }
+
+                // Khoi phuc vi tri, xoay va tra quyen kiem soat cho Cinemachine
+                if (isDroneCameraActive)
+                {
+                    if (characterBehaviour.CurrentDrone != null)
+                    {
+                        characterBehaviour.CurrentDrone.transform.position = originalDronePosition;
+                        characterBehaviour.CurrentDrone.transform.rotation = originalDroneRotation;
+                        characterBehaviour.CurrentDrone.IsUIMode = false;
+                    }
+                    characterBehaviour.transform.rotation = originalPlayerRotation;
+                    isDroneCameraActive = false;
+                }
+
+                // Bat lai di chuyen
+                Control.EnableMovementControl();
+                characterBehaviour.ActivateAgent();
+
+                // Hien lai UI mau
+                if (characterBehaviour.HealthbarBehaviour != null)
+                {
+                    characterBehaviour.HealthbarBehaviour.EnableBar(true);
+                }
+            }
+            
+            CameraController.ExitCharacterSelection();
+
             backgroundPanelRectTransform.DOAnchoredPosition(new Vector2(0, -1500), 0.3f).SetEasing(Ease.Type.CubicIn).OnComplete(delegate
             {
                 UIController.OnPageClosed(this);
             });
+        }
+
+        public void OnDrag(PointerEventData eventData)
+        {
+            CharacterBehaviour characterBehaviour = CharacterBehaviour.GetBehaviour();
+            if (characterBehaviour != null && characterBehaviour.CurrentDrone != null && isDroneCameraActive)
+            {
+                // Xoay drone theo truc Y
+                float rotationSpeed = -0.5f;
+                characterBehaviour.CurrentDrone.transform.Rotate(Vector3.up, eventData.delta.x * rotationSpeed, Space.World);
+            }
         }
 
         protected override void HidePage(SimpleCallback onFinish)

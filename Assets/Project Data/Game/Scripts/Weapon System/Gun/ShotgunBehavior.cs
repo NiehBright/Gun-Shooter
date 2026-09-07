@@ -38,6 +38,7 @@ namespace Watermelon.SquadShooter
                 bulletObj = bulletRef.LoadAssetAsync().WaitForCompletion();
             }
             bulletPool = new Pool(new PoolSettings(bulletObj.name, bulletObj, 5, true));
+            bulletPool.Initialize();
 
             RecalculateDamage();
         }
@@ -159,3 +160,4 @@ namespace Watermelon.SquadShooter
         }
     }
 }
+

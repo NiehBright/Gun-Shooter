@@ -79,6 +79,7 @@ namespace Watermelon.SquadShooter
             base.Awake();
             laserRenderer.gameObject.SetActive(false);
             bulletPool = new Pool(new PoolSettings(bulletPrefab.name, bulletPrefab, 3, true));
+            bulletPool.Initialize();
         }
 
         private void Update()
@@ -113,3 +114,4 @@ namespace Watermelon.SquadShooter
         }
     }
 }
+

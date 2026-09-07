@@ -1,4 +1,4 @@
-﻿#pragma warning disable 0649
+#pragma warning disable 0649
 
 using System;
 using UnityEngine;
@@ -44,12 +44,30 @@ namespace Watermelon
 
                 DontDestroyOnLoad(gameObject);
 
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+                // Đã tắt FPSCounter vì script gốc xài GUI.Label tạo ra lượng Rác bộ nhớ (Garbage) khổng lồ mỗi frame, 
+                // gây ra hiện tượng khựng game (Lag spike) mỗi 10-20 giây.
+                // gameObject.AddComponent<SquadShooter.FPSCounter>();
+#endif
+
                 initSettings.Initialise(this);
             }
         }
 
         public void Start()
         {
+            StartCoroutine(InitAddressablesCoroutine());
+        }
+
+        private System.Collections.IEnumerator InitAddressablesCoroutine()
+        {
+            GameLoading.SetLoadingMessage("Đang khởi tạo Hệ thống Dữ liệu...");
+            yield return null;
+
+            // Tải Addressables ban đầu
+            var handle = UnityEngine.AddressableAssets.Addressables.InitializeAsync();
+            yield return handle;
+
             Initialise(true);
         }
 

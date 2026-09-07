@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace Watermelon
 {
@@ -17,6 +17,9 @@ namespace Watermelon
             ringEffectController = this;
 
             ringEffectPool = new Pool(new PoolSettings(ringEffectPrefab.name, ringEffectPrefab, 1, true));
+
+            ringEffectPool.Initialize();
+
         }
 
         public static RingEffectCase SpawnEffect(Vector3 position, float targetSize, float time, Ease.Type easing)
@@ -41,3 +44,4 @@ namespace Watermelon
         }
     }
 }
+

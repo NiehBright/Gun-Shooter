@@ -39,6 +39,7 @@ namespace Watermelon.SquadShooter
             }
 
             bulletPool = new Pool(new PoolSettings(bulletObj.name, bulletObj, 5, true));
+            bulletPool.Initialize();
 
             shootingRadius = characterBehaviour.EnemyDetector.DetectorRadius;
 
@@ -134,3 +135,4 @@ namespace Watermelon.SquadShooter
         }
     }
 }
+

@@ -163,6 +163,7 @@ namespace Watermelon.SquadShooter
         public BaseEnemyBehavior ClosestEnemyBehaviour => closestEnemyBehaviour;
 
         private DroneBehavior currentDrone;
+        public DroneBehavior CurrentDrone => currentDrone;
 
         private Transform playerTarget;
         private GameObject targetRing;

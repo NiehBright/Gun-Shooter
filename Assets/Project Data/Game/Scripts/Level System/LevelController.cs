@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Watermelon.SquadShooter;
@@ -172,13 +173,14 @@ namespace Watermelon.LevelSystem
             DistributeRewardBetweenRooms();
 
             // Load first room
-            LoadRoom(currentRoomIndex);
-
-            if (levelSave.LevelIndex != 0 || levelSave.WorldIndex > 0)
+            LoadRoom(currentRoomIndex, () => 
             {
-                characterBehaviour.DisableAgent();
-                LoadPedestal();
-            }
+                if (levelSave.LevelIndex != 0 || levelSave.WorldIndex > 0)
+                {
+                    characterBehaviour.DisableAgent();
+                    LoadPedestal();
+                }
+            });
         }
 
         public static void LoadLobby()
@@ -219,14 +221,12 @@ namespace Watermelon.LevelSystem
             DistributeRewardBetweenRooms();
 
             // Load room 0 of the Lobby
-            LoadRoom(currentRoomIndex);
-
-            // Bật camera và di chuyển trong Lobby
-            CameraController.SetCameraShiftState(false);
-            CameraController.EnableCamera(CameraType.Main); // Góc nhìn theo nhân vật
-
-            Tween.NextFrame(() =>
+            LoadRoom(currentRoomIndex, () =>
             {
+                // Bật camera và di chuyển trong Lobby
+                CameraController.SetCameraShiftState(false);
+                CameraController.EnableCamera(CameraType.Main); // Góc nhìn theo nhân vật
+
                 characterBehaviour.Activate();
                 characterBehaviour.ActivateMovement();
                 characterBehaviour.ActivateAgent();
@@ -362,16 +362,54 @@ namespace Watermelon.LevelSystem
             return false;
         }
 
-        private static void LoadRoom(int index)
+        private static void LoadRoom(int index, System.Action onCompleted = null)
+        {
+            Tween.InvokeCoroutine(LoadRoomCoroutine(index, onCompleted));
+        }
+
+        private static IEnumerator LoadRoomCoroutine(int index, System.Action onCompleted)
         {
             RoomData roomData = currentLevelData.Rooms[index];
 
             ActiveRoom.SetRoomData(roomData);
 
-            // backWallCollider.transform.localPosition = roomData.SpawnPoint;
-
             manualExitActivation = false;
             isExitEntered = false;
+
+            // --- TRÁNH GIẬT LAG KHI BẮN ---
+            // Gọi getter Prefab để Addressables.WaitForCompletion() chạy ngầm TAY TRONG màn hình Loading
+            try
+            {
+                var weaponData = WeaponsController.Database.Weapons[WeaponsController.SelectedWeaponIndex];
+                if (weaponData != null)
+                {
+                    var gunUpgrade = UpgradesController.GetUpgrade<Watermelon.Upgrades.BaseWeaponUpgrade>(weaponData.UpgradeType);
+                    var gunStage = gunUpgrade.GetCurrentStage();
+                    if (gunStage != null)
+                    {
+                        var preloadGun = gunStage.WeaponPrefab;
+                        var preloadBullet = gunStage.BulletPrefab;
+                    }
+                }
+
+                if (DronesController.SelectedDroneIndex != -1 && DronesController.SelectedDroneIndex < DronesController.Database.Drones.Length)
+                {
+                    var droneData = DronesController.Database.Drones[DronesController.SelectedDroneIndex];
+                    if (droneData != null)
+                    {
+                        var droneUpgrade = UpgradesController.GetUpgrade<Watermelon.Upgrades.BaseDroneUpgrade>(droneData.UpgradeType);
+                        var droneStage = droneUpgrade.GetCurrentStage();
+                        if (droneStage != null)
+                        {
+                            var preloadDrone = droneStage.DronePrefab;
+                            var preloadBullet = droneStage.BulletPrefab;
+                        }
+                    }
+                }
+            }
+            catch (System.Exception e) { Debug.LogWarning(e); }
+            yield return null;
+            // --------------------------------
 
             // Reposition player
             characterBehaviour.SetPosition(roomData.SpawnPoint);
@@ -391,6 +429,7 @@ namespace Watermelon.LevelSystem
                 }
 
                 ActiveRoom.SpawnItem(itemData, items[i]);
+                if (i % 5 == 0) yield return null;
             }
 
 
@@ -398,6 +437,7 @@ namespace Watermelon.LevelSystem
             for (int i = 0; i < enemies.Length; i++)
             {
                 ActiveRoom.SpawnEnemy(EnemyController.Database.GetEnemyData(enemies[i].EnemyType), enemies[i], false);
+                if (i % 3 == 0) yield return null;
             }
 
             if (roomData.ChestEntities != null)
@@ -433,6 +473,9 @@ namespace Watermelon.LevelSystem
             loadedLevel = currentLevelData;
 
             NavMeshController.RecalculateNavMesh(null);
+            yield return null;
+
+            onCompleted?.Invoke();
 
             GameLoading.MarkAsReadyToHide();
         }

@@ -9,11 +9,23 @@ namespace Watermelon.SquadShooter
         [SerializeField] Slider loadingSlider;
         [SerializeField] Image progressFillImage;
         [SerializeField] TextMeshProUGUI progressText;
+        [SerializeField] TextMeshProUGUI hintText;
         [SerializeField] CanvasGroup canvasGroup;
 
         private float targetProgress;
         private float currentProgress;
         private bool triggeredHalfWay;
+        private float hintTimer;
+
+        private readonly string[] hints = new string[]
+        {
+            "Đang nạp đạn...",
+            "Đang bảo dưỡng Drone...",
+            "Đang sơn lại súng...",
+            "Đang đánh bóng áo giáp...",
+            "Đang sạc năng lượng...",
+            "Đang quét mục tiêu..."
+        };
 
         private void Awake()
         {
@@ -51,6 +63,12 @@ namespace Watermelon.SquadShooter
             triggeredHalfWay = false;
             SetProgress(0f);
             
+            if (hintText != null)
+            {
+                hintText.text = hints[Random.Range(0, hints.Length)];
+                hintTimer = 0f;
+            }
+
             // Kích hoạt canvas hiển thị trước khi fade
             EnableCanvas();
             GraphicRaycaster.enabled = true;
@@ -70,7 +88,19 @@ namespace Watermelon.SquadShooter
 
         private void UpdateLoading(float timer, float duration, System.Action onHalfWay, System.Action onComplete)
         {
-            timer += Time.unscaledDeltaTime;
+            float dt = Time.unscaledDeltaTime;
+            timer += dt;
+            
+            if (hintText != null)
+            {
+                hintTimer += dt;
+                if (hintTimer >= 1.5f)
+                {
+                    hintTimer = 0f;
+                    hintText.text = hints[Random.Range(0, hints.Length)];
+                }
+            }
+
             float progress = Mathf.Clamp01(timer / duration);
             SetProgress(progress);
 

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace Watermelon
 {
@@ -17,6 +17,8 @@ namespace Watermelon
         public void Initialise()
         {
             floatingTextPool = new Pool(new PoolSettings(floatingTextBehaviour.name, floatingTextBehaviour.gameObject, 1, true));
+            floatingTextPool.Initialize();
+
         }
     }
 }
