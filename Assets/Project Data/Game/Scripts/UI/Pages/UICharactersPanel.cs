@@ -237,6 +237,12 @@ namespace Watermelon.SquadShooter
                 // Tat di chuyen va agent de tranh nguoi choi dieu khien nhan vat trong khi mo UI
                 Control.DisableMovementControl();
                 characterBehaviour.DisableAgent();
+
+                // An drone
+                if (characterBehaviour.CurrentDrone != null)
+                {
+                    characterBehaviour.CurrentDrone.gameObject.SetActive(false);
+                }
             }
         }
 
@@ -258,6 +264,12 @@ namespace Watermelon.SquadShooter
                 // Bat lai di chuyen va agent cua nhan vat
                 Control.EnableMovementControl();
                 characterBehaviour.ActivateAgent();
+
+                // Hien lai drone
+                if (characterBehaviour.CurrentDrone != null)
+                {
+                    characterBehaviour.CurrentDrone.gameObject.SetActive(true);
+                }
             }
             CameraController.ExitCharacterSelection();
 
