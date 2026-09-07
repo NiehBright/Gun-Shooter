@@ -128,9 +128,12 @@ namespace Watermelon.SquadShooter
             }
         }
 
+        public bool IsUIMode { get; set; } = false;
+
         private void Update()
         {
             if (player == null || CharacterBehaviour.IsDead) return;
+            if (IsUIMode) return;
 
             if (player.IsAttackingAllowed)
             {

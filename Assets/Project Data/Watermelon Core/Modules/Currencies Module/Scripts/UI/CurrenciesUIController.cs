@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Watermelon
@@ -19,6 +19,7 @@ namespace Watermelon
         public void Initialise(Currency[] currencies)
         {
             panelPool = new Pool(new PoolSettings("Currency Panel", panelObject, 1, true, parentTrasnform));
+            panelPool.Initialize();
 
             activePanelsUI = new Dictionary<CurrencyType, CurrencyUI>();
 

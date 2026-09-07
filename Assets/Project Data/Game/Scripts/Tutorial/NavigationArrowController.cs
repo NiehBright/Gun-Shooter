@@ -24,6 +24,7 @@ namespace Watermelon
                 singlePoolPrefab = lineArrowPrefab,
                 name = "Line Navigation Arrow"
             });
+            lineArrowPool.Initialize();
 
             activeArrows = new List<BaseNavigationArrowCase>();
         }
@@ -69,3 +70,4 @@ namespace Watermelon
         }
     }
 }
+

@@ -37,6 +37,8 @@ namespace Watermelon
         public override void Initialise()
         {
             cardsUIPool = new Pool(new PoolSettings(dropCardPrefab.name, dropCardPrefab, 1, true, cardsContainerTransform));
+            cardsUIPool.Initialize();
+
         }
 
         public void SetData(int currentWorld, int currentLevel, int collectedMoney, int collectedExperience, int collectedGems, List<WeaponType> collectedCards)
@@ -163,3 +165,4 @@ namespace Watermelon
         #endregion
     }
 }
+

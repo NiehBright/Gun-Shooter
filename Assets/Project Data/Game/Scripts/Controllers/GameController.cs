@@ -36,6 +36,13 @@ namespace Watermelon
 
         private void Awake()
         {
+            // Bắt buộc quay về màn hình Init nếu chưa chạy khởi tạo hệ thống (Fix lỗi đứng game khi bấm Play thẳng từ Game.unity)
+            if (!Initialiser.IsInititalized)
+            {
+                UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+                return;
+            }
+
             instance = this;
 
             SaveController.Initialise(false);

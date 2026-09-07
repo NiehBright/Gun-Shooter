@@ -23,6 +23,7 @@ namespace Watermelon.SquadShooter
 
             GameObject slashPrefab = stage.BulletPrefab;
             slashPool = new Pool(new PoolSettings(slashPrefab.name, slashPrefab, 5, true));
+            slashPool.Initialize();
 
             RecalculateDamage();
         }
@@ -85,3 +86,4 @@ namespace Watermelon.SquadShooter
         }
     }
 }
+

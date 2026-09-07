@@ -48,6 +48,7 @@ namespace Watermelon.SquadShooter
             base.Awake();
 
             if(bulletPool == null) bulletPool = new Pool(new PoolSettings(bulletPrefab.name, bulletPrefab, 4, true));
+            bulletPool.Initialize();
 
             lasers = new List<BossSniperLaserLine>();
             for (int i = 0; i < laserRenderers.Count; i++) 
@@ -208,3 +209,4 @@ namespace Watermelon.SquadShooter
         #endregion
     }
 }
+

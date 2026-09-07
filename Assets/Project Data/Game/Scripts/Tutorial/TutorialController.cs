@@ -34,6 +34,7 @@ namespace Watermelon
 
             // Create pools
             labelPool = new Pool(new PoolSettings(labelPrefab.name, labelPrefab, 0, true));
+            labelPool.Initialize();
 
             navigationArrowController.Initialise();
             tutorialCanvasController.Initialise();
@@ -110,3 +111,4 @@ namespace Watermelon
         }
     }
 }
+

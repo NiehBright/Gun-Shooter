@@ -19,7 +19,17 @@ MonoBehaviour:
     currencyType: 0
     previewSprite: {fileID: 0}
     weaponPrefab: {fileID: 0}
+    weaponPrefabRef:
+      m_AssetGUID: 
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
     bulletPrefab: {fileID: 0}
+    bulletPrefabRef:
+      m_AssetGUID: 
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
     damage:
       firstValue: 0
       secondValue: 0
@@ -39,8 +49,18 @@ MonoBehaviour:
     previewSprite: {fileID: 0}
     weaponPrefab: {fileID: 6347890837037930244, guid: 853a1aed120851c4e8fa2018832dcad8,
       type: 3}
+    weaponPrefabRef:
+      m_AssetGUID: 853a1aed120851c4e8fa2018832dcad8
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
     bulletPrefab: {fileID: 7995167561492624291, guid: ef5f452bc7badaf4b9c9b86adda600c7,
       type: 3}
+    bulletPrefabRef:
+      m_AssetGUID: ef5f452bc7badaf4b9c9b86adda600c7
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
     damage:
       firstValue: 35
       secondValue: 40
@@ -60,8 +80,18 @@ MonoBehaviour:
     previewSprite: {fileID: 0}
     weaponPrefab: {fileID: 6347890837037930244, guid: 853a1aed120851c4e8fa2018832dcad8,
       type: 3}
+    weaponPrefabRef:
+      m_AssetGUID: 853a1aed120851c4e8fa2018832dcad8
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
     bulletPrefab: {fileID: 7995167561492624291, guid: ef5f452bc7badaf4b9c9b86adda600c7,
       type: 3}
+    bulletPrefabRef:
+      m_AssetGUID: ef5f452bc7badaf4b9c9b86adda600c7
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
     damage:
       firstValue: 27
       secondValue: 30
@@ -81,8 +111,18 @@ MonoBehaviour:
     previewSprite: {fileID: 0}
     weaponPrefab: {fileID: 6347890837037930244, guid: 853a1aed120851c4e8fa2018832dcad8,
       type: 3}
+    weaponPrefabRef:
+      m_AssetGUID: 853a1aed120851c4e8fa2018832dcad8
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
     bulletPrefab: {fileID: 7995167561492624291, guid: ef5f452bc7badaf4b9c9b86adda600c7,
       type: 3}
+    bulletPrefabRef:
+      m_AssetGUID: ef5f452bc7badaf4b9c9b86adda600c7
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
     damage:
       firstValue: 16
       secondValue: 45
@@ -102,8 +142,18 @@ MonoBehaviour:
     previewSprite: {fileID: 0}
     weaponPrefab: {fileID: 6347890837037930244, guid: 853a1aed120851c4e8fa2018832dcad8,
       type: 3}
+    weaponPrefabRef:
+      m_AssetGUID: 853a1aed120851c4e8fa2018832dcad8
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
     bulletPrefab: {fileID: 7995167561492624291, guid: ef5f452bc7badaf4b9c9b86adda600c7,
       type: 3}
+    bulletPrefabRef:
+      m_AssetGUID: ef5f452bc7badaf4b9c9b86adda600c7
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
     damage:
       firstValue: 22
       secondValue: 50
@@ -123,8 +173,18 @@ MonoBehaviour:
     previewSprite: {fileID: 0}
     weaponPrefab: {fileID: 6347890837037930244, guid: 853a1aed120851c4e8fa2018832dcad8,
       type: 3}
+    weaponPrefabRef:
+      m_AssetGUID: 853a1aed120851c4e8fa2018832dcad8
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
     bulletPrefab: {fileID: 7995167561492624291, guid: ef5f452bc7badaf4b9c9b86adda600c7,
       type: 3}
+    bulletPrefabRef:
+      m_AssetGUID: ef5f452bc7badaf4b9c9b86adda600c7
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
     damage:
       firstValue: 22
       secondValue: 50
@@ -144,8 +204,18 @@ MonoBehaviour:
     previewSprite: {fileID: 0}
     weaponPrefab: {fileID: 6347890837037930244, guid: 853a1aed120851c4e8fa2018832dcad8,
       type: 3}
+    weaponPrefabRef:
+      m_AssetGUID: 853a1aed120851c4e8fa2018832dcad8
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
     bulletPrefab: {fileID: 7995167561492624291, guid: ef5f452bc7badaf4b9c9b86adda600c7,
       type: 3}
+    bulletPrefabRef:
+      m_AssetGUID: ef5f452bc7badaf4b9c9b86adda600c7
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
     damage:
       firstValue: 22
       secondValue: 50
@@ -165,8 +235,18 @@ MonoBehaviour:
     previewSprite: {fileID: 0}
     weaponPrefab: {fileID: 6347890837037930244, guid: 853a1aed120851c4e8fa2018832dcad8,
       type: 3}
+    weaponPrefabRef:
+      m_AssetGUID: 853a1aed120851c4e8fa2018832dcad8
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
     bulletPrefab: {fileID: 7995167561492624291, guid: ef5f452bc7badaf4b9c9b86adda600c7,
       type: 3}
+    bulletPrefabRef:
+      m_AssetGUID: ef5f452bc7badaf4b9c9b86adda600c7
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
     damage:
       firstValue: 22
       secondValue: 50
@@ -186,8 +266,18 @@ MonoBehaviour:
     previewSprite: {fileID: 0}
     weaponPrefab: {fileID: 6347890837037930244, guid: 853a1aed120851c4e8fa2018832dcad8,
       type: 3}
+    weaponPrefabRef:
+      m_AssetGUID: 853a1aed120851c4e8fa2018832dcad8
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
     bulletPrefab: {fileID: 7995167561492624291, guid: ef5f452bc7badaf4b9c9b86adda600c7,
       type: 3}
+    bulletPrefabRef:
+      m_AssetGUID: ef5f452bc7badaf4b9c9b86adda600c7
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
     damage:
       firstValue: 22
       secondValue: 50
@@ -207,8 +297,18 @@ MonoBehaviour:
     previewSprite: {fileID: 0}
     weaponPrefab: {fileID: 6347890837037930244, guid: 853a1aed120851c4e8fa2018832dcad8,
       type: 3}
+    weaponPrefabRef:
+      m_AssetGUID: 853a1aed120851c4e8fa2018832dcad8
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
     bulletPrefab: {fileID: 7995167561492624291, guid: ef5f452bc7badaf4b9c9b86adda600c7,
       type: 3}
+    bulletPrefabRef:
+      m_AssetGUID: ef5f452bc7badaf4b9c9b86adda600c7
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
     damage:
       firstValue: 22
       secondValue: 50
@@ -228,8 +328,18 @@ MonoBehaviour:
     previewSprite: {fileID: 0}
     weaponPrefab: {fileID: 6347890837037930244, guid: 853a1aed120851c4e8fa2018832dcad8,
       type: 3}
+    weaponPrefabRef:
+      m_AssetGUID: 853a1aed120851c4e8fa2018832dcad8
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
     bulletPrefab: {fileID: 7995167561492624291, guid: ef5f452bc7badaf4b9c9b86adda600c7,
       type: 3}
+    bulletPrefabRef:
+      m_AssetGUID: ef5f452bc7badaf4b9c9b86adda600c7
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
     damage:
       firstValue: 22
       secondValue: 50

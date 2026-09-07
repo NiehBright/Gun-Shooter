@@ -16,11 +16,37 @@ namespace Watermelon.Upgrades
     public class BaseDroneUpgradeStage : BaseUpgradeStage
     {
         [Header("Prefabs")]
-        [SerializeField] GameObject dronePrefab;
-        public GameObject DronePrefab => dronePrefab;
+        [SerializeField] UnityEngine.AddressableAssets.AssetReferenceGameObject dronePrefabRef;
+        public UnityEngine.AddressableAssets.AssetReferenceGameObject DronePrefabRef => dronePrefabRef;
 
-        [SerializeField] GameObject bulletPrefab;
-        public GameObject BulletPrefab => bulletPrefab;
+        private GameObject loadedDronePrefab;
+        public GameObject DronePrefab
+        {
+            get
+            {
+                if (loadedDronePrefab == null && dronePrefabRef != null && dronePrefabRef.RuntimeKeyIsValid())
+                {
+                    loadedDronePrefab = UnityEngine.AddressableAssets.Addressables.LoadAssetAsync<GameObject>(dronePrefabRef).WaitForCompletion();
+                }
+                return loadedDronePrefab;
+            }
+        }
+
+        [SerializeField] UnityEngine.AddressableAssets.AssetReferenceGameObject bulletPrefabRef;
+        public UnityEngine.AddressableAssets.AssetReferenceGameObject BulletPrefabRef => bulletPrefabRef;
+
+        private GameObject loadedBulletPrefab;
+        public GameObject BulletPrefab
+        {
+            get
+            {
+                if (loadedBulletPrefab == null && bulletPrefabRef != null && bulletPrefabRef.RuntimeKeyIsValid())
+                {
+                    loadedBulletPrefab = UnityEngine.AddressableAssets.Addressables.LoadAssetAsync<GameObject>(bulletPrefabRef).WaitForCompletion();
+                }
+                return loadedBulletPrefab;
+            }
+        }
 
         [Header("Data")]
         [SerializeField] DuoInt damage;

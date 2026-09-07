@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace Watermelon
 {
@@ -36,6 +36,8 @@ namespace Watermelon
 
             // Create particle pool
             particlePool = new Pool(new PoolSettings(particlePrefab.name, particlePrefab, 0, true));
+            particlePool.Initialize();
+
         }
 
         public ParticleCase Play(float delay = 0)

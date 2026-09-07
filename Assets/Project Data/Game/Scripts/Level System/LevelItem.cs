@@ -24,6 +24,8 @@ namespace Watermelon.LevelSystem
         public void OnWorldLoaded()
         {
             pool = new Pool(new PoolSettings(prefab.name, prefab, 0, true));
+            pool.Initialize();
+
         }
 
         public void OnWorldUnloaded()
@@ -33,3 +35,4 @@ namespace Watermelon.LevelSystem
         }
     }
 }
+

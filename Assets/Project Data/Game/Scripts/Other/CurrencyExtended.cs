@@ -15,6 +15,9 @@ namespace Watermelon
         partial void OnInitialised()
         {
             pool = new Pool(new PoolSettings(currencyType.ToString(), model, 1, true));
+            pool.Initialize();
+
         }
     }
 }
+

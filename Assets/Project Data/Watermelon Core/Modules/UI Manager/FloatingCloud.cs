@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using TMPro;
@@ -185,6 +185,8 @@ namespace Watermelon
             public void Initialise()
             {
                 pool = new Pool(new PoolSettings("FloatingCloud_" + name, prefab, 10, true));
+                pool.Initialize();
+
             }
 
             public void Clear()
@@ -318,3 +320,4 @@ namespace Watermelon
         }
     }
 }
+

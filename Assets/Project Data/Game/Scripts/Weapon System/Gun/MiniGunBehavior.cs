@@ -42,6 +42,7 @@ namespace Watermelon.SquadShooter
 
             GameObject bulletObj = (upgrade.CurrentStage as BaseWeaponUpgradeStage).BulletPrefab;
             bulletPool = new Pool(new PoolSettings(bulletObj.name, bulletObj, 5, true));
+            bulletPool.Initialize();
 
             RecalculateDamage();
         }
@@ -152,3 +153,4 @@ namespace Watermelon.SquadShooter
         }
     }
 }
+
