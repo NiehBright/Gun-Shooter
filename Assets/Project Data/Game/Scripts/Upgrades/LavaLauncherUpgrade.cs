@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Watermelon.Upgrades;
 
 namespace Watermelon

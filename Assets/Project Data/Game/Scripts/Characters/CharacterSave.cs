@@ -1,4 +1,4 @@
-﻿using Watermelon;
+using Watermelon;
 
 namespace Watermelon.SquadShooter
 {

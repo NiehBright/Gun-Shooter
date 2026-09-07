@@ -1,4 +1,4 @@
-﻿namespace Watermelon.LevelSystem
+namespace Watermelon.LevelSystem
 {
     public class NavMeshCallback : INavMeshAgent
     {

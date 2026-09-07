@@ -10,7 +10,7 @@ namespace Watermelon.SquadShooter
     {
         private const string PREFAB_PATH = "Assets/Project Data/Game/Prefabs/UI/Pages/UI Game.prefab";
 
-        [MenuItem("Tools/Squad Shooter/Skill UI Builder")]
+        [MenuItem("Tools/Gun Shooter/Skill UI Builder")]
         public static void ShowWindow()
         {
             GetWindow<SkillUIBuilder>("Skill UI Builder").Show();
