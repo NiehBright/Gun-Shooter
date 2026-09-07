@@ -18,15 +18,13 @@ MonoBehaviour:
   - price: 0
     currencyType: 0
     previewSprite: {fileID: 0}
-    weaponPrefab: {fileID: 0}
-    weaponPrefabRef:
-      m_AssetGUID: 
+    weaponPrefab:
+      m_AssetGUID: 60d8b7dff4bbbbc4db793104d2c025a1
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
-    bulletPrefab: {fileID: 0}
-    bulletPrefabRef:
-      m_AssetGUID: 
+    bulletPrefab:
+      m_AssetGUID: dc444baa8fa519c4fb49319e0150187b
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
@@ -47,17 +45,13 @@ MonoBehaviour:
   - price: 0
     currencyType: 0
     previewSprite: {fileID: 0}
-    weaponPrefab: {fileID: 6347890837037930244, guid: 60d8b7dff4bbbbc4db793104d2c025a1,
-      type: 3}
-    weaponPrefabRef:
+    weaponPrefab:
       m_AssetGUID: 60d8b7dff4bbbbc4db793104d2c025a1
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
-    bulletPrefab: {fileID: 1294834399362254, guid: 4d46a88382f3c124c93b73ffeb016270,
-      type: 3}
-    bulletPrefabRef:
-      m_AssetGUID: 4d46a88382f3c124c93b73ffeb016270
+    bulletPrefab:
+      m_AssetGUID: dc444baa8fa519c4fb49319e0150187b
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
@@ -78,17 +72,13 @@ MonoBehaviour:
   - price: 70
     currencyType: 0
     previewSprite: {fileID: 0}
-    weaponPrefab: {fileID: 6347890837037930244, guid: 60d8b7dff4bbbbc4db793104d2c025a1,
-      type: 3}
-    weaponPrefabRef:
+    weaponPrefab:
       m_AssetGUID: 60d8b7dff4bbbbc4db793104d2c025a1
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
-    bulletPrefab: {fileID: 1294834399362254, guid: 4d46a88382f3c124c93b73ffeb016270,
-      type: 3}
-    bulletPrefabRef:
-      m_AssetGUID: 4d46a88382f3c124c93b73ffeb016270
+    bulletPrefab:
+      m_AssetGUID: dc444baa8fa519c4fb49319e0150187b
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
@@ -109,17 +99,13 @@ MonoBehaviour:
   - price: 90
     currencyType: 0
     previewSprite: {fileID: 0}
-    weaponPrefab: {fileID: 6347890837037930244, guid: 60d8b7dff4bbbbc4db793104d2c025a1,
-      type: 3}
-    weaponPrefabRef:
-      m_AssetGUID: 60d8b7dff4bbbbc4db793104d2c025a1
+    weaponPrefab:
+      m_AssetGUID: dc444baa8fa519c4fb49319e0150187b
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
-    bulletPrefab: {fileID: 1294834399362254, guid: 4d46a88382f3c124c93b73ffeb016270,
-      type: 3}
-    bulletPrefabRef:
-      m_AssetGUID: 4d46a88382f3c124c93b73ffeb016270
+    bulletPrefab:
+      m_AssetGUID: dc444baa8fa519c4fb49319e0150187b
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
@@ -140,17 +126,13 @@ MonoBehaviour:
   - price: 110
     currencyType: 0
     previewSprite: {fileID: 0}
-    weaponPrefab: {fileID: 6347890837037930244, guid: 60d8b7dff4bbbbc4db793104d2c025a1,
-      type: 3}
-    weaponPrefabRef:
+    weaponPrefab:
       m_AssetGUID: 60d8b7dff4bbbbc4db793104d2c025a1
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
-    bulletPrefab: {fileID: 7995167561492624291, guid: 557f547da59937549b446b57778d73bb,
-      type: 3}
-    bulletPrefabRef:
-      m_AssetGUID: 557f547da59937549b446b57778d73bb
+    bulletPrefab:
+      m_AssetGUID: dc444baa8fa519c4fb49319e0150187b
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
@@ -171,17 +153,13 @@ MonoBehaviour:
   - price: 110
     currencyType: 0
     previewSprite: {fileID: 0}
-    weaponPrefab: {fileID: 6347890837037930244, guid: 60d8b7dff4bbbbc4db793104d2c025a1,
-      type: 3}
-    weaponPrefabRef:
+    weaponPrefab:
       m_AssetGUID: 60d8b7dff4bbbbc4db793104d2c025a1
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
-    bulletPrefab: {fileID: 7995167561492624291, guid: 557f547da59937549b446b57778d73bb,
-      type: 3}
-    bulletPrefabRef:
-      m_AssetGUID: 557f547da59937549b446b57778d73bb
+    bulletPrefab:
+      m_AssetGUID: dc444baa8fa519c4fb49319e0150187b
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
@@ -202,17 +180,13 @@ MonoBehaviour:
   - price: 140
     currencyType: 0
     previewSprite: {fileID: 0}
-    weaponPrefab: {fileID: 6347890837037930244, guid: 60d8b7dff4bbbbc4db793104d2c025a1,
-      type: 3}
-    weaponPrefabRef:
+    weaponPrefab:
       m_AssetGUID: 60d8b7dff4bbbbc4db793104d2c025a1
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
-    bulletPrefab: {fileID: 7995167561492624291, guid: 557f547da59937549b446b57778d73bb,
-      type: 3}
-    bulletPrefabRef:
-      m_AssetGUID: 557f547da59937549b446b57778d73bb
+    bulletPrefab:
+      m_AssetGUID: dc444baa8fa519c4fb49319e0150187b
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
@@ -233,17 +207,13 @@ MonoBehaviour:
   - price: 165
     currencyType: 0
     previewSprite: {fileID: 0}
-    weaponPrefab: {fileID: 6347890837037930244, guid: 60d8b7dff4bbbbc4db793104d2c025a1,
-      type: 3}
-    weaponPrefabRef:
+    weaponPrefab:
       m_AssetGUID: 60d8b7dff4bbbbc4db793104d2c025a1
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
-    bulletPrefab: {fileID: 7995167561492624291, guid: 557f547da59937549b446b57778d73bb,
-      type: 3}
-    bulletPrefabRef:
-      m_AssetGUID: 557f547da59937549b446b57778d73bb
+    bulletPrefab:
+      m_AssetGUID: dc444baa8fa519c4fb49319e0150187b
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
@@ -264,17 +234,13 @@ MonoBehaviour:
   - price: 200
     currencyType: 0
     previewSprite: {fileID: 0}
-    weaponPrefab: {fileID: 6347890837037930244, guid: 60d8b7dff4bbbbc4db793104d2c025a1,
-      type: 3}
-    weaponPrefabRef:
+    weaponPrefab:
       m_AssetGUID: 60d8b7dff4bbbbc4db793104d2c025a1
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
-    bulletPrefab: {fileID: 7995167561492624291, guid: 557f547da59937549b446b57778d73bb,
-      type: 3}
-    bulletPrefabRef:
-      m_AssetGUID: 557f547da59937549b446b57778d73bb
+    bulletPrefab:
+      m_AssetGUID: dc444baa8fa519c4fb49319e0150187b
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
@@ -295,17 +261,13 @@ MonoBehaviour:
   - price: 300
     currencyType: 0
     previewSprite: {fileID: 0}
-    weaponPrefab: {fileID: 6347890837037930244, guid: 60d8b7dff4bbbbc4db793104d2c025a1,
-      type: 3}
-    weaponPrefabRef:
+    weaponPrefab:
       m_AssetGUID: 60d8b7dff4bbbbc4db793104d2c025a1
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
-    bulletPrefab: {fileID: 7995167561492624291, guid: 557f547da59937549b446b57778d73bb,
-      type: 3}
-    bulletPrefabRef:
-      m_AssetGUID: 557f547da59937549b446b57778d73bb
+    bulletPrefab:
+      m_AssetGUID: dc444baa8fa519c4fb49319e0150187b
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
@@ -326,17 +288,13 @@ MonoBehaviour:
   - price: 320
     currencyType: 0
     previewSprite: {fileID: 0}
-    weaponPrefab: {fileID: 6347890837037930244, guid: 60d8b7dff4bbbbc4db793104d2c025a1,
-      type: 3}
-    weaponPrefabRef:
+    weaponPrefab:
       m_AssetGUID: 60d8b7dff4bbbbc4db793104d2c025a1
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
-    bulletPrefab: {fileID: 7995167561492624291, guid: 557f547da59937549b446b57778d73bb,
-      type: 3}
-    bulletPrefabRef:
-      m_AssetGUID: 557f547da59937549b446b57778d73bb
+    bulletPrefab:
+      m_AssetGUID: dc444baa8fa519c4fb49319e0150187b
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0

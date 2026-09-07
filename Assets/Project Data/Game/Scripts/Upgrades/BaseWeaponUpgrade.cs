@@ -1,5 +1,7 @@
 using UnityEngine;
 
+using UnityEngine.AddressableAssets;
+
 namespace Watermelon.Upgrades
 {
     [System.Serializable]
@@ -15,37 +17,11 @@ namespace Watermelon.Upgrades
     public class BaseWeaponUpgradeStage : BaseUpgradeStage
     {
         [Header("Prefabs")]
-        [SerializeField] UnityEngine.AddressableAssets.AssetReferenceGameObject weaponPrefabRef;
-        public UnityEngine.AddressableAssets.AssetReferenceGameObject WeaponPrefabRef => weaponPrefabRef;
+        [SerializeField] AssetReferenceGameObject weaponPrefab;
+        public AssetReferenceGameObject WeaponPrefab => weaponPrefab;
 
-        private GameObject loadedWeaponPrefab;
-        public GameObject WeaponPrefab
-        {
-            get
-            {
-                if (loadedWeaponPrefab == null && weaponPrefabRef != null && weaponPrefabRef.RuntimeKeyIsValid())
-                {
-                    loadedWeaponPrefab = UnityEngine.AddressableAssets.Addressables.LoadAssetAsync<GameObject>(weaponPrefabRef).WaitForCompletion();
-                }
-                return loadedWeaponPrefab;
-            }
-        }
-
-        [SerializeField] UnityEngine.AddressableAssets.AssetReferenceGameObject bulletPrefabRef;
-        public UnityEngine.AddressableAssets.AssetReferenceGameObject BulletPrefabRef => bulletPrefabRef;
-
-        private GameObject loadedBulletPrefab;
-        public GameObject BulletPrefab
-        {
-            get
-            {
-                if (loadedBulletPrefab == null && bulletPrefabRef != null && bulletPrefabRef.RuntimeKeyIsValid())
-                {
-                    loadedBulletPrefab = UnityEngine.AddressableAssets.Addressables.LoadAssetAsync<GameObject>(bulletPrefabRef).WaitForCompletion();
-                }
-                return loadedBulletPrefab;
-            }
-        }
+        [SerializeField] AssetReferenceGameObject bulletPrefab;
+        public AssetReferenceGameObject BulletPrefab => bulletPrefab;
 
         [Header("Data")]
         [SerializeField] DuoInt damage;

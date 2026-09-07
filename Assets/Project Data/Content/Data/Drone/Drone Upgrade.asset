@@ -18,16 +18,12 @@ MonoBehaviour:
   - price: 0
     currencyType: 0
     previewSprite: {fileID: 0}
-    dronePrefab: {fileID: 366650712974705125, guid: 588fca0d2edef9146bf031b23032112c,
-      type: 3}
-    dronePrefabRef:
+    dronePrefab:
       m_AssetGUID: 588fca0d2edef9146bf031b23032112c
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
-    bulletPrefab: {fileID: 5512187175349329341, guid: 4bc7f675979ba1445858202f430d4c36,
-      type: 3}
-    bulletPrefabRef:
+    bulletPrefab:
       m_AssetGUID: 4bc7f675979ba1445858202f430d4c36
       m_SubObjectName: 
       m_SubObjectType: 
@@ -46,16 +42,12 @@ MonoBehaviour:
   - price: 200
     currencyType: 0
     previewSprite: {fileID: 0}
-    dronePrefab: {fileID: 366650712974705125, guid: 588fca0d2edef9146bf031b23032112c,
-      type: 3}
-    dronePrefabRef:
+    dronePrefab:
       m_AssetGUID: 588fca0d2edef9146bf031b23032112c
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
-    bulletPrefab: {fileID: 5512187175349329341, guid: 4bc7f675979ba1445858202f430d4c36,
-      type: 3}
-    bulletPrefabRef:
+    bulletPrefab:
       m_AssetGUID: 4bc7f675979ba1445858202f430d4c36
       m_SubObjectName: 
       m_SubObjectType: 
@@ -74,16 +66,12 @@ MonoBehaviour:
   - price: 200
     currencyType: 0
     previewSprite: {fileID: 0}
-    dronePrefab: {fileID: 366650712974705125, guid: 588fca0d2edef9146bf031b23032112c,
-      type: 3}
-    dronePrefabRef:
+    dronePrefab:
       m_AssetGUID: 588fca0d2edef9146bf031b23032112c
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
-    bulletPrefab: {fileID: 5512187175349329341, guid: 4bc7f675979ba1445858202f430d4c36,
-      type: 3}
-    bulletPrefabRef:
+    bulletPrefab:
       m_AssetGUID: 4bc7f675979ba1445858202f430d4c36
       m_SubObjectName: 
       m_SubObjectType: 
@@ -102,16 +90,12 @@ MonoBehaviour:
   - price: 200
     currencyType: 0
     previewSprite: {fileID: 0}
-    dronePrefab: {fileID: 366650712974705125, guid: 588fca0d2edef9146bf031b23032112c,
-      type: 3}
-    dronePrefabRef:
+    dronePrefab:
       m_AssetGUID: 588fca0d2edef9146bf031b23032112c
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
-    bulletPrefab: {fileID: 5512187175349329341, guid: 4bc7f675979ba1445858202f430d4c36,
-      type: 3}
-    bulletPrefabRef:
+    bulletPrefab:
       m_AssetGUID: 4bc7f675979ba1445858202f430d4c36
       m_SubObjectName: 
       m_SubObjectType: 

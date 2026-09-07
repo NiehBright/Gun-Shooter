@@ -272,7 +272,8 @@ namespace Watermelon.SquadShooter
             graphics.DisableRagdoll();
             graphics.Reload();
 
-            gunBehaviour.Reload();
+            if (gunBehaviour != null)
+                gunBehaviour.Reload();
 
             gameObject.SetActive(true);
         }
@@ -418,6 +419,8 @@ namespace Watermelon.SquadShooter
             graphics.PlayHitAnimation();
         }
 
+        private UnityEngine.AddressableAssets.AssetReferenceGameObject gunPrefabReference;
+
         #region Gun
         public void SetGun(WeaponData weaponData, bool playBounceAnimation = false, bool playAnimation = false, bool playParticle = false)
         {
@@ -425,21 +428,20 @@ namespace Watermelon.SquadShooter
             var currentStage = gunUpgrade.GetCurrentStage();
 
             // Check if graphics isn't exist already
-            if (gunPrefabGraphics != currentStage.WeaponPrefab)
+            if (gunPrefabReference == null || gunPrefabReference.AssetGUID != currentStage.WeaponPrefab.AssetGUID)
             {
                 // Store prefab link
-                gunPrefabGraphics = currentStage.WeaponPrefab;
+                gunPrefabReference = currentStage.WeaponPrefab;
 
                 if (gunBehaviour != null)
                 {
                     gunBehaviour.OnGunUnloaded();
-
                     Destroy(gunBehaviour.gameObject);
                 }
 
-                if (gunPrefabGraphics != null)
+                if (gunPrefabReference != null && gunPrefabReference.RuntimeKeyIsValid())
                 {
-                    GameObject gunObject = Instantiate(gunPrefabGraphics);
+                    GameObject gunObject = gunPrefabReference.InstantiateAsync().WaitForCompletion();
                     gunObject.SetActive(true);
 
                     gunBehaviour = gunObject.GetComponent<BaseGunBehavior>();
@@ -927,19 +929,25 @@ namespace Watermelon.SquadShooter
         public void Jump()
         {
             graphics.Jump();
-            gunBehaviour.transform.localScale = Vector3.zero;
-            gunBehaviour.gameObject.SetActive(false);
+            if (gunBehaviour != null)
+            {
+                gunBehaviour.transform.localScale = Vector3.zero;
+                gunBehaviour.gameObject.SetActive(false);
+            }
         }
 
         public void SpawnWeapon()
         {
-            if (gunBehaviour.NeedsRig)
-                graphics.EnableRig();
-            else
-                graphics.DisableRig();
+            if (gunBehaviour != null)
+            {
+                if (gunBehaviour.NeedsRig)
+                    graphics.EnableRig();
+                else
+                    graphics.DisableRig();
 
-            gunBehaviour.gameObject.SetActive(true);
-            gunBehaviour.DOScale(1, 0.2f).SetCustomEasing(Ease.GetCustomEasingFunction("BackOutLight"));
+                gunBehaviour.gameObject.SetActive(true);
+                gunBehaviour.DOScale(1, 0.2f).SetCustomEasing(Ease.GetCustomEasingFunction("BackOutLight"));
+            }
         }
 
 

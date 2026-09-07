@@ -15,80 +15,56 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_Data:
     m_SerializedData: []
-  m_GUID: ed957f5c15e6cbf44978b4b821403117
+  m_GUID: e9ed9cbb95e1497448aba2608d5d500b
   m_SerializeEntries:
-  - m_GUID: 0dbf0192706e97b459bd1d7422a170b6
-    m_Address: Levi
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e7ada6aba0ba3de49b2cb73cdcb9659d
-    m_Address: Nieh
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 9b5eb08d300f7ee4da6cb1c619d4ed03
-    m_Address: NinNin
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 64787e0afa85a8c4184ebff97b6bad1b
-    m_Address: Gun Lava
+    m_Address: Assets/Project Data/Game/Prefabs/Weapons/Gun Lava.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: baac439279f60604591914c7a0c8519d
-    m_Address: Lava Bullet
+    m_Address: Assets/Project Data/Game/Prefabs/Weapons/Bullets/Lava Bullet.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 60d8b7dff4bbbbc4db793104d2c025a1
-    m_Address: Gun Minigun
+    m_Address: Assets/Project Data/Game/Prefabs/Weapons/Gun Minigun.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 4d46a88382f3c124c93b73ffeb016270
-    m_Address: Projectile 3 black fire
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 557f547da59937549b446b57778d73bb
-    m_Address: Minigun Bullet
+  - m_GUID: dc444baa8fa519c4fb49319e0150187b
+    m_Address: Assets/Project Data/Game/Prefabs/Weapons/Bullets/Projectile 3 black
+      fire.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 853a1aed120851c4e8fa2018832dcad8
-    m_Address: Gun Shotgun
+    m_Address: Assets/Project Data/Game/Prefabs/Weapons/Gun Shotgun.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ef5f452bc7badaf4b9c9b86adda600c7
-    m_Address: Shotgun Bullet
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 4449f42cfa8c43f4db1af66585d070bc
-    m_Address: Sword
+    m_Address: Assets/Project Data/Game/Prefabs/Weapons/Bullets/Shotgun Bullet.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7dcb1c770f6ca3049901423a2518a007
-    m_Address: Gun Tesla
+    m_Address: Assets/Project Data/Game/Prefabs/Weapons/Gun Tesla.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6d6abdbe3a5c2054996cd0238671e0a6
-    m_Address: Tesla Bullet
+    m_Address: Assets/Project Data/Game/Prefabs/Weapons/Bullets/Tesla Bullet.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 588fca0d2edef9146bf031b23032112c
-    m_Address: Drone_Locator
+    m_Address: Assets/Project Data/Game/Prefabs/Drone/Drone_Locator.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4bc7f675979ba1445858202f430d4c36
-    m_Address: DroneBullet
+    m_Address: Assets/Project Data/Game/Prefabs/Drone/DroneBullet.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

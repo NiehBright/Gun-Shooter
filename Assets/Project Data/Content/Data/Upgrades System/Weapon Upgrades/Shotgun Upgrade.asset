@@ -18,15 +18,13 @@ MonoBehaviour:
   - price: 0
     currencyType: 0
     previewSprite: {fileID: 0}
-    weaponPrefab: {fileID: 0}
-    weaponPrefabRef:
-      m_AssetGUID: 
+    weaponPrefab:
+      m_AssetGUID: 853a1aed120851c4e8fa2018832dcad8
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
-    bulletPrefab: {fileID: 0}
-    bulletPrefabRef:
-      m_AssetGUID: 
+    bulletPrefab:
+      m_AssetGUID: ef5f452bc7badaf4b9c9b86adda600c7
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
@@ -47,16 +45,12 @@ MonoBehaviour:
   - price: 5
     currencyType: 0
     previewSprite: {fileID: 0}
-    weaponPrefab: {fileID: 6347890837037930244, guid: 853a1aed120851c4e8fa2018832dcad8,
-      type: 3}
-    weaponPrefabRef:
+    weaponPrefab:
       m_AssetGUID: 853a1aed120851c4e8fa2018832dcad8
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
-    bulletPrefab: {fileID: 7995167561492624291, guid: ef5f452bc7badaf4b9c9b86adda600c7,
-      type: 3}
-    bulletPrefabRef:
+    bulletPrefab:
       m_AssetGUID: ef5f452bc7badaf4b9c9b86adda600c7
       m_SubObjectName: 
       m_SubObjectType: 
@@ -78,16 +72,12 @@ MonoBehaviour:
   - price: 120
     currencyType: 0
     previewSprite: {fileID: 0}
-    weaponPrefab: {fileID: 6347890837037930244, guid: 853a1aed120851c4e8fa2018832dcad8,
-      type: 3}
-    weaponPrefabRef:
+    weaponPrefab:
       m_AssetGUID: 853a1aed120851c4e8fa2018832dcad8
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
-    bulletPrefab: {fileID: 7995167561492624291, guid: ef5f452bc7badaf4b9c9b86adda600c7,
-      type: 3}
-    bulletPrefabRef:
+    bulletPrefab:
       m_AssetGUID: ef5f452bc7badaf4b9c9b86adda600c7
       m_SubObjectName: 
       m_SubObjectType: 
@@ -109,16 +99,12 @@ MonoBehaviour:
   - price: 130
     currencyType: 0
     previewSprite: {fileID: 0}
-    weaponPrefab: {fileID: 6347890837037930244, guid: 853a1aed120851c4e8fa2018832dcad8,
-      type: 3}
-    weaponPrefabRef:
+    weaponPrefab:
       m_AssetGUID: 853a1aed120851c4e8fa2018832dcad8
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
-    bulletPrefab: {fileID: 7995167561492624291, guid: ef5f452bc7badaf4b9c9b86adda600c7,
-      type: 3}
-    bulletPrefabRef:
+    bulletPrefab:
       m_AssetGUID: ef5f452bc7badaf4b9c9b86adda600c7
       m_SubObjectName: 
       m_SubObjectType: 
@@ -140,16 +126,12 @@ MonoBehaviour:
   - price: 150
     currencyType: 0
     previewSprite: {fileID: 0}
-    weaponPrefab: {fileID: 6347890837037930244, guid: 853a1aed120851c4e8fa2018832dcad8,
-      type: 3}
-    weaponPrefabRef:
+    weaponPrefab:
       m_AssetGUID: 853a1aed120851c4e8fa2018832dcad8
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
-    bulletPrefab: {fileID: 7995167561492624291, guid: ef5f452bc7badaf4b9c9b86adda600c7,
-      type: 3}
-    bulletPrefabRef:
+    bulletPrefab:
       m_AssetGUID: ef5f452bc7badaf4b9c9b86adda600c7
       m_SubObjectName: 
       m_SubObjectType: 
@@ -171,16 +153,12 @@ MonoBehaviour:
   - price: 170
     currencyType: 0
     previewSprite: {fileID: 0}
-    weaponPrefab: {fileID: 6347890837037930244, guid: 853a1aed120851c4e8fa2018832dcad8,
-      type: 3}
-    weaponPrefabRef:
+    weaponPrefab:
       m_AssetGUID: 853a1aed120851c4e8fa2018832dcad8
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
-    bulletPrefab: {fileID: 7995167561492624291, guid: ef5f452bc7badaf4b9c9b86adda600c7,
-      type: 3}
-    bulletPrefabRef:
+    bulletPrefab:
       m_AssetGUID: ef5f452bc7badaf4b9c9b86adda600c7
       m_SubObjectName: 
       m_SubObjectType: 
@@ -202,16 +180,12 @@ MonoBehaviour:
   - price: 300
     currencyType: 0
     previewSprite: {fileID: 0}
-    weaponPrefab: {fileID: 6347890837037930244, guid: 853a1aed120851c4e8fa2018832dcad8,
-      type: 3}
-    weaponPrefabRef:
+    weaponPrefab:
       m_AssetGUID: 853a1aed120851c4e8fa2018832dcad8
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
-    bulletPrefab: {fileID: 7995167561492624291, guid: ef5f452bc7badaf4b9c9b86adda600c7,
-      type: 3}
-    bulletPrefabRef:
+    bulletPrefab:
       m_AssetGUID: ef5f452bc7badaf4b9c9b86adda600c7
       m_SubObjectName: 
       m_SubObjectType: 
@@ -233,16 +207,12 @@ MonoBehaviour:
   - price: 310
     currencyType: 0
     previewSprite: {fileID: 0}
-    weaponPrefab: {fileID: 6347890837037930244, guid: 853a1aed120851c4e8fa2018832dcad8,
-      type: 3}
-    weaponPrefabRef:
+    weaponPrefab:
       m_AssetGUID: 853a1aed120851c4e8fa2018832dcad8
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
-    bulletPrefab: {fileID: 7995167561492624291, guid: ef5f452bc7badaf4b9c9b86adda600c7,
-      type: 3}
-    bulletPrefabRef:
+    bulletPrefab:
       m_AssetGUID: ef5f452bc7badaf4b9c9b86adda600c7
       m_SubObjectName: 
       m_SubObjectType: 
@@ -264,16 +234,12 @@ MonoBehaviour:
   - price: 335
     currencyType: 0
     previewSprite: {fileID: 0}
-    weaponPrefab: {fileID: 6347890837037930244, guid: 853a1aed120851c4e8fa2018832dcad8,
-      type: 3}
-    weaponPrefabRef:
+    weaponPrefab:
       m_AssetGUID: 853a1aed120851c4e8fa2018832dcad8
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
-    bulletPrefab: {fileID: 7995167561492624291, guid: ef5f452bc7badaf4b9c9b86adda600c7,
-      type: 3}
-    bulletPrefabRef:
+    bulletPrefab:
       m_AssetGUID: ef5f452bc7badaf4b9c9b86adda600c7
       m_SubObjectName: 
       m_SubObjectType: 
@@ -295,16 +261,12 @@ MonoBehaviour:
   - price: 420
     currencyType: 0
     previewSprite: {fileID: 0}
-    weaponPrefab: {fileID: 6347890837037930244, guid: 853a1aed120851c4e8fa2018832dcad8,
-      type: 3}
-    weaponPrefabRef:
+    weaponPrefab:
       m_AssetGUID: 853a1aed120851c4e8fa2018832dcad8
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
-    bulletPrefab: {fileID: 7995167561492624291, guid: ef5f452bc7badaf4b9c9b86adda600c7,
-      type: 3}
-    bulletPrefabRef:
+    bulletPrefab:
       m_AssetGUID: ef5f452bc7badaf4b9c9b86adda600c7
       m_SubObjectName: 
       m_SubObjectType: 
@@ -326,16 +288,12 @@ MonoBehaviour:
   - price: 500
     currencyType: 0
     previewSprite: {fileID: 0}
-    weaponPrefab: {fileID: 6347890837037930244, guid: 853a1aed120851c4e8fa2018832dcad8,
-      type: 3}
-    weaponPrefabRef:
+    weaponPrefab:
       m_AssetGUID: 853a1aed120851c4e8fa2018832dcad8
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
-    bulletPrefab: {fileID: 7995167561492624291, guid: ef5f452bc7badaf4b9c9b86adda600c7,
-      type: 3}
-    bulletPrefabRef:
+    bulletPrefab:
       m_AssetGUID: ef5f452bc7badaf4b9c9b86adda600c7
       m_SubObjectName: 
       m_SubObjectType: 

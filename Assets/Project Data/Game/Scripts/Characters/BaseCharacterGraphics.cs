@@ -225,7 +225,9 @@ namespace Watermelon.SquadShooter
             else
                 mainRig.weight = 0.0f;
 
-            characterBehaviour.Weapon.gameObject.SetActive(true);
+            if (characterBehaviour.Weapon != null)
+                characterBehaviour.Weapon.gameObject.SetActive(true);
+            
             characterAnimator.enabled = true;
         }
 

@@ -70,15 +70,19 @@ namespace Watermelon.SquadShooter
             StartExhaust();
 
             // Init Pools
-            if (currentStage.BulletPrefab != null)
+            if (currentStage.BulletPrefab != null && currentStage.BulletPrefab.RuntimeKeyIsValid())
             {
-                if (PoolManager.PoolExists(currentStage.BulletPrefab.name))
+                GameObject bulletObj = currentStage.BulletPrefab.LoadAssetAsync().WaitForCompletion();
+                if (bulletObj != null)
                 {
-                    bulletPool = PoolManager.GetPoolByName(currentStage.BulletPrefab.name);
-                }
-                else
-                {
-                    bulletPool = PoolManager.AddPool(new PoolSettings(currentStage.BulletPrefab.name, currentStage.BulletPrefab, 10, true));
+                    if (PoolManager.PoolExists(bulletObj.name))
+                    {
+                        bulletPool = PoolManager.GetPoolByName(bulletObj.name);
+                    }
+                    else
+                    {
+                        bulletPool = PoolManager.AddPool(new PoolSettings(bulletObj.name, bulletObj, 10, true));
+                    }
                 }
             }
 
