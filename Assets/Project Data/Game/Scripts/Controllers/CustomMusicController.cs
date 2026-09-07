@@ -1,4 +1,4 @@
-ï»¿using UnityEngine;
+using UnityEngine;
 
 namespace Watermelon
 {
@@ -49,20 +49,20 @@ namespace Watermelon
 
 // Changelog
 // v 0.3.2
-// â€¢ Added audio listener creation method
+// • Added audio listener creation method
 // v 0.3.2
-// â€¢ Added volume float
-// â€¢ AudioSettings variable removed (now sounds, music and vibrations can be reached directly)
+// • Added volume float
+// • AudioSettings variable removed (now sounds, music and vibrations can be reached directly)
 // v 0.3.1
-// â€¢ Added OnVolumeChanged callback
-// â€¢ Renamed AudioSettings to Settings
+// • Added OnVolumeChanged callback
+// • Renamed AudioSettings to Settings
 // v 0.3
-// â€¢ Added IsAudioModuleEnabled method
-// â€¢ Added IsVibrationModuleEnabled method
-// â€¢ Removed VibrationToggleButton class
+// • Added IsAudioModuleEnabled method
+// • Added IsVibrationModuleEnabled method
+// • Removed VibrationToggleButton class
 // v 0.2
-// â€¢ Removed MODULE_VIBRATION
+// • Removed MODULE_VIBRATION
 // v 0.1
-// â€¢ Added basic version
-// â€¢ Added support of new initialization
-// â€¢ Music and Sound volume is combined
+// • Added basic version
+// • Added support of new initialization
+// • Music and Sound volume is combined

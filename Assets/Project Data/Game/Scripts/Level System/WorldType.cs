@@ -1,4 +1,4 @@
-﻿namespace Watermelon.LevelSystem
+namespace Watermelon.LevelSystem
 {
     [System.Serializable]
     public enum WorldType

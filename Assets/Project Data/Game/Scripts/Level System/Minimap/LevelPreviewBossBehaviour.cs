@@ -1,4 +1,4 @@
-﻿namespace Watermelon.SquadShooter
+namespace Watermelon.SquadShooter
 {
     public class LevelPreviewBossBehaviour : LevelPreviewBaseBehaviour
     {

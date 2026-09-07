@@ -12,7 +12,7 @@ namespace Watermelon.SquadShooter
         private const string TARGET_PREFAB_PATH = "Assets/Project Data/Game/Prefabs/UI/Pages/UI Loading Screen.prefab";
         private const string SCENE_PATH = "Assets/Project Data/Game/Scenes/Game.unity";
 
-        [MenuItem("Tools/Squad Shooter/Loading Screen Builder")]
+        [MenuItem("Tools/Gun Shooter/Loading Screen Builder")]
         public static void ShowWindow()
         {
             GetWindow<LoadingScreenBuilder>("Loading Screen Builder").Show();

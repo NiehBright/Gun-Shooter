@@ -1,4 +1,4 @@
-﻿namespace Watermelon
+namespace Watermelon
 {
     public enum TutorialID
     {

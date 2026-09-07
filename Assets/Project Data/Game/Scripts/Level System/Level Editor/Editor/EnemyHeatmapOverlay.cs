@@ -15,7 +15,7 @@ namespace Watermelon.SquadShooter
     public static class EnemyHeatmapOverlay
     {
         private const string PREF_KEY    = "LevelEditor_HeatmapEnabled";
-        private const string MENU_PATH   = "Tools/Squad Shooter/Toggle Enemy Heatmap";
+        private const string MENU_PATH   = "Tools/Gun Shooter/Toggle Enemy Heatmap";
         private const float  RADIUS      = 2.5f;
         private const float  ALPHA_BASE  = 0.18f;
 

@@ -22,7 +22,7 @@ namespace Watermelon.SquadShooter
 
         private Vector3 currentVelocity;
         [SerializeField] float smoothTime = 0.2f;
-        [SerializeField] float followRadius = 3f; // Max distance from player
+
 
         private bool exhaustPlaying = false;
         
@@ -136,7 +136,14 @@ namespace Watermelon.SquadShooter
         {
             if (player == null || CharacterBehaviour.IsDead) return;
 
-            currentEnemyTarget = player.ClosestEnemyBehaviour;
+            if (player.IsAttackingAllowed)
+            {
+                currentEnemyTarget = player.ClosestEnemyBehaviour;
+            }
+            else
+            {
+                currentEnemyTarget = null;
+            }
 
             Vector3 targetPosition = GetTargetPosition(currentEnemyTarget);
 
@@ -173,14 +180,10 @@ namespace Watermelon.SquadShooter
                     transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
                 }
 
-                // Check shooting range and fire rate
-                float distanceToEnemy = Vector3.Distance(transform.position, currentEnemyTarget.transform.position);
-                if (distanceToEnemy <= currentStage.RangeRadius)
+                // Check fire rate and shoot
+                if (Time.time - lastShootTime >= (1f / currentStage.FireRate))
                 {
-                    if (Time.time - lastShootTime >= (1f / currentStage.FireRate))
-                    {
-                        Shoot();
-                    }
+                    Shoot();
                 }
             }
             else
