@@ -137,10 +137,13 @@ namespace Watermelon.LevelSystem
             LoadLevel(levelSave.WorldIndex, levelSave.LevelIndex);
         }
 
-        public static void LoadLevel(int worldIndex, int levelIndex)
+        public static void LoadLevel(int worldIndex, int levelIndex, System.Action onLoaded = null)
         {
             if (isLevelLoaded)
+            {
+                onLoaded?.Invoke();
                 return;
+            }
 
             isLevelLoaded = true;
             isExitEntered = false;
@@ -175,18 +178,17 @@ namespace Watermelon.LevelSystem
             // Load first room
             LoadRoom(currentRoomIndex, () => 
             {
-                if (levelSave.LevelIndex != 0 || levelSave.WorldIndex > 0)
-                {
-                    characterBehaviour.DisableAgent();
-                    LoadPedestal();
-                }
+                onLoaded?.Invoke();
             });
         }
 
-        public static void LoadLobby()
+        public static void LoadLobby(System.Action onLoaded = null)
         {
             if (isLevelLoaded)
+            {
+                onLoaded?.Invoke();
                 return;
+            }
 
             IsLobbyMode = true;
             CharacterBehaviour.IsLobbyModeActive = true;
@@ -239,6 +241,8 @@ namespace Watermelon.LevelSystem
                 // Đảm bảo GraphicRaycaster của UIGame được bật (tránh UI bị khoá tương tác)
                 if (uiGame.GraphicRaycaster != null)
                     uiGame.GraphicRaycaster.enabled = true;
+
+                onLoaded?.Invoke();
             });
         }
 
@@ -247,7 +251,14 @@ namespace Watermelon.LevelSystem
             if (!isLevelLoaded)
                 return;
 
+            if (loadedLevel != null)
+                loadedLevel.OnLevelUnloaded();
+
             ActiveRoom.Unload();
+
+            if (activeWorldData != null)
+                activeWorldData.UnloadWorld();
+
             isLevelLoaded = false;
         }
 
@@ -718,9 +729,57 @@ namespace Watermelon.LevelSystem
 
         public static void OnGameStarted(bool immediately = false)
         {
+            // Tạm thời vô hiệu hóa di chuyển của nhân vật trong lúc chuyển tiếp
+            Control.DisableMovementControl();
+            if (characterBehaviour != null)
+                characterBehaviour.DisableAgent();
+
+            System.Action doTransition = () =>
+            {
+                AudioClip musicClip = AudioController.Music.gameMusic;
+                if (activeWorldData != null && activeWorldData.UniqueWorldMusicClip != null)
+                    musicClip = activeWorldData.UniqueWorldMusicClip;
+
+                CustomMusicController.ToggleMusic(musicClip, 0.3f, 0.3f);
+
+                isGameplayActive = true;
+
+                CameraController.SetCameraShiftState(true);
+                CameraController.EnableCamera(CameraType.Main);
+
+                lastLevelMoneyCollected = 0;
+                uiGame.UpdateCoinsText(CurrenciesController.Get(CurrencyType.Coins) + lastLevelMoneyCollected);
+
+                if (CurrentLevelData != null && CurrentLevelData.Rooms != null && CurrentLevelData.Rooms.Length > currentRoomIndex)
+                    characterBehaviour.SetPosition(CurrentLevelData.Rooms[currentRoomIndex].SpawnPoint);
+
+                Tween.NextFrame(() =>
+                {
+                    characterBehaviour.Activate();
+                    characterBehaviour.ActivateMovement();
+                    characterBehaviour.ActivateAgent();
+                });
+
+                // Ẩn Menu
+                uiMainMenu.DisableCanvas();
+                UIController.HidePage<UIMainMenu>(() =>
+                {
+                    UIController.ShowPage<UIGame>();
+                    Control.EnableMovementControl();
+                    StartGameplay();
+                });
+            };
+
             if (immediately)
             {
-                StartGamePlayTransition();
+                UnloadLobby();
+                IsLobbyMode = false;
+                CharacterBehaviour.IsLobbyModeActive = false;
+                uiGame.SetLobbyMode(false);
+                LoadLevel(levelSave.WorldIndex, levelSave.LevelIndex, () =>
+                {
+                    doTransition();
+                });
                 return;
             }
 
@@ -728,69 +787,30 @@ namespace Watermelon.LevelSystem
             UILoadingScreen loadingScreen = Object.FindAnyObjectByType<UILoadingScreen>(FindObjectsInactive.Include);
             if (loadingScreen != null)
             {
-                loadingScreen.gameObject.SetActive(true);
-                // Tạm thời vô hiệu hóa di chuyển của nhân vật trong lúc chuyển tiếp
-                Control.DisableMovementControl();
-                characterBehaviour.DisableAgent();
+                loadingScreen.ShowInstant("Đang nạp màn chơi...");
 
-                loadingScreen.ShowLoading(1.2f, 
-                onHalfWay: () =>
+                UnloadLobby();
+                IsLobbyMode = false;
+                CharacterBehaviour.IsLobbyModeActive = false;
+                uiGame.SetLobbyMode(false);
+
+                LoadLevel(levelSave.WorldIndex, levelSave.LevelIndex, () =>
                 {
-                    // 1. Giải phóng Sảnh chờ (Lobby Map)
-                    UnloadLobby();
-
-                    // 2. Tải bản đồ màn chơi thực tế
-                    IsLobbyMode = false;
-                    CharacterBehaviour.IsLobbyModeActive = false;
-
-                    // Load level thực tế dựa trên lưu trữ
-                    LoadLevel(levelSave.WorldIndex, levelSave.LevelIndex);
-                    
-                    // Khôi phục giao diện HUD chiến đấu đầy đủ
-                    uiGame.SetLobbyMode(false);
-                }, 
-                onComplete: () =>
-                {
-                    // 3. Hoàn tất: Kích hoạt chơi nhạc nền game và cho phép chiến đấu
-                    AudioClip musicClip = AudioController.Music.gameMusic;
-                    if (activeWorldData.UniqueWorldMusicClip != null)
-                        musicClip = activeWorldData.UniqueWorldMusicClip;
-
-                    CustomMusicController.ToggleMusic(musicClip, 0.3f, 0.3f);
-
-                    isGameplayActive = true;
-
-                    CameraController.SetCameraShiftState(true);
-                    CameraController.EnableCamera(CameraType.Main);
-
-                    characterBehaviour.SetPosition(CurrentLevelData.Rooms[currentRoomIndex].SpawnPoint);
-                    Tween.NextFrame(() =>
-                    {
-                        characterBehaviour.Activate();
-                        characterBehaviour.ActivateMovement();
-                        characterBehaviour.ActivateAgent();
-                    });
-
-                    // Ẩn Menu
-                    uiMainMenu.DisableCanvas();
-                    UIController.HidePage<UIMainMenu>(() =>
-                    {
-                        UIController.ShowPage<UIGame>();
-                        Control.EnableMovementControl();
-                        StartGameplay();
-                    });
+                    doTransition();
+                    loadingScreen.FinishLoading();
                 });
             }
             else
             {
-                // Fallback nếu chưa cấu hình Loading Screen
                 UnloadLobby();
                 IsLobbyMode = false;
                 CharacterBehaviour.IsLobbyModeActive = false;
-                LoadLevel(levelSave.WorldIndex, levelSave.LevelIndex);
                 uiGame.SetLobbyMode(false);
-                
-                StartGamePlayTransition();
+
+                LoadLevel(levelSave.WorldIndex, levelSave.LevelIndex, () =>
+                {
+                    doTransition();
+                });
             }
         }
 

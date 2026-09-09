@@ -35,11 +35,25 @@ namespace Watermelon.SquadShooter
             GameObject bulletObj = null;
             if (bulletRef != null && bulletRef.RuntimeKeyIsValid())
             {
-                bulletObj = bulletRef.LoadAssetAsync().WaitForCompletion();
+                if (bulletRef.Asset != null)
+                {
+                    bulletObj = bulletRef.Asset as GameObject;
+                }
+                else if (bulletRef.OperationHandle.IsValid())
+                {
+                    bulletObj = bulletRef.OperationHandle.Convert<GameObject>().Result;
+                }
+                else
+                {
+                    bulletObj = bulletRef.LoadAssetAsync().WaitForCompletion();
+                }
             }
 
-            bulletPool = new Pool(new PoolSettings(bulletObj.name, bulletObj, 5, true));
-            bulletPool.Initialize();
+            if (bulletObj != null && bulletPool == null)
+            {
+                bulletPool = new Pool(new PoolSettings(bulletObj.name, bulletObj, 5, true, PoolManager.ObjectsContainerTransform));
+                bulletPool.Initialize();
+            }
 
             shootingRadius = characterBehaviour.EnemyDetector.DetectorRadius;
 

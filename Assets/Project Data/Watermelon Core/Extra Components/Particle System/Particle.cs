@@ -35,7 +35,7 @@ namespace Watermelon
             isInitialised = true;
 
             // Create particle pool
-            particlePool = new Pool(new PoolSettings(particlePrefab.name, particlePrefab, 0, true));
+            particlePool = new Pool(new PoolSettings(particlePrefab.name, particlePrefab, 0, true, PoolManager.ObjectsContainerTransform));
             particlePool.Initialize();
 
         }

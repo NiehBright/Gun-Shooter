@@ -609,7 +609,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraBrain: {fileID: 1929836243}
-  firstCamera: 0
+  firstCamera: 1
   virtualCameras:
   - cameraType: 0
     virtualCamera: {fileID: 2072566471}

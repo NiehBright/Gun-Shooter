@@ -232,7 +232,7 @@ namespace Watermelon.SquadShooter
                 borderRect.offsetMax = new Vector2(-3, -3);
                 var borderImg = borderObj.AddComponent<Image>();
                 borderImg.color = Color.clear;
-                var outline = borderObj.AddComponent<Outline>();
+                var outline = borderObj.AddComponent<UnityEngine.UI.Outline>();
                 outline.effectColor = new Color(0.85f, 0.7f, 0.25f, 1f); // Gold outline
                 outline.effectDistance = new Vector2(3, 3);
             }

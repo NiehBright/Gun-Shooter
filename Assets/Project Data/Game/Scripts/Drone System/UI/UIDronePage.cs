@@ -4,7 +4,7 @@ using Watermelon.Upgrades;
 
 namespace Watermelon.SquadShooter
 {
-    public class UIDronePage : UIUpgradesAbstractPage<DronePanelUI, DroneType>, IDragHandler
+    public class UIDronePage : UIUpgradesAbstractPage<DronePanelUI, DroneType>, IDragHandler, IEndDragHandler
     {
         protected override int SelectedIndex => Mathf.Clamp(DronesController.SelectedDroneIndex, 0, int.MaxValue);
 
@@ -67,6 +67,8 @@ namespace Watermelon.SquadShooter
         }
 
         private Quaternion originalDroneRotation;
+        private Quaternion showcaseDroneRotation;
+        private TweenCase resetDroneRotationTweenCase;
         private Quaternion originalPlayerRotation;
         private Vector3 originalDronePosition;
         private bool isDroneCameraActive = false;
@@ -97,23 +99,53 @@ namespace Watermelon.SquadShooter
                     isDroneCameraActive = true;
                     characterBehaviour.CurrentDrone.IsUIMode = true;
                     originalDroneRotation = characterBehaviour.CurrentDrone.transform.rotation;
+                    showcaseDroneRotation = originalDroneRotation;
                     originalDronePosition = characterBehaviour.CurrentDrone.transform.position;
                     originalPlayerRotation = characterBehaviour.transform.rotation;
 
-                    // Di chuyen Drone den ngay vi tri cua nguoi choi + 1 ty chieu cao (de no o ngay chinh giua man hinh giong nguoi choi)
-                    Vector3 showcasePos = characterBehaviour.transform.position + Vector3.up * 1.0f;
-                    characterBehaviour.CurrentDrone.transform.position = showcasePos;
-
-                    Vector3 defaultCamPos = CameraController.MainCamera.transform.position;
-                    Vector3 dirToCam = defaultCamPos - showcasePos;
-                    dirToCam.y = 0;
-                    if (dirToCam.sqrMagnitude > 0.01f)
+                    // Nếu Drone có CameraTarget → Camera sẽ đặt chính xác tại CameraTarget và nhìn thẳng vào Drone
+                    if (characterBehaviour.CurrentDrone.CameraTarget != null)
                     {
-                        Vector3 lookDir = dirToCam.normalized;
-                        characterBehaviour.CurrentDrone.transform.rotation = Quaternion.LookRotation(lookDir);
-                        
-                        Vector3 right = Vector3.Cross(Vector3.up, lookDir).normalized;
-                        CameraController.EnterCharacterSelection(showcasePos, lookDir, right, Vector3.up);
+                        Transform camTarget = characterBehaviour.CurrentDrone.CameraTarget;
+                        Vector3 dronePos = characterBehaviour.CurrentDrone.transform.position;
+                        Vector3 camPos = camTarget.position;
+
+                        // Huong nhin tu CameraTarget den Drone
+                        Vector3 dirToDrone = dronePos - camPos;
+                        float dist = dirToDrone.magnitude;
+                        Vector3 forwardDir = dist > 0.001f ? dirToDrone.normalized : Vector3.forward;
+
+                        // Vector ben phai vuong goc voi huong nhin
+                        Vector3 camRight = Vector3.Cross(Vector3.up, forwardDir).normalized;
+
+                        // Do lech ngang de Drone hien thi o ben trai man hinh (tranh che khuat boi UI ben phai)
+                        float horizontalOffset = Mathf.Max(0.6f, dist * 0.35f);
+
+                        // Dich vi tri camera va tam nhin sang phai -> Drone se nam o nua ben trai man hinh
+                        Vector3 adjustedCamPos = camPos + camRight * (horizontalOffset * 0.4f);
+                        Vector3 lookAtPoint = dronePos + camRight * horizontalOffset;
+
+                        Quaternion targetRot = Quaternion.LookRotation((lookAtPoint - adjustedCamPos).normalized);
+                        CameraController.MoveCameraTo(adjustedCamPos, targetRot);
+                    }
+                    else
+                    {
+                        // Fallback: Dùng vị trí mặc định (vị trí nhân vật + offset)
+                        Vector3 showcasePos = characterBehaviour.transform.position + Vector3.up * 1.0f;
+                        characterBehaviour.CurrentDrone.transform.position = showcasePos;
+
+                        Vector3 defaultCamPos = CameraController.MainCamera.transform.position;
+                        Vector3 dirToCam = defaultCamPos - showcasePos;
+                        dirToCam.y = 0;
+                        if (dirToCam.sqrMagnitude > 0.01f)
+                        {
+                            Vector3 lookDir = dirToCam.normalized;
+                            characterBehaviour.CurrentDrone.transform.rotation = Quaternion.LookRotation(lookDir);
+                            showcaseDroneRotation = characterBehaviour.CurrentDrone.transform.rotation;
+                            
+                            Vector3 right = Vector3.Cross(Vector3.up, lookDir).normalized;
+                            CameraController.EnterCharacterSelection(showcasePos, lookDir, right, Vector3.up);
+                        }
                     }
                 }
 
@@ -130,6 +162,7 @@ namespace Watermelon.SquadShooter
             // Disable ScrollRect when page hides to prevent "Invalid AABB inAABB"
             if (scrollView != null) scrollView.enabled = false;
 
+            resetDroneRotationTweenCase.KillActive();
             base.PlayHideAnimation();
 
             CharacterBehaviour characterBehaviour = CharacterBehaviour.GetBehaviour();
@@ -178,9 +211,27 @@ namespace Watermelon.SquadShooter
             CharacterBehaviour characterBehaviour = CharacterBehaviour.GetBehaviour();
             if (characterBehaviour != null && characterBehaviour.CurrentDrone != null && isDroneCameraActive)
             {
+                resetDroneRotationTweenCase.KillActive();
                 // Xoay drone theo truc Y
                 float rotationSpeed = -0.5f;
                 characterBehaviour.CurrentDrone.transform.Rotate(Vector3.up, eventData.delta.x * rotationSpeed, Space.World);
+            }
+        }
+
+        public void OnEndDrag(PointerEventData eventData)
+        {
+            CharacterBehaviour characterBehaviour = CharacterBehaviour.GetBehaviour();
+            if (characterBehaviour != null && characterBehaviour.CurrentDrone != null && isDroneCameraActive)
+            {
+                Quaternion startRot = characterBehaviour.CurrentDrone.transform.rotation;
+                resetDroneRotationTweenCase.KillActive();
+                resetDroneRotationTweenCase = Tween.DoFloat(0f, 1f, 0.4f, (float t) =>
+                {
+                    if (characterBehaviour != null && characterBehaviour.CurrentDrone != null)
+                    {
+                        characterBehaviour.CurrentDrone.transform.rotation = Quaternion.Slerp(startRot, showcaseDroneRotation, t);
+                    }
+                }).SetEasing(Ease.Type.QuadOut);
             }
         }
 

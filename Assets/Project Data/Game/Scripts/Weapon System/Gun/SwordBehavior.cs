@@ -25,10 +25,25 @@ namespace Watermelon.SquadShooter
             GameObject slashPrefab = null;
             if (slashRef != null && slashRef.RuntimeKeyIsValid())
             {
-                slashPrefab = slashRef.LoadAssetAsync().WaitForCompletion();
+                if (slashRef.Asset != null)
+                {
+                    slashPrefab = slashRef.Asset as GameObject;
+                }
+                else if (slashRef.OperationHandle.IsValid())
+                {
+                    slashPrefab = slashRef.OperationHandle.Convert<GameObject>().Result;
+                }
+                else
+                {
+                    slashPrefab = slashRef.LoadAssetAsync().WaitForCompletion();
+                }
             }
-            slashPool = new Pool(new PoolSettings(slashPrefab.name, slashPrefab, 5, true));
-            slashPool.Initialize();
+
+            if (slashPrefab != null && slashPool == null)
+            {
+                slashPool = new Pool(new PoolSettings(slashPrefab.name, slashPrefab, 5, true, PoolManager.ObjectsContainerTransform));
+                slashPool.Initialize();
+            }
 
             RecalculateDamage();
         }

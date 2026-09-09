@@ -14,6 +14,14 @@ namespace Watermelon.SquadShooter
         [SerializeField] ParticleSystem exhaustVFX1;
         [SerializeField] ParticleSystem exhaustVFX2;
 
+        [Header("Camera (Tạo 1 GameObject con đặt ở vị trí Camera muốn nhìn vào Drone)")]
+        [SerializeField] Transform cameraTarget;
+        /// <summary>
+        /// Vị trí mà Camera sẽ đặt tại khi mở UI Drone. 
+        /// Nếu null, camera sẽ dùng vị trí mặc định.
+        /// </summary>
+        public Transform CameraTarget => cameraTarget;
+
         private CharacterBehaviour player;
         private BaseDroneUpgradeStage currentStage;
         
@@ -47,6 +55,16 @@ namespace Watermelon.SquadShooter
                 r.enabled = true;
                 r.gameObject.SetActive(true);
             }
+
+            // Them vien sang nhe (hoi trang) cho Drone
+            var outline = GetComponent<Outline>();
+            if (outline == null)
+            {
+                outline = gameObject.AddComponent<Outline>();
+            }
+            outline.OutlineMode = Outline.Mode.OutlineVisible;
+            outline.OutlineColor = new Color(0.9f, 0.92f, 0.95f, 1f);
+            outline.OutlineWidth = 1.9f;
             
             // Auto-find exhaust VFX by name if not assigned in Inspector
             if (exhaustVFX1 == null || exhaustVFX2 == null)
@@ -72,7 +90,17 @@ namespace Watermelon.SquadShooter
             // Init Pools
             if (currentStage.BulletPrefab != null && currentStage.BulletPrefab.RuntimeKeyIsValid())
             {
-                GameObject bulletObj = currentStage.BulletPrefab.LoadAssetAsync().WaitForCompletion();
+                // Kiểm tra xem AssetReference đã được load chưa để tránh warning "already loaded"
+                GameObject bulletObj;
+                if (currentStage.BulletPrefab.Asset != null)
+                {
+                    bulletObj = (GameObject)currentStage.BulletPrefab.Asset;
+                }
+                else
+                {
+                    bulletObj = currentStage.BulletPrefab.LoadAssetAsync().WaitForCompletion();
+                }
+
                 if (bulletObj != null)
                 {
                     if (PoolManager.PoolExists(bulletObj.name))

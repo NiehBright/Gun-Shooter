@@ -320,6 +320,16 @@ namespace Watermelon.SquadShooter
             isDead = false;
             chaseMode = false;
 
+            // Them vien sang nhe (hoi trang) cho quai vat
+            var outline = GetComponent<Outline>();
+            if (outline == null)
+            {
+                outline = gameObject.AddComponent<Outline>();
+            }
+            outline.OutlineMode = Outline.Mode.OutlineVisible;
+            outline.OutlineColor = new Color(0.9f, 0.92f, 0.95f, 1f);
+            outline.OutlineWidth = 1.9f;
+
             NavMeshController.InvokeOrSubscribe(this);
 
             LevelController.OnPlayerDiedEvent += OnRoomDone;

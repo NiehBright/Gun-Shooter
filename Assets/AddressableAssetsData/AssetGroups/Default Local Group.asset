@@ -68,6 +68,39 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3798c856b2c654d4cae5916e9ba5b34e
+    m_Address: Assets/Project Data/Game/Prefabs/Characters/Player/Graphics/Character
+      1.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bc55126d2c417d34995c7b8fe1069384
+    m_Address: Assets/Project Data/Game/Prefabs/Characters/Player/Graphics/Character
+      2.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 46ed7a58790bfba429a7f6bf4c4ffcab
+    m_Address: Assets/Project Data/Game/Prefabs/Characters/Player/Graphics/Character
+      3.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0dbf0192706e97b459bd1d7422a170b6
+    m_Address: Assets/Project Data/Game/Prefabs/Characters/Player/Graphics/Levi.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e7ada6aba0ba3de49b2cb73cdcb9659d
+    m_Address: Assets/Project Data/Game/Prefabs/Characters/Player/Graphics/Nieh.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9b5eb08d300f7ee4da6cb1c619d4ed03
+    m_Address: Assets/Project Data/Game/Prefabs/Characters/Player/Graphics/NinNin.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: c4c47700490f90a4abc1efb8dc813faf, type: 2}
   m_SchemaSet:

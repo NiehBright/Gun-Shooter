@@ -554,6 +554,16 @@ namespace Watermelon.SquadShooter
 
                 if (playAnimation)
                     graphics.PlayBounceAnimation();
+
+                // Them vien sang nhe (hoi trang) cho nhan vat va vu khi
+                var outline = graphicObject.GetComponent<Outline>();
+                if (outline == null)
+                {
+                    outline = graphicObject.AddComponent<Outline>();
+                }
+                outline.OutlineMode = Outline.Mode.OutlineVisible;
+                outline.OutlineColor = new Color(0.9f, 0.92f, 0.95f, 1f);
+                outline.OutlineWidth = 1.9f;
             }
         }
         #endregion
