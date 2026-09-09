@@ -85,6 +85,7 @@ namespace Watermelon.Enemy
 
         private Vector3 cachedTargetPos;
         private bool isSlowed = false;
+        private float repathCooldown = 0f;
 
         public override void OnStart()
         {
@@ -101,14 +102,20 @@ namespace Watermelon.Enemy
             }
 
             Target.MoveToPoint(cachedTargetPos);
+            repathCooldown = Random.Range(0.05f, 0.25f);
         }
 
         public override void OnUpdate()
         {
-            if (Vector3.Distance(Target.Target.position, cachedTargetPos) > 0.5f)
+            repathCooldown -= Time.deltaTime;
+            if (repathCooldown <= 0f)
             {
-                cachedTargetPos = Target.Target.position;
-                Target.MoveToPoint(cachedTargetPos);
+                if (Vector3.Distance(Target.Target.position, cachedTargetPos) > 0.5f)
+                {
+                    cachedTargetPos = Target.Target.position;
+                    Target.MoveToPoint(cachedTargetPos);
+                }
+                repathCooldown = Random.Range(0.2f, 0.3f);
             }
 
             if (isSlowed && !Target.IsWalking)
@@ -139,6 +146,7 @@ namespace Watermelon.Enemy
         protected readonly int ANIMATOR_SPEED_HASH = Animator.StringToHash("Movement Speed");
 
         private Vector3 fleePoint;
+        private float repathCooldown = 0f;
 
         public override void OnStart()
         {
@@ -146,14 +154,17 @@ namespace Watermelon.Enemy
             fleePoint = GetRandomPointOnLevel();
 
             Target.MoveToPoint(fleePoint);
+            repathCooldown = 0.5f;
         }
 
         public override void OnUpdate()
         {
-            if (Vector3.Distance(Target.transform.position, fleePoint) < 5f || Vector3.Distance(Target.TargetPosition, fleePoint) < Target.Stats.FleeDistance)
+            repathCooldown -= Time.deltaTime;
+            if (repathCooldown <= 0f && (Vector3.Distance(Target.transform.position, fleePoint) < 3f || Vector3.Distance(Target.TargetPosition, fleePoint) < Target.Stats.FleeDistance))
             {
                 fleePoint = GetRandomPointOnLevel();
                 Target.MoveToPoint(fleePoint);
+                repathCooldown = 0.5f;
             }
 
             Target.Animator.SetFloat(ANIMATOR_SPEED_HASH, Target.NavMeshAgent.velocity.magnitude / Target.Stats.MoveSpeed);
@@ -166,27 +177,40 @@ namespace Watermelon.Enemy
 
         public Vector3 GetRandomPointOnLevel()
         {
-            int counter = 0;
-            while (true)
+            Vector3 fleeDir = (Target.Position - Target.Target.position).SetY(0).normalized;
+            if (fleeDir.sqrMagnitude < 0.001f)
             {
-                counter++;
+                fleeDir = Random.insideUnitSphere.SetY(0).normalized;
+            }
 
-                var testPoint = Target.Position + Random.onUnitSphere.SetY(0) * Random.Range(10, 100);
+            // Directional search away from player (up to 12 attempts)
+            for (int i = 0; i < 12; i++)
+            {
+                float angle = Random.Range(-60f, 60f);
+                Vector3 dir = Quaternion.Euler(0, angle, 0) * fleeDir;
+                float dist = Random.Range(6f, 15f);
+                Vector3 testPoint = Target.Position + dir * dist;
 
-                if (UnityEngine.AI.NavMesh.SamplePosition(testPoint, out var hit, 0.5f, UnityEngine.AI.NavMesh.AllAreas))
+                if (UnityEngine.AI.NavMesh.SamplePosition(testPoint, out var hit, 2.0f, UnityEngine.AI.NavMesh.AllAreas))
                 {
-                    if (Vector3.Distance(Target.Target.position, testPoint) > Target.Stats.AttackDistance)
+                    if (Vector3.Distance(Target.Target.position, hit.position) > Target.Stats.AttackDistance)
                     {
-                        return testPoint;
+                        return hit.position;
                     }
                 }
+            }
 
-                if (counter > 1000)
+            // Fallback search around enemy (up to 8 attempts)
+            for (int i = 0; i < 8; i++)
+            {
+                Vector3 testPoint = Target.Position + Random.onUnitSphere.SetY(0) * Random.Range(5f, 12f);
+                if (UnityEngine.AI.NavMesh.SamplePosition(testPoint, out var hit, 2.0f, UnityEngine.AI.NavMesh.AllAreas))
                 {
-                    return Target.Position;
-
+                    return hit.position;
                 }
             }
+
+            return Target.Position;
         }
     }
 

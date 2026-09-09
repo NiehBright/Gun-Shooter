@@ -79,6 +79,10 @@ namespace Watermelon
         [SerializeField] TextMeshProUGUI profilePopupDmgText;
         [SerializeField] TextMeshProUGUI profilePopupHpText;
 
+        [Header("Currencies UI")]
+        [SerializeField] TextMeshProUGUI coinsText;
+        public TextMeshProUGUI CoinsText => coinsText;
+
         #region UI Page
 
         public override void Initialise()
@@ -107,16 +111,12 @@ namespace Watermelon
 
             if (overlayUI == null)
             {
-                overlayUI = FindAnyObjectByType<OverlayUI>();
+                overlayUI = FindAnyObjectByType<OverlayUI>(FindObjectsInactive.Include);
             }
 
             if (overlayUI != null)
             {
                 overlayUI.Initialise();
-            }
-            else
-            {
-                Debug.LogWarning("[UIMainMenu] overlayUI is null and could not be found in the scene!");
             }
 
             // Create tutorial components
@@ -144,6 +144,13 @@ namespace Watermelon
             }
 
             InitUserProfile();
+
+            Currency coinCurrency = CurrenciesController.GetCurrency(CurrencyType.Coins);
+            if (coinCurrency != null)
+            {
+                coinCurrency.OnCurrencyChanged += OnCoinCurrencyChanged;
+            }
+            UpdateCoinsText();
         }
 
         private void InitUserProfile()
@@ -334,6 +341,8 @@ namespace Watermelon
 
             OverlayUI.ShowOverlay();
 
+            UpdateCoinsText();
+
             characterTab.OnWindowOpened();
             weaponTab.OnWindowOpened();
             if (droneTab != null) droneTab.OnWindowOpened();
@@ -435,6 +444,31 @@ namespace Watermelon
             });
 
             SettingsPanel.HidePanel(true);
+        }
+        #endregion
+
+        #region Currencies
+        public void UpdateCoinsText()
+        {
+            if (coinsText != null)
+            {
+                int currentCoins = CurrenciesController.Get(CurrencyType.Coins);
+                coinsText.text = CurrenciesHelper.Format(currentCoins);
+            }
+        }
+
+        private void OnCoinCurrencyChanged(Currency currency, int difference)
+        {
+            UpdateCoinsText();
+        }
+
+        private void OnDestroy()
+        {
+            Currency coinCurrency = CurrenciesController.GetCurrency(CurrencyType.Coins);
+            if (coinCurrency != null)
+            {
+                coinCurrency.OnCurrencyChanged -= OnCoinCurrencyChanged;
+            }
         }
         #endregion
     }

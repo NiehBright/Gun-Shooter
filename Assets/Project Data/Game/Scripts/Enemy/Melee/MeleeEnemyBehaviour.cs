@@ -21,6 +21,15 @@ namespace Watermelon.SquadShooter
 
         private bool isHitting;
         private bool isSlowRunning;
+        private float attackDurationTimer;
+
+        public override void Initialise()
+        {
+            base.Initialise();
+
+            isHitting = false;
+            attackDurationTimer = 0f;
+        }
 
         public override void Attack()
         {
@@ -28,6 +37,7 @@ namespace Watermelon.SquadShooter
                 return;
 
             isHitting = true;
+            attackDurationTimer = 0f;
             ApplySlowDown();
 
             AudioController.PlaySound(AudioController.Sounds.enemyMeleeHit, 0.5f);
@@ -64,6 +74,17 @@ namespace Watermelon.SquadShooter
 
             healthbarBehaviour.FollowUpdate();
 
+            if (isHitting)
+            {
+                attackDurationTimer += Time.fixedDeltaTime;
+                if (attackDurationTimer >= 1.2f)
+                {
+                    isHitting = false;
+                    attackDurationTimer = 0f;
+                    InvokeOnAttackFinished();
+                }
+            }
+
             if (isSlowRunning)
             {
                 slowRunningTimer -= Time.deltaTime;
@@ -98,6 +119,7 @@ namespace Watermelon.SquadShooter
             else if (enemyCallbackType == EnemyCallbackType.HitFinish)
             {
                 isHitting = false;
+                attackDurationTimer = 0f;
                 InvokeOnAttackFinished();
             }
         }

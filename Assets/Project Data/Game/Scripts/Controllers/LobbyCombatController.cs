@@ -119,8 +119,26 @@ namespace Watermelon.SquadShooter
         {
             IsCombatModeActive = false;
 
-            // 1. Kích hoạt lại LobbyMode trên nhân vật
+            // 1. Kích hoạt lại LobbyMode trên nhân vật và reset target
             CharacterBehaviour.IsLobbyModeActive = true;
+            var player = CharacterBehaviour.GetBehaviour();
+            if (player != null)
+            {
+                player.OnCloseEnemyChanged(null);
+                if (player.EnemyDetector != null)
+                {
+                    player.EnemyDetector.Reload();
+                }
+            }
+
+            BaseEnemyBehavior[] allEnemies = Object.FindObjectsByType<BaseEnemyBehavior>(FindObjectsInactive.Exclude);
+            foreach (var enemy in allEnemies)
+            {
+                if (enemy != null)
+                {
+                    enemy.SetTargeted(false);
+                }
+            }
 
             // 2. Mở lại giao diện sảnh chính (UIMainMenu) (UIGame luôn mở để hiện Joystick di chuyển)
             UIController.ShowPage<UIMainMenu>();

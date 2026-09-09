@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using Watermelon.SquadShooter;
 
 namespace Watermelon.LevelSystem
@@ -98,7 +99,38 @@ namespace Watermelon.LevelSystem
             itemObject.transform.localScale = itemEntityData.Scale;
             itemObject.SetActive(true);
 
+            ConfigureObstacle(itemObject);
+
             activeObjects.Add(itemObject);
+        }
+
+        public static void ConfigureObstacle(GameObject obj)
+        {
+            if (obj == null) return;
+
+            NavMeshObstacle[] navMeshObstacles = obj.GetComponentsInChildren<NavMeshObstacle>(true);
+            for (int i = 0; i < navMeshObstacles.Length; i++)
+            {
+                NavMeshObstacle navMeshObstacle = navMeshObstacles[i];
+                if (navMeshObstacle != null)
+                {
+                    navMeshObstacle.carveOnlyStationary = false;
+                    navMeshObstacle.carving = true;
+
+                    BoxCollider boxCol = navMeshObstacle.GetComponent<BoxCollider>();
+                    if (boxCol != null && navMeshObstacle.shape == NavMeshObstacleShape.Box)
+                    {
+                        Vector3 colSize = boxCol.size;
+                        Vector3 safeSize = new Vector3(
+                            Mathf.Max(navMeshObstacle.size.x, colSize.x + 0.3f),
+                            Mathf.Max(navMeshObstacle.size.y, colSize.y),
+                            Mathf.Max(navMeshObstacle.size.z, colSize.z + 0.3f)
+                        );
+                        navMeshObstacle.size = safeSize;
+                        navMeshObstacle.center = boxCol.center;
+                    }
+                }
+            }
         }
 
         public static void RegisterExitPoint(ExitPointBehaviour exitPointBehaviour)
@@ -309,6 +341,8 @@ namespace Watermelon.LevelSystem
             customObject.transform.SetPositionAndRotation(objectData.Position, objectData.Rotation);
             customObject.transform.localScale = objectData.Scale;
             customObject.SetActive(true);
+
+            ConfigureObstacle(customObject);
 
             customObjects.Add(customObject);
         }

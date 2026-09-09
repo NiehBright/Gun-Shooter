@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Ads Settings
   m_EditorClassIdentifier: 
   bannerType: 0
-  interstitialType: 1
-  rewardedVideoType: 1
+  interstitialType: 0
+  rewardedVideoType: 0
   adMobContainer:
     androidBannerID: ca-app-pub-3940256099942544/6300978111
     iOSBannerID: ca-app-pub-3940256099942544/2934735716
@@ -39,7 +39,7 @@ MonoBehaviour:
   dummyContainer:
     bannerPosition: 0
   testMode: 0
-  systemLogs: 1
+  systemLogs: 0
   interstitialFirstStartDelay: 40
   interstitialStartDelay: 40
   interstitialShowingDelay: 30

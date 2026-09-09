@@ -13,6 +13,8 @@ namespace Watermelon.SquadShooter
         [SerializeField] TextMeshProUGUI progressText;
         [SerializeField] TextMeshProUGUI hintText;
         [SerializeField] CanvasGroup canvasGroup;
+        public CanvasGroup CanvasGroup => canvasGroup;
+        public bool IsLoadingActive => isPageDisplayed || (canvas != null && canvas.enabled);
 
         private float targetProgress;
         private float currentProgress;
@@ -28,7 +30,10 @@ namespace Watermelon.SquadShooter
             "Đang sơn lại súng...",
             "Đang đánh bóng áo giáp...",
             "Đang sạc năng lượng...",
-            "Đang quét mục tiêu..."
+            "Đang quét mục tiêu...",
+            "Đang trở về căn cứ...",
+            "Đang kiểm đếm phần thưởng...",
+            "Đang chuẩn bị trang bị..."
         };
 
         private void Awake()
@@ -185,29 +190,73 @@ namespace Watermelon.SquadShooter
             });
         }
 
+        private Coroutine levelLoadingCoroutine;
+
+        public void StartLevelLoading(string initialHint = "Đang nạp màn chơi...")
+        {
+            ShowInstant(initialHint);
+            if (levelLoadingCoroutine != null)
+                StopCoroutine(levelLoadingCoroutine);
+            levelLoadingCoroutine = StartCoroutine(LevelLoadingProgressCoroutine());
+        }
+
+        private System.Collections.IEnumerator LevelLoadingProgressCoroutine()
+        {
+            currentProgress = 0.1f;
+            SetProgress(currentProgress);
+
+            while (true)
+            {
+                if (currentProgress < 0.90f)
+                {
+                    currentProgress = Mathf.MoveTowards(currentProgress, 0.90f, Time.unscaledDeltaTime * 0.8f);
+                    SetProgress(currentProgress);
+                }
+                CycleHint(Time.unscaledDeltaTime);
+                yield return null;
+            }
+        }
+
         public void FinishLoading(System.Action onFinished = null)
         {
+            if (levelLoadingCoroutine != null)
+            {
+                StopCoroutine(levelLoadingCoroutine);
+                levelLoadingCoroutine = null;
+            }
+
+            StartCoroutine(FinishLoadingCoroutine(onFinished));
+        }
+
+        private System.Collections.IEnumerator FinishLoadingCoroutine(System.Action onFinished)
+        {
+            while (currentProgress < 1f)
+            {
+                currentProgress = Mathf.MoveTowards(currentProgress, 1f, Time.unscaledDeltaTime * 2.5f);
+                SetProgress(currentProgress);
+                yield return null;
+            }
+
             if (hintText != null) hintText.text = "Sẵn sàng!";
             SetProgress(1f);
 
-            Tween.DelayedCall(0.25f, () =>
+            yield return new WaitForSecondsRealtime(0.3f);
+
+            if (canvasGroup != null)
             {
-                if (canvasGroup != null)
-                {
-                    canvasGroup.DOFade(0f, 0.35f, unscaledTime: true).OnComplete(() =>
-                    {
-                        if (GraphicRaycaster != null) GraphicRaycaster.enabled = false;
-                        DisableCanvas();
-                        onFinished?.Invoke();
-                    });
-                }
-                else
+                canvasGroup.DOFade(0f, 0.35f, unscaledTime: true).OnComplete(() =>
                 {
                     if (GraphicRaycaster != null) GraphicRaycaster.enabled = false;
                     DisableCanvas();
                     onFinished?.Invoke();
-                }
-            }, unscaledTime: true);
+                });
+            }
+            else
+            {
+                if (GraphicRaycaster != null) GraphicRaycaster.enabled = false;
+                DisableCanvas();
+                onFinished?.Invoke();
+            }
         }
 
         public void ShowLoading(float duration, System.Action onHalfWay, System.Action onComplete)

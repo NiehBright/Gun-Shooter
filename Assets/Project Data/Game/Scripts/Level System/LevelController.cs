@@ -184,10 +184,23 @@ namespace Watermelon.LevelSystem
 
         public static void LoadLobby(System.Action onLoaded = null)
         {
+            if (!IsLobbyMode && isLevelLoaded)
+            {
+                UnloadLevel();
+            }
+
             if (isLevelLoaded)
             {
                 onLoaded?.Invoke();
                 return;
+            }
+
+            UILoadingScreen loadingScreen = Object.FindAnyObjectByType<UILoadingScreen>(FindObjectsInactive.Include);
+            bool isAlreadyLoading = loadingScreen != null && loadingScreen.IsLoadingActive;
+
+            if (loadingScreen != null && !isAlreadyLoading)
+            {
+                loadingScreen.StartLevelLoading("Đang trở về sảnh chờ...");
             }
 
             IsLobbyMode = true;
@@ -218,6 +231,7 @@ namespace Watermelon.LevelSystem
 
             uiMainMenu.LevelProgressionPanel.LoadPanel();
             uiMainMenu.UpdateLevelText();
+            uiMainMenu.UpdateCoinsText();
 
             currentRoomIndex = 0;
             DistributeRewardBetweenRooms();
@@ -236,13 +250,24 @@ namespace Watermelon.LevelSystem
                 // Bật Joystick và cấu hình UI sảnh chờ
                 uiGame.SetLobbyMode(true);
                 UIController.ShowPage<UIGame>(); // Mở UIGame song song để hiện Joystick
+                UIController.ShowPage<UIMainMenu>(); // Đảm bảo sảnh chính hiển thị sẵn sàng
                 Control.EnableMovementControl();
 
                 // Đảm bảo GraphicRaycaster của UIGame được bật (tránh UI bị khoá tương tác)
                 if (uiGame.GraphicRaycaster != null)
                     uiGame.GraphicRaycaster.enabled = true;
 
-                onLoaded?.Invoke();
+                if (loadingScreen != null && !isAlreadyLoading)
+                {
+                    loadingScreen.FinishLoading(() =>
+                    {
+                        onLoaded?.Invoke();
+                    });
+                }
+                else
+                {
+                    onLoaded?.Invoke();
+                }
             });
         }
 
@@ -483,7 +508,20 @@ namespace Watermelon.LevelSystem
 
             loadedLevel = currentLevelData;
 
-            NavMeshController.RecalculateNavMesh(null);
+            // Chờ NavMesh tính toán hoàn tất trong màn hình loading
+            bool isNavMeshReady = false;
+            NavMeshController.RecalculateNavMesh(delegate
+            {
+                isNavMeshReady = true;
+            });
+
+            while (!isNavMeshReady)
+            {
+                yield return null;
+            }
+
+            // Chờ thêm 1-2 frame cho vật lý và các object ổn định
+            yield return new WaitForFixedUpdate();
             yield return null;
 
             onCompleted?.Invoke();
@@ -684,18 +722,16 @@ namespace Watermelon.LevelSystem
 
                     NavMeshController.Reset();
 
-                    LoadRoom(currentRoomIndex);
-
-                    NavMeshController.InvokeOrSubscribe(new NavMeshCallback(delegate
+                    LoadRoom(currentRoomIndex, () =>
                     {
                         Control.EnableMovementControl();
 
                         characterBehaviour.Activate();
                         characterBehaviour.ActivateAgent();
                         ActiveRoom.ActivateEnemies();
-                    }));
 
-                    Overlay.Hide(0.3f, null);
+                        Overlay.Hide(0.3f, null);
+                    });
                 });
             }
             else
@@ -787,7 +823,7 @@ namespace Watermelon.LevelSystem
             UILoadingScreen loadingScreen = Object.FindAnyObjectByType<UILoadingScreen>(FindObjectsInactive.Include);
             if (loadingScreen != null)
             {
-                loadingScreen.ShowInstant("Đang nạp màn chơi...");
+                loadingScreen.StartLevelLoading("Đang nạp màn chơi...");
 
                 UnloadLobby();
                 IsLobbyMode = false;

@@ -19,20 +19,28 @@ namespace Watermelon.LevelSystem
         private Pool pool;
         public Pool Pool => pool;
 
-        
-
         public void OnWorldLoaded()
         {
+            if (prefab == null)
+                return;
+
+            if (pool != null)
+            {
+                pool.Clear();
+                pool = null;
+            }
+
             pool = new Pool(new PoolSettings(prefab.name, prefab, 0, true));
             pool.Initialize();
-
         }
 
         public void OnWorldUnloaded()
         {
-            pool.Clear();
-            pool = null;
+            if (pool != null)
+            {
+                pool.Clear();
+                pool = null;
+            }
         }
     }
 }
-

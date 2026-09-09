@@ -4015,7 +4015,7 @@ PrefabInstance:
     - target: {fileID: 7346584915278347249, guid: 815286de9651e5840b7c01ceebbe4942,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.00061035156
+      value: -0.00024414062
       objectReference: {fileID: 0}
     - target: {fileID: 8227189595499872361, guid: 815286de9651e5840b7c01ceebbe4942,
         type: 3}
@@ -5470,7 +5470,7 @@ PrefabInstance:
     - target: {fileID: 9068757956156514045, guid: 16ae3e6461f25be45bc05ba7fc78f9fa,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.0006409966
+      value: 0.0010453395
       objectReference: {fileID: 0}
     - target: {fileID: 9154281434466665231, guid: 16ae3e6461f25be45bc05ba7fc78f9fa,
         type: 3}
@@ -6173,6 +6173,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: "UI \u0421urrency Overlay"
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053553464428135912, guid: 84ad07836c407ae4a8526eef5cd17fe7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2053553464428135927, guid: 84ad07836c407ae4a8526eef5cd17fe7,
         type: 3}

@@ -144,6 +144,51 @@ namespace Watermelon.SquadShooter
 
         public bool HasTakenDamage { get; private set; }
 
+        public static readonly Color OUTLINE_COLOR_DEFAULT = new Color(0.9f, 0.92f, 0.95f, 1f);
+        public static readonly Color OUTLINE_COLOR_TARGETED = new Color(1.0f, 0.2f, 0.2f, 1f);
+
+        protected Outline enemyOutline;
+        protected bool isTargeted;
+        public bool IsTargeted => isTargeted;
+        public Outline EnemyOutline => enemyOutline;
+        private TweenCase untargetTweenCase;
+
+        public void SetTargeted(bool targeted)
+        {
+            isTargeted = targeted;
+            untargetTweenCase.KillActive();
+
+            if (enemyOutline == null)
+            {
+                enemyOutline = GetComponent<Outline>();
+            }
+
+            if (enemyOutline != null)
+            {
+                if (isDead)
+                {
+                    enemyOutline.OutlineColor = OUTLINE_COLOR_DEFAULT;
+                    return;
+                }
+
+                if (targeted)
+                {
+                    enemyOutline.OutlineColor = OUTLINE_COLOR_TARGETED;
+                }
+                else
+                {
+                    // Sau 3 giay thoat target thi vien moi tro lai mau trang
+                    untargetTweenCase = Tween.DelayedCall(3.0f, () =>
+                    {
+                        if (!isTargeted && enemyOutline != null)
+                        {
+                            enemyOutline.OutlineColor = OUTLINE_COLOR_DEFAULT;
+                        }
+                    });
+                }
+            }
+        }
+
         protected Transform target;
         public Transform Target => target;
 
@@ -320,15 +365,21 @@ namespace Watermelon.SquadShooter
             isDead = false;
             chaseMode = false;
 
-            // Them vien sang nhe (hoi trang) cho quai vat
-            var outline = GetComponent<Outline>();
-            if (outline == null)
+            // Them vien sang cho quai vat (mac dinh trang, khi bi taget chuyen sang do)
+            if (enemyOutline == null)
             {
-                outline = gameObject.AddComponent<Outline>();
+                enemyOutline = GetComponent<Outline>();
+                if (enemyOutline == null)
+                {
+                    enemyOutline = gameObject.AddComponent<Outline>();
+                }
             }
-            outline.OutlineMode = Outline.Mode.OutlineVisible;
-            outline.OutlineColor = new Color(0.9f, 0.92f, 0.95f, 1f);
-            outline.OutlineWidth = 1.9f;
+            enemyOutline.enabled = true;
+            enemyOutline.OutlineMode = Outline.Mode.OutlineVisible;
+            untargetTweenCase.KillActive();
+            enemyOutline.OutlineColor = OUTLINE_COLOR_DEFAULT;
+            enemyOutline.OutlineWidth = 1.9f;
+            isTargeted = false;
 
             NavMeshController.InvokeOrSubscribe(this);
 
@@ -472,11 +523,27 @@ namespace Watermelon.SquadShooter
             {
                 hitOffsetMult += Time.fixedDeltaTime;
             }
+
+            if (isTargeted)
+            {
+                var player = CharacterBehaviour.GetBehaviour();
+                if (player == null || CharacterBehaviour.IsLobbyModeActive || player.ClosestEnemyBehaviour != this)
+                {
+                    SetTargeted(false);
+                }
+            }
         }
 
         protected virtual void OnDeath()
         {
             isDead = true;
+            untargetTweenCase.KillActive();
+            isTargeted = false;
+            if (enemyOutline != null)
+            {
+                enemyOutline.OutlineColor = OUTLINE_COLOR_DEFAULT;
+                enemyOutline.enabled = false;
+            }
 
             navMeshAgent.enabled = false;
 
@@ -674,8 +741,20 @@ namespace Watermelon.SquadShooter
 
         public void MoveToPoint(Vector3 pos)
         {
-            if (navMeshAgent != null)
+            if (navMeshAgent != null && navMeshAgent.isActiveAndEnabled)
             {
+                if (!navMeshAgent.isOnNavMesh)
+                {
+                    if (UnityEngine.AI.NavMesh.SamplePosition(transform.position, out var hit, 2.5f, UnityEngine.AI.NavMesh.AllAreas))
+                    {
+                        navMeshAgent.Warp(hit.position);
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+
                 navMeshAgent.isStopped = false;
                 navMeshAgent.SetDestination(pos);
             }
@@ -699,6 +778,14 @@ namespace Watermelon.SquadShooter
 
         public virtual void Unload()
         {
+            untargetTweenCase.KillActive();
+            isTargeted = false;
+            if (enemyOutline != null)
+            {
+                enemyOutline.OutlineColor = OUTLINE_COLOR_DEFAULT;
+                enemyOutline.enabled = false;
+            }
+
             healthbarBehaviour.ForceDisable();
 
             if (navMeshAgent.isActiveAndEnabled)
