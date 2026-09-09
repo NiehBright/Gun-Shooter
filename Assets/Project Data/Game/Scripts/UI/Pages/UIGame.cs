@@ -242,25 +242,15 @@ namespace Watermelon
                 dropItems[i].ItemDisable();
             }
 
-            Overlay.Show(0.3f, () =>
-            {
-                LevelController.UnloadLevel();
+            Time.timeScale = 1.0f;
+            pausePanelObject.SetActive(false);
 
-                Time.timeScale = 1.0f;
+            CustomMusicController.ToggleMusic(AudioController.Music.menuMusic, 0.3f, 0.3f);
 
-                pausePanelObject.SetActive(false);
+            CameraController.SetCameraShiftState(false);
+            CameraController.EnableCamera(CameraType.Main); // Bật camera follow cho Lobby
 
-                CustomMusicController.ToggleMusic(AudioController.Music.menuMusic, 0.3f, 0.3f);
-
-                CameraController.SetCameraShiftState(false);
-                CameraController.EnableCamera(CameraType.Main); // Bật camera follow cho Lobby
-
-                UIController.ShowPage<UIMainMenu>();
-
-                LevelController.LoadLobby(); // Nạp sảnh chờ Lobby
-
-                Overlay.Hide(0.3f, null);
-            });
+            LevelController.LoadLobby(); // Nạp sảnh chờ Lobby với Loading Screen
         }
 
         private void OnPauseButtonClicked()

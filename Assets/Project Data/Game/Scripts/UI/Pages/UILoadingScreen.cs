@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.AddressableAssets;
+using Watermelon.LevelSystem;
 
 namespace Watermelon.SquadShooter
 {
@@ -11,6 +13,8 @@ namespace Watermelon.SquadShooter
         [SerializeField] TextMeshProUGUI progressText;
         [SerializeField] TextMeshProUGUI hintText;
         [SerializeField] CanvasGroup canvasGroup;
+        public CanvasGroup CanvasGroup => canvasGroup;
+        public bool IsLoadingActive => isPageDisplayed || (canvas != null && canvas.enabled);
 
         private float targetProgress;
         private float currentProgress;
@@ -19,12 +23,17 @@ namespace Watermelon.SquadShooter
 
         private readonly string[] hints = new string[]
         {
+            "Đang kiểm tra tài nguyên Addressables...",
+            "Đang khởi tạo bản đồ sảnh...",
             "Đang nạp đạn...",
             "Đang bảo dưỡng Drone...",
             "Đang sơn lại súng...",
             "Đang đánh bóng áo giáp...",
             "Đang sạc năng lượng...",
-            "Đang quét mục tiêu..."
+            "Đang quét mục tiêu...",
+            "Đang trở về căn cứ...",
+            "Đang kiểm đếm phần thưởng...",
+            "Đang chuẩn bị trang bị..."
         };
 
         private void Awake()
@@ -56,6 +65,198 @@ namespace Watermelon.SquadShooter
             if (loadingSlider != null) loadingSlider.value = progress;
             if (progressFillImage != null) progressFillImage.fillAmount = progress;
             if (progressText != null) progressText.text = string.Format("{0}%", Mathf.RoundToInt(progress * 100f));
+        }
+
+        public void ShowInstant(string initialHint = "Đang tải dữ liệu...")
+        {
+            gameObject.SetActive(true);
+            EnableCanvas();
+            if (GraphicRaycaster != null) GraphicRaycaster.enabled = true;
+            if (canvasGroup != null) canvasGroup.alpha = 1f;
+            SetProgress(0.05f);
+            if (hintText != null) hintText.text = initialHint;
+            hintTimer = 0f;
+        }
+
+        public void CycleHint(float dt)
+        {
+            if (hintText == null) return;
+            hintTimer += dt;
+            if (hintTimer >= 1.5f)
+            {
+                hintTimer = 0f;
+                hintText.text = hints[Random.Range(0, hints.Length)];
+            }
+        }
+
+        public void StartLobbyLoading(System.Action onFinish = null)
+        {
+            ShowInstant("Đang kiểm tra tài nguyên Addressables...");
+            StartCoroutine(LobbyLoadingCoroutine(onFinish));
+        }
+
+        private System.Collections.IEnumerator LobbyLoadingCoroutine(System.Action onFinish)
+        {
+            // 1. Khởi tạo Addressables nếu chưa khởi tạo
+            float targetP = 0.25f;
+            var initHandle = Addressables.InitializeAsync();
+            while (!initHandle.IsDone)
+            {
+                currentProgress = Mathf.MoveTowards(currentProgress, targetP, Time.unscaledDeltaTime * 0.8f);
+                SetProgress(currentProgress);
+                CycleHint(Time.unscaledDeltaTime);
+                yield return null;
+            }
+
+            // 2. Preload các Addressables (Vũ khí, Đạn, Drone)
+            targetP = 0.5f;
+            if (hintText != null) hintText.text = "Đang nạp vũ khí & Drone...";
+
+            try
+            {
+                if (WeaponsController.Database != null && WeaponsController.Database.Weapons != null && WeaponsController.SelectedWeaponIndex < WeaponsController.Database.Weapons.Length)
+                {
+                    var weaponData = WeaponsController.Database.Weapons[WeaponsController.SelectedWeaponIndex];
+                    if (weaponData != null)
+                    {
+                        var gunUpgrade = UpgradesController.GetUpgrade<Watermelon.Upgrades.BaseWeaponUpgrade>(weaponData.UpgradeType);
+                        var gunStage = gunUpgrade?.GetCurrentStage();
+                        if (gunStage != null)
+                        {
+                            var preloadGun = gunStage.WeaponPrefab;
+                            var preloadBullet = gunStage.BulletPrefab;
+                        }
+                    }
+                }
+
+                if (DronesController.Database != null && DronesController.Database.Drones != null && DronesController.SelectedDroneIndex != -1 && DronesController.SelectedDroneIndex < DronesController.Database.Drones.Length)
+                {
+                    var droneData = DronesController.Database.Drones[DronesController.SelectedDroneIndex];
+                    if (droneData != null)
+                    {
+                        var droneUpgrade = UpgradesController.GetUpgrade<Watermelon.Upgrades.BaseDroneUpgrade>(droneData.UpgradeType);
+                        var droneStage = droneUpgrade?.GetCurrentStage();
+                        if (droneStage != null)
+                        {
+                            var preloadDrone = droneStage.DronePrefab;
+                            var preloadBullet = droneStage.BulletPrefab;
+                        }
+                    }
+                }
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogWarning("[Loading] Preload addressables warning: " + e.Message);
+            }
+
+            while (currentProgress < targetP)
+            {
+                currentProgress = Mathf.MoveTowards(currentProgress, targetP, Time.unscaledDeltaTime * 1.5f);
+                SetProgress(currentProgress);
+                CycleHint(Time.unscaledDeltaTime);
+                yield return null;
+            }
+
+            // 3. Tải sảnh chờ (Lobby)
+            targetP = 0.9f;
+            if (hintText != null) hintText.text = "Đang kiến tạo bản đồ sảnh chờ...";
+
+            bool isLobbyLoaded = false;
+            LevelController.LoadLobby(() =>
+            {
+                isLobbyLoaded = true;
+            });
+
+            while (!isLobbyLoaded || currentProgress < 0.95f)
+            {
+                float ceiling = isLobbyLoaded ? 1.0f : 0.95f;
+                currentProgress = Mathf.MoveTowards(currentProgress, ceiling, Time.unscaledDeltaTime * 0.8f);
+                SetProgress(currentProgress);
+                CycleHint(Time.unscaledDeltaTime);
+                yield return null;
+            }
+
+            // 4. Hoàn tất
+            SetProgress(1f);
+            if (hintText != null) hintText.text = "Sẵn sàng!";
+            yield return new WaitForSecondsRealtime(0.25f);
+
+            // 5. Fade out biến mất
+            onFinish?.Invoke();
+            canvasGroup.DOFade(0f, 0.35f, unscaledTime: true).OnComplete(() =>
+            {
+                if (GraphicRaycaster != null) GraphicRaycaster.enabled = false;
+                DisableCanvas();
+            });
+        }
+
+        private Coroutine levelLoadingCoroutine;
+
+        public void StartLevelLoading(string initialHint = "Đang nạp màn chơi...")
+        {
+            ShowInstant(initialHint);
+            if (levelLoadingCoroutine != null)
+                StopCoroutine(levelLoadingCoroutine);
+            levelLoadingCoroutine = StartCoroutine(LevelLoadingProgressCoroutine());
+        }
+
+        private System.Collections.IEnumerator LevelLoadingProgressCoroutine()
+        {
+            currentProgress = 0.1f;
+            SetProgress(currentProgress);
+
+            while (true)
+            {
+                if (currentProgress < 0.90f)
+                {
+                    currentProgress = Mathf.MoveTowards(currentProgress, 0.90f, Time.unscaledDeltaTime * 0.8f);
+                    SetProgress(currentProgress);
+                }
+                CycleHint(Time.unscaledDeltaTime);
+                yield return null;
+            }
+        }
+
+        public void FinishLoading(System.Action onFinished = null)
+        {
+            if (levelLoadingCoroutine != null)
+            {
+                StopCoroutine(levelLoadingCoroutine);
+                levelLoadingCoroutine = null;
+            }
+
+            StartCoroutine(FinishLoadingCoroutine(onFinished));
+        }
+
+        private System.Collections.IEnumerator FinishLoadingCoroutine(System.Action onFinished)
+        {
+            while (currentProgress < 1f)
+            {
+                currentProgress = Mathf.MoveTowards(currentProgress, 1f, Time.unscaledDeltaTime * 2.5f);
+                SetProgress(currentProgress);
+                yield return null;
+            }
+
+            if (hintText != null) hintText.text = "Sẵn sàng!";
+            SetProgress(1f);
+
+            yield return new WaitForSecondsRealtime(0.3f);
+
+            if (canvasGroup != null)
+            {
+                canvasGroup.DOFade(0f, 0.35f, unscaledTime: true).OnComplete(() =>
+                {
+                    if (GraphicRaycaster != null) GraphicRaycaster.enabled = false;
+                    DisableCanvas();
+                    onFinished?.Invoke();
+                });
+            }
+            else
+            {
+                if (GraphicRaycaster != null) GraphicRaycaster.enabled = false;
+                DisableCanvas();
+                onFinished?.Invoke();
+            }
         }
 
         public void ShowLoading(float duration, System.Action onHalfWay, System.Action onComplete)
@@ -91,15 +292,7 @@ namespace Watermelon.SquadShooter
             float dt = Time.unscaledDeltaTime;
             timer += dt;
             
-            if (hintText != null)
-            {
-                hintTimer += dt;
-                if (hintTimer >= 1.5f)
-                {
-                    hintTimer = 0f;
-                    hintText.text = hints[Random.Range(0, hints.Length)];
-                }
-            }
+            CycleHint(dt);
 
             float progress = Mathf.Clamp01(timer / duration);
             SetProgress(progress);

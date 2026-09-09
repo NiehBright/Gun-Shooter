@@ -48,24 +48,36 @@ namespace Watermelon.LevelSystem
         public void LoadWorld()
         {
             // creating items pools
+            if (items == null) return;
             for (int i = 0; i < items.Length; i++)
             {
-                items[i].OnWorldLoaded();
+                if (items[i] != null)
+                {
+                    items[i].OnWorldLoaded();
+                }
             }
         }
 
         public void UnloadWorld()
         {
             // releasing items pools
+            if (items == null) return;
             for (int i = 0; i < items.Length; i++)
             {
-                items[i].OnWorldUnloaded();
+                if (items[i] != null)
+                {
+                    items[i].OnWorldUnloaded();
+                }
             }
         }
 
         public LevelItem GetLevelItem(int hash)
         {
-            return itemsDisctionary[hash];
+            if (itemsDisctionary != null && itemsDisctionary.TryGetValue(hash, out var item))
+            {
+                return item;
+            }
+            return null;
         }
     }
 }

@@ -9,6 +9,14 @@ namespace Watermelon
 
         private static Canvas canvas;
 
+        private void Awake()
+        {
+            if (canvas == null)
+            {
+                canvas = GetComponent<Canvas>();
+            }
+        }
+
         public void Initialise()
         {
             canvas = GetComponent<Canvas>();
@@ -16,12 +24,36 @@ namespace Watermelon
 
         public static void ShowOverlay()
         {
-            canvas.enabled = true;
+            if (canvas == null)
+            {
+                OverlayUI overlay = FindAnyObjectByType<OverlayUI>(FindObjectsInactive.Include);
+                if (overlay != null)
+                {
+                    canvas = overlay.GetComponent<Canvas>();
+                }
+            }
+
+            if (canvas != null)
+            {
+                canvas.enabled = true;
+            }
         }
 
         public static void HideOverlay()
         {
-            canvas.enabled = false;
+            if (canvas == null)
+            {
+                OverlayUI overlay = FindAnyObjectByType<OverlayUI>(FindObjectsInactive.Include);
+                if (overlay != null)
+                {
+                    canvas = overlay.GetComponent<Canvas>();
+                }
+            }
+
+            if (canvas != null)
+            {
+                canvas.enabled = false;
+            }
         }
     }
 }

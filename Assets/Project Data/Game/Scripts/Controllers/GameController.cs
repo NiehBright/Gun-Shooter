@@ -102,6 +102,8 @@ namespace Watermelon
 
             uiController.InitialisePages();
 
+            var loadingScreen = Object.FindAnyObjectByType<UILoadingScreen>(FindObjectsInactive.Include);
+
             if (LevelController.IsFirstTimePlayer)
             {
                 // Lần đầu chơi game: Bỏ qua Main Menu và vào thẳng Level 1 World 1 để chạy hướng dẫn (Tutorial)
@@ -126,7 +128,16 @@ namespace Watermelon
                 // Đã hoàn thành màn 1: Hiện Menu sảnh chờ Lobby bình thường
                 UIController.ShowPage<UIMainMenu>();
                 CameraController.SetCameraShiftState(false);
-                LevelController.LoadLobby();
+                CameraController.EnableCamera(CameraType.Main);
+
+                if (loadingScreen != null)
+                {
+                    loadingScreen.StartLobbyLoading(null);
+                }
+                else
+                {
+                    LevelController.LoadLobby();
+                }
             }
         }
 

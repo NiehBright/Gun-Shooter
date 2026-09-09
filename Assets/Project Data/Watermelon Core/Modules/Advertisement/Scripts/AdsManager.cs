@@ -1,4 +1,4 @@
-﻿#pragma warning disable 0649
+#pragma warning disable 0649
 #pragma warning disable 0162
 
 using UnityEngine;
@@ -44,6 +44,8 @@ namespace Watermelon
 
         private static AdsSettings settings;
         public static AdsSettings Settings => settings;
+
+        public static bool AreAdsDisabled => true;
 
         private static double lastInterstitialTime;
 
@@ -99,6 +101,12 @@ namespace Watermelon
             {
                 Debug.LogError("[AdsManager]: Settings don't exist!");
 
+                return;
+            }
+
+            if (AreAdsDisabled)
+            {
+                isForcedAdEnabled = false;
                 return;
             }
 
@@ -219,6 +227,9 @@ namespace Watermelon
 
         public static void TryToLoadFirstAds()
         {
+            if (AreAdsDisabled)
+                return;
+
             if (loadingCoroutine == null)
                 loadingCoroutine = Tween.InvokeCoroutine(TryToLoadAdsCoroutine());
         }
@@ -345,6 +356,12 @@ namespace Watermelon
 
         public static void ShowInterstitial(AdProviderHandler.InterstitialCallback callback, bool ignoreConditions = false)
         {
+            if (AreAdsDisabled || settings == null || settings.InterstitialType == AdProvider.Disable)
+            {
+                callback?.Invoke(true);
+                return;
+            }
+
             AdProvider advertisingModules = settings.InterstitialType;
 
             interstitalCallback = callback;
@@ -415,6 +432,9 @@ namespace Watermelon
         #region Rewarded Video
         public static bool IsRewardBasedVideoLoaded()
         {
+            if (AreAdsDisabled || settings == null || settings.RewardedVideoType == AdProvider.Disable)
+                return true;
+
             AdProvider advertisingModule = settings.RewardedVideoType;
 
             if (!IsModuleActive(advertisingModule) || !advertisingActiveModules[advertisingModule].IsInitialised())
@@ -435,6 +455,12 @@ namespace Watermelon
 
         public static void ShowRewardBasedVideo(AdProviderHandler.RewardedVideoCallback callback, bool showErrorMessage = true)
         {
+            if (AreAdsDisabled || settings == null || settings.RewardedVideoType == AdProvider.Disable)
+            {
+                callback?.Invoke(true);
+                return;
+            }
+
             AdProvider advertisingModule = settings.RewardedVideoType;
 
             rewardedVideoCallback = callback;
@@ -558,6 +584,9 @@ namespace Watermelon
 
         public static bool IsForcedAdEnabled(bool useCachedValue = true)
         {
+            if (AreAdsDisabled)
+                return false;
+
             if (useCachedValue)
                 return isForcedAdEnabled;
 

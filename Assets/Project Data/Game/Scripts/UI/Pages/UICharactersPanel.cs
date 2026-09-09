@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 
 namespace Watermelon.SquadShooter
 {
-    public class UICharactersPanel : UIUpgradesAbstractPage<CharacterPanelUI, CharacterType>, IDragHandler
+    public class UICharactersPanel : UIUpgradesAbstractPage<CharacterPanelUI, CharacterType>, IDragHandler, IEndDragHandler
     {
         [Space]
         [SerializeField] GameObject stageStarPrefab;
@@ -17,6 +17,8 @@ namespace Watermelon.SquadShooter
 
         private Pool stageStarPool;
         private Quaternion originalPlayerRotation;
+        private Quaternion showcasePlayerRotation;
+        private TweenCase resetPlayerRotationTweenCase;
 
         protected override int SelectedIndex => Mathf.Clamp(CharactersController.GetCharacterIndex(CharactersController.SelectedCharacter.Type), 0, int.MaxValue);
 
@@ -221,6 +223,7 @@ namespace Watermelon.SquadShooter
             if (characterBehaviour != null)
             {
                 originalPlayerRotation = characterBehaviour.transform.rotation;
+                showcasePlayerRotation = originalPlayerRotation;
 
                 Vector3 playerPos = characterBehaviour.transform.position;
                 Vector3 defaultCamPos = CameraController.MainCamera.transform.position;
@@ -230,6 +233,7 @@ namespace Watermelon.SquadShooter
                 {
                     Vector3 lookDir = dirToCam.normalized;
                     characterBehaviour.transform.rotation = Quaternion.LookRotation(lookDir);
+                    showcasePlayerRotation = characterBehaviour.transform.rotation;
                     
                     // Kich hoat camera bay den vi tri phia truoc và lech phai (gip nhan vat dung ben trai man hinh)
                     Vector3 right = Vector3.Cross(Vector3.up, lookDir).normalized; // Right vector local
@@ -265,6 +269,7 @@ namespace Watermelon.SquadShooter
             base.PlayHideAnimation();
 
             // Khoi phuc huong xoay nhan vat va tra quyen kiem soat cho Cinemachine
+            resetPlayerRotationTweenCase.KillActive();
             CharacterBehaviour characterBehaviour = CharacterBehaviour.GetBehaviour();
             if (characterBehaviour != null)
             {
@@ -314,9 +319,27 @@ namespace Watermelon.SquadShooter
             CharacterBehaviour characterBehaviour = CharacterBehaviour.GetBehaviour();
             if (characterBehaviour != null)
             {
+                resetPlayerRotationTweenCase.KillActive();
                 // Xoay nhan vat theo truc Y
                 float rotationSpeed = -0.5f;
                 characterBehaviour.transform.Rotate(Vector3.up, eventData.delta.x * rotationSpeed, Space.World);
+            }
+        }
+
+        public void OnEndDrag(PointerEventData eventData)
+        {
+            CharacterBehaviour characterBehaviour = CharacterBehaviour.GetBehaviour();
+            if (characterBehaviour != null)
+            {
+                Quaternion startRot = characterBehaviour.transform.rotation;
+                resetPlayerRotationTweenCase.KillActive();
+                resetPlayerRotationTweenCase = Tween.DoFloat(0f, 1f, 0.4f, (float t) =>
+                {
+                    if (characterBehaviour != null)
+                    {
+                        characterBehaviour.transform.rotation = Quaternion.Slerp(startRot, showcasePlayerRotation, t);
+                    }
+                }).SetEasing(Ease.Type.QuadOut);
             }
         }
 

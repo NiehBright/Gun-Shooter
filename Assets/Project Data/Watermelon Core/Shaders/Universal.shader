@@ -4,7 +4,7 @@ Shader "WMelon/Universal"
     {
         [HideInInspector]_Transparent("Transparent", float) = 0
 
-        _Color ("Color", Color) = (1,1,1,1)
+        [MainColor] _Color ("Color", Color) = (1,1,1,1)
         _MainTex ("Texture", 2D) = "white" {}
         
         //[Toggle(RECEIVE_SHADOWS_ON)]_ReceiveShadowsOn("Receive Shadows", float) = 1

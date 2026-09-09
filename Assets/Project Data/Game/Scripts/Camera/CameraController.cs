@@ -14,7 +14,7 @@ namespace Watermelon
         private static CameraController cameraController;
 
         [SerializeField] CinemachineBrain cameraBrain;
-        [SerializeField] CameraType firstCamera;
+        [SerializeField] CameraType firstCamera = CameraType.Main;
 
         [Space]
         [SerializeField] VirtualCameraCase[] virtualCameras;
@@ -77,7 +77,7 @@ namespace Watermelon
             // Disable camera brain
             cameraController.cameraBrain.enabled = false;
 
-            EnableCamera(firstCamera);
+            EnableCamera(firstCamera != CameraType.Menu ? firstCamera : CameraType.Main);
 
             InternalTarget = new GameObject("[Internal Camera Target]").transform;
 
@@ -96,6 +96,7 @@ namespace Watermelon
             {
                 cameraController.virtualCameras[i].VirtualCamera.Follow = InternalTarget;
                 cameraController.virtualCameras[i].VirtualCamera.LookAt = InternalTarget;
+                cameraController.virtualCameras[i].VirtualCamera.PreviousStateIsValid = false;
             }
 
             cameraController.cameraBrain.transform.position = target.position;
@@ -182,6 +183,31 @@ namespace Watermelon
 
             cameraController.selectionTweenCase.KillActive();
             cameraController.selectionTweenCase = Tween.DoFloat(0f, 1f, 0.5f, (float t) =>
+            {
+                mainCamera.transform.position = Vector3.Lerp(startPos, targetPos, t);
+                mainCamera.transform.rotation = Quaternion.Slerp(startRot, targetRot, t);
+            }).SetEasing(Ease.Type.QuadOut);
+        }
+
+        public static void MoveCameraTo(Vector3 targetPos, Quaternion targetRot, float duration = 0.5f)
+        {
+            if (cameraController == null) return;
+
+            if (!cameraController.isZoomedIn)
+            {
+                cameraController.originalCameraPosition = mainCamera.transform.position;
+                cameraController.originalCameraRotation = mainCamera.transform.rotation;
+                cameraController.isZoomedIn = true;
+            }
+
+            // Tam thoi tat Cinemachine de di chuyen camera tu do
+            cameraController.cameraBrain.enabled = false;
+
+            Vector3 startPos = mainCamera.transform.position;
+            Quaternion startRot = mainCamera.transform.rotation;
+
+            cameraController.selectionTweenCase.KillActive();
+            cameraController.selectionTweenCase = Tween.DoFloat(0f, 1f, duration, (float t) =>
             {
                 mainCamera.transform.position = Vector3.Lerp(startPos, targetPos, t);
                 mainCamera.transform.rotation = Quaternion.Slerp(startRot, targetRot, t);

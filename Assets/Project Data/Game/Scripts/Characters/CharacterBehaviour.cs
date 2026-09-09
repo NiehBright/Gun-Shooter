@@ -554,6 +554,16 @@ namespace Watermelon.SquadShooter
 
                 if (playAnimation)
                     graphics.PlayBounceAnimation();
+
+                // Them vien sang nhe (hoi trang) cho nhan vat va vu khi
+                var outline = graphicObject.GetComponent<Outline>();
+                if (outline == null)
+                {
+                    outline = graphicObject.AddComponent<Outline>();
+                }
+                outline.OutlineMode = Outline.Mode.OutlineVisible;
+                outline.OutlineColor = new Color(0.9f, 0.92f, 0.95f, 1f);
+                outline.OutlineWidth = 1.9f;
             }
         }
         #endregion
@@ -592,6 +602,10 @@ namespace Watermelon.SquadShooter
 
             graphics.Disable();
 
+            if (closestEnemyBehaviour != null)
+            {
+                closestEnemyBehaviour.SetTargeted(false);
+            }
             closestEnemyBehaviour = null;
 
             if (isMoving)
@@ -789,7 +803,7 @@ namespace Watermelon.SquadShooter
         public void OnCloseEnemyChanged(BaseEnemyBehavior enemyBehavior)
         {
             if (!isActive) return;
-            if (IsLobbyModeActive) return;
+            if (IsLobbyModeActive && enemyBehavior != null) return;
 
             if (enemyBehavior != null)
             {
@@ -798,9 +812,15 @@ namespace Watermelon.SquadShooter
                     playerTarget.position = transform.position + transform.forward * 5;
                 }
 
+                if (closestEnemyBehaviour != null && closestEnemyBehaviour != enemyBehavior)
+                {
+                    closestEnemyBehaviour.SetTargeted(false);
+                }
+
                 activeMovementSettings = movementAimingSettings;
 
                 closestEnemyBehaviour = enemyBehavior;
+                closestEnemyBehaviour.SetTargeted(true);
 
                 targetRing.SetActive(true);
                 targetRing.transform.rotation = Quaternion.identity;
@@ -816,6 +836,11 @@ namespace Watermelon.SquadShooter
                 SetTargetActive();
 
                 return;
+            }
+
+            if (closestEnemyBehaviour != null)
+            {
+                closestEnemyBehaviour.SetTargeted(false);
             }
 
             activeMovementSettings = movementSettings;
@@ -844,19 +869,35 @@ namespace Watermelon.SquadShooter
 
         public void SetTargetActive()
         {
-            if (closestEnemyBehaviour != null && closestEnemyBehaviour.Tier == EnemyTier.Elite)
+            if (closestEnemyBehaviour != null)
             {
-                targetRingRenderer.material.color = targetRingSpecialColor;
+                closestEnemyBehaviour.SetTargeted(true);
             }
-            else
+
+            if (targetRingRenderer != null && targetRingRenderer.material != null)
             {
-                targetRingRenderer.material.color = targetRingActiveColor;
+                Color ringColor = (closestEnemyBehaviour != null && closestEnemyBehaviour.Tier == EnemyTier.Elite)
+                    ? targetRingSpecialColor
+                    : targetRingActiveColor;
+
+                targetRingRenderer.material.color = ringColor;
+                if (targetRingRenderer.material.HasProperty("_Color"))
+                    targetRingRenderer.material.SetColor("_Color", ringColor);
+                if (targetRingRenderer.material.HasProperty("_BaseColor"))
+                    targetRingRenderer.material.SetColor("_BaseColor", ringColor);
             }
         }
 
         public void SetTargetUnreachable()
         {
-            targetRingRenderer.material.color = targetRingDisabledColor;
+            if (targetRingRenderer != null && targetRingRenderer.material != null)
+            {
+                targetRingRenderer.material.color = targetRingDisabledColor;
+                if (targetRingRenderer.material.HasProperty("_Color"))
+                    targetRingRenderer.material.SetColor("_Color", targetRingDisabledColor);
+                if (targetRingRenderer.material.HasProperty("_BaseColor"))
+                    targetRingRenderer.material.SetColor("_BaseColor", targetRingDisabledColor);
+            }
         }
 
         private void OnTriggerEnter(Collider other)

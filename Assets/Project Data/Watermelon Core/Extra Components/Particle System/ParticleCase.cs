@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace Watermelon
 {
@@ -79,21 +79,33 @@ namespace Watermelon
 
         public void OnDisable()
         {
-            particleSystem.transform.SetParent(null);
-            particleSystem.Stop();
+            Transform container = (particle != null && particle.ParticlePool != null && particle.ParticlePool.ObjectsContainer != null)
+                ? particle.ParticlePool.ObjectsContainer 
+                : PoolManager.ObjectsContainerTransform;
 
-            particleSystem.gameObject.SetActive(false);
+            if (particleSystem != null)
+            {
+                particleSystem.transform.SetParent(container);
+                particleSystem.Stop();
+                particleSystem.gameObject.SetActive(false);
+            }
 
-            if (particle.SpecialBehaviour)
+            if (particle != null && particle.SpecialBehaviour)
                 particleBehaviour.OnParticleDisabled();
         }
 
         public void ForceDisable(ParticleSystemStopBehavior stopBehavior = ParticleSystemStopBehavior.StopEmitting)
         {
             forceDisable = true;
-            particleSystem.transform.SetParent(null);
+            Transform container = (particle != null && particle.ParticlePool != null && particle.ParticlePool.ObjectsContainer != null)
+                ? particle.ParticlePool.ObjectsContainer 
+                : PoolManager.ObjectsContainerTransform;
 
-            particleSystem.Stop(true, stopBehavior);
+            if (particleSystem != null)
+            {
+                particleSystem.transform.SetParent(container);
+                particleSystem.Stop(true, stopBehavior);
+            }
         }
 
         public bool IsForceDisabledRequired()
