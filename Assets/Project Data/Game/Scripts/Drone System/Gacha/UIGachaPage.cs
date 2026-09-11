@@ -32,10 +32,16 @@ namespace Watermelon.SquadShooter
                 backButton.onClick.AddListener(OnBackClicked);
             if (resultPopup != null)
                 resultPopup.gameObject.SetActive(false);
+
+            // Đảm bảo ban đầu luôn ẩn ở Hierarchy
+            gameObject.SetActive(false);
         }
 
         public override void PlayShowAnimation()
         {
+            // Bật GameObject khi tab được ấn
+            gameObject.SetActive(true);
+
             UpdateUI();
 
             if (mainPanelRect != null)
@@ -56,12 +62,21 @@ namespace Watermelon.SquadShooter
                 mainPanelRect.DOAnchoredPosition(new Vector2(0, -1500), 0.3f).SetEasing(Ease.Type.CubicIn).OnComplete(delegate
                 {
                     UIController.OnPageClosed(this);
+                    // Ẩn lại GameObject sau khi hoàn tất đóng trang để ẩn ở Hierarchy
+                    gameObject.SetActive(false);
                 });
             }
             else
             {
                 UIController.OnPageClosed(this);
+                gameObject.SetActive(false);
             }
+        }
+
+        public override void Unload()
+        {
+            base.Unload();
+            gameObject.SetActive(false);
         }
 
         private void UpdateUI()

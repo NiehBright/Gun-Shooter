@@ -186,6 +186,8 @@ namespace Watermelon.SquadShooter
 
             base.TakeDamage(damage, projectilePosition, projectileDirection);
 
+            UIBossHealthBar.UpdateHealth(currentHealth, MaxHealth);
+
             if (hitAnimationTime < Time.time)
                 HitAnimation(Random.Range(0, 2));
         }
@@ -203,6 +205,7 @@ namespace Watermelon.SquadShooter
 
             // Disable healthbar
             healthbarBehaviour.DisableBar();
+            UIBossHealthBar.HideBoss();
 
             animatorRef.Play(ANIMATOR_DIE_HASH, -1, 0);
 
@@ -317,7 +320,8 @@ namespace Watermelon.SquadShooter
         {
             isDead = false;
 
-            healthbarBehaviour.HealthBarTransform.gameObject.SetActive(true);
+            healthbarBehaviour.HealthBarTransform.gameObject.SetActive(false);
+            UIBossHealthBar.ShowBoss("BOSS BOMBER", currentHealth, MaxHealth);
 
             ParticlesController.PlayParticle(PARTICLE_ENTER_FALL_HASH).SetPosition(transform.position);
 
@@ -339,7 +343,8 @@ namespace Watermelon.SquadShooter
         {
             // Enable graphics
             graphicsObject.SetActive(true);
-            healthbarBehaviour.HealthBarTransform.gameObject.SetActive(true);
+            healthbarBehaviour.HealthBarTransform.gameObject.SetActive(false);
+            UIBossHealthBar.ShowBoss("BOSS BOMBER", currentHealth, MaxHealth);
 
             animatorRef.Play(ANIMATOR_ENTER_HASH, -1, 0);
         }
@@ -347,6 +352,11 @@ namespace Watermelon.SquadShooter
         public override void Attack()
         {
 
+        }
+
+        private void OnDisable()
+        {
+            UIBossHealthBar.HideBoss(true);
         }
     }
 }

@@ -57,6 +57,14 @@ namespace Watermelon.SquadShooter
         public float MaxHealth => stats.Health;
         public bool FullHealth => currentHealth == MaxHealth;
 
+        public static event System.Action<float, float> OnPlayerHealthChanged;
+        public static event System.Action<CharacterBehaviour> OnPlayerSpawned;
+
+        public void NotifyHealthChanged()
+        {
+            OnPlayerHealthChanged?.Invoke(currentHealth, MaxHealth);
+        }
+
         public bool IsInvulnerable { get; private set; }
 
         public bool IsActive => isActive;
@@ -144,12 +152,9 @@ namespace Watermelon.SquadShooter
                 var behaviour = GetBehaviour();
                 if (behaviour != null)
                 {
-                    if (behaviour.healthbarBehaviour != null)
+                    if (behaviour.healthbarBehaviour != null && behaviour.healthbarBehaviour.HealthBarTransform != null)
                     {
-                        if (isLobbyModeActive)
-                            behaviour.healthbarBehaviour.DisableBar();
-                        else
-                            behaviour.healthbarBehaviour.EnableBar();
+                        behaviour.healthbarBehaviour.HealthBarTransform.gameObject.SetActive(false);
                     }
                     if (isLobbyModeActive)
                     {
@@ -225,6 +230,13 @@ namespace Watermelon.SquadShooter
 
             // Initialise healthbar
             healthbarBehaviour.Initialise(transform, this, true, CharactersController.SelectedCharacter.GetCurrentStage().HealthBarOffset);
+            if (healthbarBehaviour.HealthBarTransform != null)
+            {
+                healthbarBehaviour.HealthBarTransform.gameObject.SetActive(false);
+            }
+
+            OnPlayerSpawned?.Invoke(this);
+            NotifyHealthChanged();
 
             aimRingBehavior.Init(transform);
 
@@ -262,6 +274,11 @@ namespace Watermelon.SquadShooter
 
             healthbarBehaviour.EnableBar(true);
             healthbarBehaviour.RedrawHealth();
+            if (healthbarBehaviour.HealthBarTransform != null)
+            {
+                healthbarBehaviour.HealthBarTransform.gameObject.SetActive(false);
+            }
+            NotifyHealthChanged();
 
             // Drone is now a child of the player, so it doesn't need to be destroyed on reload
 
@@ -352,6 +369,11 @@ namespace Watermelon.SquadShooter
             currentHealth = Mathf.Clamp(currentHealth - damage, 0, MaxHealth);
 
             healthbarBehaviour.OnHealthChanged();
+            if (healthbarBehaviour.HealthBarTransform != null)
+            {
+                healthbarBehaviour.HealthBarTransform.gameObject.SetActive(false);
+            }
+            NotifyHealthChanged();
 
             mainCameraCase.Shake(0.04f, 0.04f, 0.3f, 1.4f);
 
@@ -497,7 +519,14 @@ namespace Watermelon.SquadShooter
             currentHealth = stats.Health;
 
             if (healthbarBehaviour != null)
+            {
                 healthbarBehaviour.OnHealthChanged();
+                if (healthbarBehaviour.HealthBarTransform != null)
+                {
+                    healthbarBehaviour.HealthBarTransform.gameObject.SetActive(false);
+                }
+            }
+            NotifyHealthChanged();
         }
 
         public void SetGraphics(GameObject newGraphicsPrefab, bool playParticle, bool playAnimation)
@@ -690,6 +719,28 @@ namespace Watermelon.SquadShooter
 
             var joystick = Control.CurrentControl;
 
+            Vector3 movementInput = Vector3.zero;
+            if (joystick != null && joystick.IsMovementInputNonZero && joystick.MovementInput.sqrMagnitude > 0.05f)
+            {
+                movementInput = joystick.MovementInput;
+            }
+#if UNITY_EDITOR
+            else if (UnityEngine.InputSystem.Keyboard.current != null)
+            {
+                var kb = UnityEngine.InputSystem.Keyboard.current;
+                Vector3 keyInput = Vector3.zero;
+                if (kb.wKey.isPressed || kb.upArrowKey.isPressed) keyInput.z += 1f;
+                if (kb.sKey.isPressed || kb.downArrowKey.isPressed) keyInput.z -= 1f;
+                if (kb.aKey.isPressed || kb.leftArrowKey.isPressed) keyInput.x -= 1f;
+                if (kb.dKey.isPressed || kb.rightArrowKey.isPressed) keyInput.x += 1f;
+
+                if (keyInput.sqrMagnitude > 0.01f)
+                {
+                    movementInput = keyInput.normalized;
+                }
+            }
+#endif
+
             if (isDashing)
             {
                 dashTimeLeft -= Time.deltaTime;
@@ -715,7 +766,7 @@ namespace Watermelon.SquadShooter
                     transform.rotation = Quaternion.LookRotation(dashDirection);
                 }
             }
-            else if (joystick.IsMovementInputNonZero && joystick.MovementInput.sqrMagnitude > 0.1f)
+            else if (movementInput.sqrMagnitude > 0.05f)
             {
                 if (!isMoving)
                 {
@@ -726,7 +777,7 @@ namespace Watermelon.SquadShooter
                     graphics.OnMovingStarted();
                 }
 
-                float maxAlowedSpeed = Mathf.Clamp01(joystick.MovementInput.magnitude) * ActualMoveSpeed;
+                float maxAlowedSpeed = Mathf.Clamp01(movementInput.magnitude) * ActualMoveSpeed;
 
                 if (speed > maxAlowedSpeed)
                 {
@@ -747,13 +798,13 @@ namespace Watermelon.SquadShooter
 
                 movementVelocity = transform.forward * speed;
 
-                transform.position += joystick.MovementInput * Time.deltaTime * speed;
+                transform.position += movementInput * Time.deltaTime * speed;
 
-                graphics.OnMoving(Mathf.InverseLerp(0, ActualMoveSpeed, speed), joystick.MovementInput, IsCloseEnemyFound);
+                graphics.OnMoving(Mathf.InverseLerp(0, ActualMoveSpeed, speed), movementInput, IsCloseEnemyFound);
 
                 if (!IsCloseEnemyFound)
                 {
-                    transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(joystick.MovementInput.normalized), Time.deltaTime * activeMovementSettings.RotationSpeed);
+                    transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(movementInput.normalized), Time.deltaTime * activeMovementSettings.RotationSpeed);
                 }
             }
             else
@@ -962,6 +1013,11 @@ namespace Watermelon.SquadShooter
             {
                 currentHealth = Mathf.Clamp(currentHealth + item.DropAmount, 0, MaxHealth);
                 healthbarBehaviour.OnHealthChanged();
+                if (healthbarBehaviour.HealthBarTransform != null)
+                {
+                    healthbarBehaviour.HealthBarTransform.gameObject.SetActive(false);
+                }
+                NotifyHealthChanged();
                 healingParticle.Play();
             }
         }
@@ -1006,6 +1062,19 @@ namespace Watermelon.SquadShooter
             {
                 dashDirection = new Vector3(joystick.MovementInput.x, 0, joystick.MovementInput.y).normalized;
             }
+#if UNITY_EDITOR
+            else if (UnityEngine.InputSystem.Keyboard.current != null)
+            {
+                var kb = UnityEngine.InputSystem.Keyboard.current;
+                Vector3 keyInput = Vector3.zero;
+                if (kb.wKey.isPressed || kb.upArrowKey.isPressed) keyInput.z += 1f;
+                if (kb.sKey.isPressed || kb.downArrowKey.isPressed) keyInput.z -= 1f;
+                if (kb.aKey.isPressed || kb.leftArrowKey.isPressed) keyInput.x -= 1f;
+                if (kb.dKey.isPressed || kb.rightArrowKey.isPressed) keyInput.x += 1f;
+                if (keyInput.sqrMagnitude > 0.01f) dashDirection = keyInput.normalized;
+                else dashDirection = transform.forward;
+            }
+#endif
             else
             {
                 dashDirection = transform.forward;

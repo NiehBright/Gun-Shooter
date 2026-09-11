@@ -76,14 +76,32 @@ namespace Watermelon.SquadShooter
         {
             base.Initialise();
 
+            if (healthbarBehaviour != null && healthbarBehaviour.HealthBarTransform != null)
+            {
+                healthbarBehaviour.HealthBarTransform.gameObject.SetActive(false);
+            }
+            UIBossHealthBar.ShowBoss("BOSS SNIPER", currentHealth, MaxHealth);
+
             auraParticle.SetActive(true);
+        }
+
+        public override void TakeDamage(float damage, Vector3 projectilePosition, Vector3 projectileDirection)
+        {
+            base.TakeDamage(damage, projectilePosition, projectileDirection);
+            UIBossHealthBar.UpdateHealth(currentHealth, MaxHealth);
         }
 
         protected override void OnDeath()
         {
             base.OnDeath();
 
+            UIBossHealthBar.HideBoss();
             auraParticle.SetActive(false);
+        }
+
+        private void OnDisable()
+        {
+            UIBossHealthBar.HideBoss(true);
         }
 
         public override void OnAnimatorCallback(EnemyCallbackType enemyCallbackType)
