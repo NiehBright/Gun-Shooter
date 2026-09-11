@@ -40,6 +40,13 @@ namespace Watermelon
         [SerializeField] Image fadeImage;
         [SerializeField] TextMeshProUGUI coinsText;
 
+        [Header("Player & Boss Health Bars")]
+        [SerializeField] UIPlayerHealthBar playerHealthBar;
+        public UIPlayerHealthBar PlayerHealthBar => playerHealthBar;
+
+        [SerializeField] UIBossHealthBar bossHealthBar;
+        public UIBossHealthBar BossHealthBar => bossHealthBar;
+
         [Header("Pause Panel")]
         [SerializeField] Button pauseButton;
         public Button PauseButton => pauseButton;
@@ -150,6 +157,21 @@ namespace Watermelon
         public override void Initialise()
         {
             joystick.Initialise(UIController.MainCanvas);
+
+            if (joystick != null)
+            {
+                Canvas joyCanvas = joystick.GetComponent<Canvas>();
+                if (joyCanvas != null)
+                {
+                    Destroy(joyCanvas);
+                }
+
+                GraphicRaycaster joyRaycaster = joystick.GetComponent<GraphicRaycaster>();
+                if (joyRaycaster != null)
+                {
+                    Destroy(joyRaycaster);
+                }
+            }
         }
 
         public override void PlayHideAnimation()
@@ -186,6 +208,8 @@ namespace Watermelon
             {
                 if (skillButton != null) skillButton.gameObject.SetActive(false);
             }
+
+            UpdatePlayerHealthBarVisibility();
         }
 
         public void InitRoomsUI(RoomData[] rooms)
@@ -331,12 +355,19 @@ namespace Watermelon
             if (pauseButton != null)
                 pauseButton.gameObject.SetActive(!active);
 
-            if (roomsHolder != null && roomsHolder.parent != null)
-                roomsHolder.parent.gameObject.SetActive(!active);
+            if (roomsHolder != null)
+                roomsHolder.gameObject.SetActive(!active);
 
             if (areaText != null)
                 areaText.gameObject.SetActive(!active);
 
+            if (joystick != null)
+            {
+                joystick.gameObject.SetActive(true);
+                joystick.ResetControl();
+            }
+
+            UpdatePlayerHealthBarVisibility();
             UpdateAttackButtonVisibility();
         }
 
@@ -377,6 +408,19 @@ namespace Watermelon
                     attackButton.gameObject.SetActive(!CharacterBehaviour.IsAutoShootActive);
                 }
             }
+
+            UpdatePlayerHealthBarVisibility();
+        }
+
+        public void UpdatePlayerHealthBarVisibility()
+        {
+            if (playerHealthBar == null) return;
+
+            bool isCombatMode = LobbyCombatController.IsCombatModeActive;
+            bool isLobby = LevelController.IsLobbyMode;
+
+            bool shouldShow = !isLobby || isCombatMode;
+            playerHealthBar.SetVisible(shouldShow);
         }
 
         private void OnAutoShootButtonClicked()

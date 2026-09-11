@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -32,6 +33,9 @@ namespace Watermelon
         private RectTransform backgroundRectTransform;
         private RectTransform handleRectTransform;
 
+        private CanvasGroup visualsCanvasGroup;
+        private GameObject pendingTargetUI;
+
         private bool isActive;
         public bool IsMovementInputNonZero => isActive;
 
@@ -59,6 +63,17 @@ namespace Watermelon
 
         private void Awake()
         {
+            if (backgroundImage != null)
+            {
+                visualsCanvasGroup = backgroundImage.rectTransform.GetComponent<CanvasGroup>();
+                if (visualsCanvasGroup == null)
+                    visualsCanvasGroup = backgroundImage.rectTransform.gameObject.AddComponent<CanvasGroup>();
+
+                visualsCanvasGroup.alpha = 0f;
+                visualsCanvasGroup.blocksRaycasts = false;
+                visualsCanvasGroup.interactable = false;
+            }
+
             if (Control.InputType == InputType.UIJoystick)
             {
                 Control.SetControl(this);
@@ -80,6 +95,20 @@ namespace Watermelon
             baseRectTransform = GetComponent<RectTransform>();
             backgroundRectTransform = backgroundImage.rectTransform;
             handleRectTransform = handleImage.rectTransform;
+
+            if (visualsCanvasGroup == null && backgroundRectTransform != null)
+            {
+                visualsCanvasGroup = backgroundRectTransform.GetComponent<CanvasGroup>();
+                if (visualsCanvasGroup == null)
+                    visualsCanvasGroup = backgroundRectTransform.gameObject.AddComponent<CanvasGroup>();
+            }
+
+            if (visualsCanvasGroup != null)
+            {
+                visualsCanvasGroup.alpha = 0f;
+                visualsCanvasGroup.blocksRaycasts = false;
+                visualsCanvasGroup.interactable = false;
+            }
 
             if (canvas.renderMode == RenderMode.ScreenSpaceCamera)
                 canvasCamera = canvas.worldCamera;
@@ -116,6 +145,19 @@ namespace Watermelon
 
         public void OnPointerDown(PointerEventData eventData)
         {
+            // 1. Kiểm tra nếu chạm vào nút UI nào khác (Button, Toggle, Scroll, ...) trên màn hình
+            if (IsPointerOverOtherUI(eventData, out GameObject targetUI))
+            {
+                canDrag = false;
+                isActive = false;
+                pendingTargetUI = targetUI;
+                eventData.pointerPress = targetUI;
+                eventData.rawPointerPress = targetUI;
+                ExecuteEvents.Execute(targetUI, eventData, ExecuteEvents.pointerDownHandler);
+                return;
+            }
+
+            // 2. Kiểm tra nút 3D WorldSpace trong game
             canDrag = !WorldSpaceRaycaster.Raycast(eventData);
 
             if (!canDrag) return;
@@ -129,6 +171,11 @@ namespace Watermelon
             }
 
             backgroundRectTransform.anchoredPosition = ScreenPointToAnchoredPosition(eventData.position);
+
+            if (visualsCanvasGroup != null)
+            {
+                visualsCanvasGroup.alpha = hideVisualsActive ? 0f : 1f;
+            }
 
             backgroundImage.color = backgroundActiveColor.SetAlpha(hideVisualsActive ? 0f : backgroundActiveColor.a);
             handleImage.color = handleActiveColor.SetAlpha(hideVisualsActive ? 0f : handleActiveColor.a);
@@ -165,6 +212,14 @@ namespace Watermelon
 
         public void OnPointerUp(PointerEventData eventData)
         {
+            if (pendingTargetUI != null)
+            {
+                ExecuteEvents.Execute(pendingTargetUI, eventData, ExecuteEvents.pointerUpHandler);
+                ExecuteEvents.Execute(pendingTargetUI, eventData, ExecuteEvents.pointerClickHandler);
+                pendingTargetUI = null;
+                return;
+            }
+
             WorldSpaceRaycaster.OnPointerUp(eventData);
 
             if (!isActive)
@@ -178,6 +233,11 @@ namespace Watermelon
         public void ResetControl()
         {
             isActive = false;
+
+            if (visualsCanvasGroup != null)
+            {
+                visualsCanvasGroup.alpha = 0f;
+            }
 
             backgroundImage.color = backgroundDisableColor.SetAlpha(0f);
             handleImage.color = handleDisableColor.SetAlpha(0f);
@@ -199,6 +259,37 @@ namespace Watermelon
             return Vector2.zero;
         }
 
+        private bool IsPointerOverOtherUI(PointerEventData eventData, out GameObject targetUI)
+        {
+            targetUI = null;
+            if (EventSystem.current == null) return false;
+
+            var results = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(eventData, results);
+
+            for (int i = 0; i < results.Count; i++)
+            {
+                var go = results[i].gameObject;
+                if (go == null || go == gameObject || go.transform.IsChildOf(transform))
+                    continue;
+
+                // Kiểm tra xem GameObject này (hoặc cha của nó) có component nhận sự kiện click / nhấn không
+                var handler = ExecuteEvents.GetEventHandler<IPointerClickHandler>(go);
+                if (handler == null)
+                    handler = ExecuteEvents.GetEventHandler<IPointerDownHandler>(go);
+                if (handler == null)
+                    handler = ExecuteEvents.GetEventHandler<ISubmitHandler>(go);
+
+                if (handler != null && handler != gameObject && !handler.transform.IsChildOf(transform))
+                {
+                    targetUI = handler;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public void EnableMovementControl()
         {
             gameObject.SetActive(true);
@@ -216,6 +307,9 @@ namespace Watermelon
         {
             hideVisualsActive = true;
 
+            if (visualsCanvasGroup != null)
+                visualsCanvasGroup.alpha = 0f;
+
             backgroundImage.color = backgroundImage.color.SetAlpha(0f);
             handleImage.color = backgroundImage.color.SetAlpha(0f);
         }
@@ -223,6 +317,9 @@ namespace Watermelon
         public void ShowVisuals()
         {
             hideVisualsActive = false;
+
+            if (visualsCanvasGroup != null)
+                visualsCanvasGroup.alpha = isActive ? 1f : 0f;
 
             backgroundImage.color = backgroundImage.color.SetAlpha(1f);
             handleImage.color = backgroundImage.color.SetAlpha(1f);
