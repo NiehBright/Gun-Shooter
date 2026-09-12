@@ -47,7 +47,17 @@ namespace Watermelon.SquadShooter
 
         private bool storedIsLocked;
 
-        public Transform UpgradeButtonTransform => upgradesBuyButton.transform;
+        public Transform UpgradeButtonTransform
+        {
+            get
+            {
+                if (upgradesBuyButton != null && upgradesBuyButton.gameObject.activeInHierarchy)
+                    return upgradesBuyButton.transform;
+                if (charactersPanel != null && charactersPanel.DetailsPanel != null)
+                    return charactersPanel.DetailsPanel.UpgradeButtonTransform;
+                return transform;
+            }
+        }
 
         private UICharactersPanel charactersPanel;
 
@@ -192,15 +202,24 @@ namespace Watermelon.SquadShooter
 
             selectedCharacterPanelUI = this;
 
+            panelRectTransform.DOScale(Vector3.one * 0.78f, 0.2f).SetEasing(Ease.Type.QuadOut);
+
             UIGeneralPowerIndicator.UpdateText();
             RedrawUpgradeButton();
 
             CharactersController.SelectCharacter(character.Type);
+
+            if (charactersPanel != null)
+            {
+                charactersPanel.OnCharacterSelected(character);
+            }
         }
 
         public void UnselectCharacter()
         {
             selectionImage.gameObject.SetActive(false);
+
+            panelRectTransform.DOScale(Vector3.one * 0.70f, 0.2f).SetEasing(Ease.Type.QuadOut);
 
             if(gamepadButton != null)
                 gamepadButton.SetFocus(false);
@@ -304,8 +323,8 @@ namespace Watermelon.SquadShooter
                     upgradesStatesImages[i].color = upgradeStateActiveColor;
                 }
 
-                upgradesMaxObject.SetActive(false);
-                upgradesBuyButton.gameObject.SetActive(true);
+                if (upgradesMaxObject != null) upgradesMaxObject.SetActive(false);
+                if (upgradesBuyButton != null) upgradesBuyButton.gameObject.SetActive(false);
 
                 RedrawUpgradeButton();
             }
@@ -316,8 +335,8 @@ namespace Watermelon.SquadShooter
                     upgradesStatesImages[i].color = upgradeStateActiveColor;
                 }
 
-                upgradesMaxObject.SetActive(true);
-                upgradesBuyButton.gameObject.SetActive(false);
+                if (upgradesMaxObject != null) upgradesMaxObject.SetActive(false);
+                if (upgradesBuyButton != null) upgradesBuyButton.gameObject.SetActive(false);
 
                 if (gamepadButton != null)
                     gamepadButton.SetFocus(false);
@@ -386,13 +405,20 @@ namespace Watermelon.SquadShooter
             if (UICharactersPanel.IsControlBlocked)
                 return;
 
-            if (character.IsSelected())
-                return;
-
             AudioController.PlaySound(AudioController.Sounds.buttonSound);
 
             // Check if character is unlocked
             if (!character.IsUnlocked())
+            {
+                // Cho phep xem thong tin nhan vat khoa tren bang chi tiet ben trai
+                if (charactersPanel != null)
+                {
+                    charactersPanel.OnCharacterSelected(character);
+                }
+                return;
+            }
+
+            if (character.IsSelected())
                 return;
 
             Select();
