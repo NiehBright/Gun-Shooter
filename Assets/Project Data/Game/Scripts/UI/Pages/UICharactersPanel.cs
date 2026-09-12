@@ -13,6 +13,19 @@ namespace Watermelon.SquadShooter
         [Space]
         [SerializeField] GameObject stageStarPrefab;
 
+        [Header("Custom Layout")]
+        [SerializeField] UICharacterDetailsPanel detailsPanel;
+        public UICharacterDetailsPanel DetailsPanel => detailsPanel;
+
+        [SerializeField] RectTransform leftPanelRectTransform;
+        [SerializeField] RectTransform rightPanelRectTransform;
+
+        public RectTransform BackgroundPanelRectTransform => backgroundPanelRectTransform;
+        public ScrollRect ScrollView => scrollView;
+        public Transform PanelsContainer => panelsContainer;
+        public Button BackButtonObject => backButton;
+        public RectTransform CloseButtonRectTransform => closeButtonRectTransform;
+
         private CharactersDatabase charactersDatabase;
 
         private Pool stageStarPool;
@@ -162,8 +175,15 @@ namespace Watermelon.SquadShooter
             charactersDatabase = CharactersController.GetDatabase();
 
             stageStarPool = new Pool(new PoolSettings(stageStarPrefab.name, stageStarPrefab, 1, true));
-
             stageStarPool.Initialize();
+
+            // Build or refresh iPhone 12 layout
+            UICharactersPanelBuilder.BuildLayout(this);
+
+            if (detailsPanel != null)
+            {
+                detailsPanel.Initialise(this);
+            }
 
             for (int i = 0; i < charactersDatabase.Characters.Length; i++)
             {
@@ -180,35 +200,49 @@ namespace Watermelon.SquadShooter
             for (int i = 0; i < CurrenciesController.Currencies.Length; i++)
             {
                 CurrenciesController.Currencies[i].OnCurrencyChanged += OnCurrencyAmountChanged;
+                CurrenciesController.Currencies[i].OnCurrencyChanged += OnCurrencyChangedCallback;
             }
 
-            backgroundPanelRectTransform.anchoredPosition = new Vector2(0, -1500);
-            backgroundPanelRectTransform.DOAnchoredPosition(Vector2.zero, 0.3f).SetCustomEasing(Ease.GetCustomEasingFunction("BackOutLight"));
+            // Left Details Panel slide in from left (-800 -> 90)
+            if (leftPanelRectTransform != null)
+            {
+                leftPanelRectTransform.anchoredPosition = new Vector2(-800f, 0f);
+                leftPanelRectTransform.DOAnchoredPosition(new Vector2(90f, 0f), 0.35f).SetCustomEasing(Ease.GetCustomEasingFunction("BackOutLight"));
+            }
 
-            // Dat vi tri Scroll View ve (0, 0) va dung cuon
-            scrollView.content.anchoredPosition = Vector2.zero;
-            scrollView.StopMovement();
+            // Right Selection Panel (backgroundPanelRectTransform) slide in from right (800 -> -70)
+            if (backgroundPanelRectTransform != null)
+            {
+                backgroundPanelRectTransform.anchoredPosition = new Vector2(800f, 0f);
+                backgroundPanelRectTransform.DOAnchoredPosition(new Vector2(-70f, 0f), 0.35f).SetCustomEasing(Ease.GetCustomEasingFunction("BackOutLight"));
+            }
 
+            // Reset scroll position
+            if (scrollView != null && scrollView.content != null)
+            {
+                scrollView.content.anchoredPosition = Vector2.zero;
+                scrollView.StopMovement();
+            }
+
+            // Animate cards appearance (Enlarged scales)
             for (int i = 0; i < itemPanels.Count; i++)
             {
                 RectTransform panelTransform = itemPanels[i].RectTransform;
-
                 panelTransform.localScale = Vector2.zero;
 
-                if (i == SelectedIndex)
-                {
-                    panelTransform.DOScale(Vector3.one, 0.3f, 0.2f).SetCurveEasing(selectedPanelScaleAnimationCurve);
-                }
-                else
-                {
-                    panelTransform.DOScale(Vector3.one, 0.3f, 0.3f).SetCurveEasing(panelScaleAnimationCurve);
-                }
+                float targetScale = (i == SelectedIndex) ? 0.78f : 0.70f;
+                panelTransform.DOScale(Vector3.one * targetScale, 0.3f, 0.15f + i * 0.05f).SetCurveEasing(panelScaleAnimationCurve);
 
                 itemPanels[i].OnPanelOpened();
             }
 
-            UIGeneralPowerIndicator.Show();
+            // Update details panel with currently selected character
+            if (detailsPanel != null && CharactersController.SelectedCharacter != null)
+            {
+                detailsPanel.DisplayCharacter(CharactersController.SelectedCharacter);
+            }
 
+            UIGeneralPowerIndicator.Show();
             UIMainMenu.DotsBackground.gameObject.SetActive(false); // An background de thay ro 3D character
 
             Tween.DelayedCall(0.9f, () => {
@@ -218,7 +252,7 @@ namespace Watermelon.SquadShooter
 
             StartAnimations();
 
-            // Xoay nhan vat doi dien camera va kích hoat camera bay cận canh
+            // Xoay nhan vat doi dien camera va kích hoat camera bay cận canh chinh giua
             CharacterBehaviour characterBehaviour = CharacterBehaviour.GetBehaviour();
             if (characterBehaviour != null)
             {
@@ -235,9 +269,9 @@ namespace Watermelon.SquadShooter
                     characterBehaviour.transform.rotation = Quaternion.LookRotation(lookDir);
                     showcasePlayerRotation = characterBehaviour.transform.rotation;
                     
-                    // Kich hoat camera bay den vi tri phia truoc và lech phai (gip nhan vat dung ben trai man hinh)
-                    Vector3 right = Vector3.Cross(Vector3.up, lookDir).normalized; // Right vector local
-                    CameraController.EnterCharacterSelection(playerPos, lookDir, right, Vector3.up);
+                    // Kich hoat camera bay den vi tri phia truoc (horizontalOffset = 0f giup nhan vat dung chinh giua man hinh)
+                    Vector3 right = Vector3.Cross(Vector3.up, lookDir).normalized;
+                    CameraController.EnterCharacterSelection(playerPos, lookDir, right, Vector3.up, 0f);
                 }
 
                 // Tat di chuyen va agent de tranh nguoi choi dieu khien nhan vat trong khi mo UI
@@ -268,23 +302,30 @@ namespace Watermelon.SquadShooter
         {
             base.PlayHideAnimation();
 
+            for (int i = 0; i < CurrenciesController.Currencies.Length; i++)
+            {
+                CurrenciesController.Currencies[i].OnCurrencyChanged -= OnCurrencyChangedCallback;
+            }
+
+            if (leftPanelRectTransform != null)
+            {
+                leftPanelRectTransform.DOAnchoredPosition(new Vector2(-800f, 0f), 0.25f).SetEasing(Ease.Type.CubicIn);
+            }
+
             // Khoi phuc huong xoay nhan vat va tra quyen kiem soat cho Cinemachine
             resetPlayerRotationTweenCase.KillActive();
             CharacterBehaviour characterBehaviour = CharacterBehaviour.GetBehaviour();
             if (characterBehaviour != null)
             {
                 characterBehaviour.transform.rotation = originalPlayerRotation;
-                // Bat lai di chuyen va agent cua nhan vat
                 Control.EnableMovementControl();
                 characterBehaviour.ActivateAgent();
 
-                // Hien lai drone
                 if (characterBehaviour.CurrentDrone != null)
                 {
                     characterBehaviour.CurrentDrone.gameObject.SetActive(true);
                 }
 
-                // Hien lai UI mau
                 if (characterBehaviour.HealthbarBehaviour != null)
                 {
                     characterBehaviour.HealthbarBehaviour.EnableBar(true);
@@ -292,10 +333,41 @@ namespace Watermelon.SquadShooter
             }
             CameraController.ExitCharacterSelection();
 
-            backgroundPanelRectTransform.DOAnchoredPosition(new Vector2(0, -1500), 0.3f).SetEasing(Ease.Type.CubicIn).OnComplete(delegate
+            if (backgroundPanelRectTransform != null)
+            {
+                backgroundPanelRectTransform.DOAnchoredPosition(new Vector2(800f, 0f), 0.25f).SetEasing(Ease.Type.CubicIn).OnComplete(delegate
+                {
+                    UIController.OnPageClosed(this);
+                });
+            }
+            else
             {
                 UIController.OnPageClosed(this);
-            });
+            }
+        }
+
+        public void OnCharacterSelected(Character character)
+        {
+            if (detailsPanel != null)
+            {
+                detailsPanel.DisplayCharacter(character);
+            }
+        }
+
+        public void OnCharacterUpgradedInternal(Character character)
+        {
+            for (int i = 0; i < itemPanels.Count; i++)
+            {
+                itemPanels[i].OnPanelOpened();
+            }
+        }
+
+        private void OnCurrencyChangedCallback(Currency currency, int difference)
+        {
+            if (detailsPanel != null)
+            {
+                detailsPanel.UpdateUpgradeButtonsState();
+            }
         }
 
         protected override void HidePage(SimpleCallback onFinish)

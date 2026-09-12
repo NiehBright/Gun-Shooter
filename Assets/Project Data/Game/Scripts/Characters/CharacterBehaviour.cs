@@ -325,17 +325,39 @@ namespace Watermelon.SquadShooter
 
         public void OnNavMeshUpdated()
         {
-            if (agent.isOnNavMesh)
+            if (agent != null)
             {
-                agent.enabled = true;
-                agent.isStopped = false;
+                if (UnityEngine.AI.NavMesh.SamplePosition(transform.position, out UnityEngine.AI.NavMeshHit hit, 3.0f, UnityEngine.AI.NavMesh.AllAreas))
+                {
+                    transform.position = hit.position;
+                    agent.enabled = true;
+                    agent.isStopped = false;
+                }
+                else
+                {
+                    agent.enabled = true;
+                    if (agent.isOnNavMesh)
+                    {
+                        agent.isStopped = false;
+                    }
+                }
             }
         }
 
         public void ActivateAgent()
         {
-            agent.enabled = true;
-            agent.isStopped = false;
+            if (agent != null)
+            {
+                if (UnityEngine.AI.NavMesh.SamplePosition(transform.position, out UnityEngine.AI.NavMeshHit hit, 3.0f, UnityEngine.AI.NavMesh.AllAreas))
+                {
+                    transform.position = hit.position;
+                }
+                agent.enabled = true;
+                if (agent.isOnNavMesh)
+                {
+                    agent.isStopped = false;
+                }
+            }
         }
 
         public static void DisableNavmeshAgent()
@@ -422,9 +444,16 @@ namespace Watermelon.SquadShooter
             transform.position = position;
             transform.rotation = Quaternion.identity;
 
-            if (agent.isActiveAndEnabled && agent.isOnNavMesh)
+            if (agent != null && agent.isActiveAndEnabled)
             {
-                agent.Warp(position);
+                if (UnityEngine.AI.NavMesh.SamplePosition(position, out UnityEngine.AI.NavMeshHit hit, 3.0f, UnityEngine.AI.NavMesh.AllAreas))
+                {
+                    agent.Warp(hit.position);
+                }
+                else
+                {
+                    agent.enabled = false;
+                }
             }
         }
 
@@ -1164,11 +1193,10 @@ namespace Watermelon.SquadShooter
             var skill = character.SkillData;
             skillCooldownTimeLeft = skill.Cooldown;
 
-            // Spawn VFX at the current character feet (fixed position)
+            // Vị trí kích hoạt mặc định tại chân nhân vật
             Vector3 spawnPos = transform.position;
-            GameObject vfxObj = Instantiate(skill.VFXPrefab, spawnPos, Quaternion.identity);
 
-            // Calculate damage scaled with character level
+            // Tính toán sát thương theo cấp độ và vũ khí của nhân vật
             int upgradeLevel = character.Save != null ? character.Save.UpgradeLevel : 0;
             float charLevel = upgradeLevel + 1;
 
@@ -1185,13 +1213,80 @@ namespace Watermelon.SquadShooter
 
             float charDmgMult = Stats.BaseBulletDamageMultiplier;
             float finalBaseDmg = baseDmg * charDmgMult;
+            float scaledDmg = finalBaseDmg * skill.DamageMultiplier * (1f + (charLevel - 1) * 0.15f);
 
-            // Damage per tick scales up by 15% per character level
-            float damagePerTick = finalBaseDmg * skill.DamageMultiplier * (1f + (charLevel - 1) * 0.15f);
+            switch (skill.SkillType)
+            {
+                case SkillType.BlackHole:
+                    {
+                        GameObject vfxObj = Instantiate(skill.VFXPrefab, spawnPos, Quaternion.identity);
+                        var blackHole = vfxObj.GetComponent<BlackHoleBehaviour>() ?? vfxObj.AddComponent<BlackHoleBehaviour>();
+                        blackHole.Initialise(skill.AoeRadius, skill.PullSpeed, scaledDmg, skill.TickInterval, skill.Duration);
+                    }
+                    break;
 
-            // Add BlackHoleBehaviour component to handle pulling and damage ticks
-            var blackHole = vfxObj.AddComponent<BlackHoleBehaviour>();
-            blackHole.Initialise(skill.AoeRadius, skill.PullSpeed, damagePerTick, skill.TickInterval, skill.Duration);
+                case SkillType.OrbitalLaser:
+                    {
+                        // Định vị tại quái vật gần nhất nếu có, hoặc đặt tại chân người chơi
+                        Vector3 targetPos = spawnPos;
+                        if (closestEnemyBehaviour != null && !closestEnemyBehaviour.IsDead)
+                        {
+                            targetPos = closestEnemyBehaviour.transform.position;
+                        }
+
+                        GameObject vfxObj = Instantiate(skill.VFXPrefab, targetPos, Quaternion.identity);
+                        var orbitalLaser = vfxObj.GetComponent<OrbitalLaserBehaviour>() ?? vfxObj.AddComponent<OrbitalLaserBehaviour>();
+                        float burstDmg = scaledDmg * 1.5f;
+                        float burnTickDmg = scaledDmg * 0.35f;
+                        float actualRadius = Mathf.Min(skill.AoeRadius, 1.5f);
+                        orbitalLaser.Initialise(actualRadius, burstDmg, burnTickDmg, 0.35f, skill.Duration, 0.5f);
+                    }
+                    break;
+
+                case SkillType.ShadowClone:
+                    {
+                        // 1. Khởi tạo Phân thân Hologram tại vị trí NinNin đang đứng
+                        GameObject vfxObj = Instantiate(skill.VFXPrefab, spawnPos, transform.rotation);
+                        var shadowClone = vfxObj.GetComponent<ShadowCloneBehaviour>() ?? vfxObj.AddComponent<ShadowCloneBehaviour>();
+                        float explosionDmg = scaledDmg * 2.5f;
+                        float shockTickDmg = scaledDmg * 0.25f; // Sát thương giật sét liên tục
+                        float explosionRadius = 3.2f; // Khớp chuẩn 100% với bán kính hình ảnh VFX
+                        shadowClone.Initialise(12f, explosionRadius, explosionDmg, skill.Duration, 1.5f, shadowClone.ExplosionVfxPrefab, shockTickDmg);
+
+                        // Sao chép chính xác dáng đứng (pose) của nhân vật NinNin tại khoảnh khắc sài skill
+                        if (graphics != null)
+                        {
+                            shadowClone.CopyPoseFrom(graphics.gameObject);
+                        }
+
+                        // 2. NinNin lướt lùi về phía sau theo hướng ngược lại với hướng mặt nhìn (Backstep Dash)
+                        Vector3 dashDir = -transform.forward;
+                        dashDirection = dashDir;
+                        isDashing = true;
+                        dashTimeLeft = 0.22f;
+
+                        // Kích hoạt vệt mờ Dash Trail
+                        var trail = GetComponentInChildren<TrailRenderer>();
+                        if (trail != null)
+                        {
+                            trail.emitting = true;
+                            Tween.DelayedCall(0.22f, () => trail.emitting = false);
+                        }
+
+                        // 3. Tàng hình / Miễn nhiễm sát thương trong 1.2s
+                        IsInvulnerable = true;
+                        Tween.DelayedCall(1.2f, () => IsInvulnerable = false);
+                    }
+                    break;
+
+                default:
+                    {
+                        GameObject vfxObj = Instantiate(skill.VFXPrefab, spawnPos, Quaternion.identity);
+                        var defaultHole = vfxObj.GetComponent<BlackHoleBehaviour>() ?? vfxObj.AddComponent<BlackHoleBehaviour>();
+                        defaultHole.Initialise(skill.AoeRadius, skill.PullSpeed, scaledDmg, skill.TickInterval, skill.Duration);
+                    }
+                    break;
+            }
 
             // Play sound
             AudioController.PlaySound(AudioController.Sounds.buttonSound);

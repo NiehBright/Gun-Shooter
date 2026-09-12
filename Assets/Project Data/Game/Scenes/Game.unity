@@ -838,6 +838,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: UI Gacha Page
       objectReference: {fileID: 0}
+    - target: {fileID: 8227189595499872365, guid: d033df7208398df46841ac2ff8fdbda1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8227189595499872366, guid: d033df7208398df46841ac2ff8fdbda1,
         type: 3}
       propertyPath: m_Pivot.x
@@ -4528,7 +4533,7 @@ PrefabInstance:
     - target: {fileID: 9068757956156514045, guid: 16ae3e6461f25be45bc05ba7fc78f9fa,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.00047292028
+      value: 0.00083851244
       objectReference: {fileID: 0}
     - target: {fileID: 9154281434466665231, guid: 16ae3e6461f25be45bc05ba7fc78f9fa,
         type: 3}
