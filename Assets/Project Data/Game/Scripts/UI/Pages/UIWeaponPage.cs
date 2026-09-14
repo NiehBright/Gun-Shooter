@@ -27,6 +27,7 @@ namespace Watermelon.SquadShooter
 
         private WeaponShowcaseBehaviour showcaseBehaviour;
         private Vector3 showcaseWorldPosition;
+        private Quaternion originalPlayerRotation;
 
         protected override int SelectedIndex => Mathf.Clamp(WeaponsController.SelectedWeaponIndex, 0, int.MaxValue);
 
@@ -115,19 +116,19 @@ namespace Watermelon.SquadShooter
 
             previewWeaponIndex = SelectedIndex;
 
-            // Slide in Left Panel (-600 -> 0)
+            // Slide in Left Panel (-700 -> 75f)
             if (leftPanelRectTransform != null)
             {
-                leftPanelRectTransform.anchoredPosition = new Vector2(-600f, 0f);
-                leftPanelRectTransform.DOAnchoredPosition(Vector2.zero, 0.35f)
+                leftPanelRectTransform.anchoredPosition = new Vector2(-700f, 0f);
+                leftPanelRectTransform.DOAnchoredPosition(new Vector2(75f, 0f), 0.35f)
                     .SetCustomEasing(Ease.GetCustomEasingFunction("BackOutLight"));
             }
 
-            // Slide in Right Panel (600 -> 0)
+            // Slide in Right Panel (700 -> -65f)
             if (backgroundPanelRectTransform != null)
             {
-                backgroundPanelRectTransform.anchoredPosition = new Vector2(600f, 0f);
-                backgroundPanelRectTransform.DOAnchoredPosition(Vector2.zero, 0.35f)
+                backgroundPanelRectTransform.anchoredPosition = new Vector2(700f, 0f);
+                backgroundPanelRectTransform.DOAnchoredPosition(new Vector2(-65f, 0f), 0.35f)
                     .SetCustomEasing(Ease.GetCustomEasingFunction("BackOutLight"));
             }
 
@@ -158,33 +159,56 @@ namespace Watermelon.SquadShooter
                 UIMainMenu.DotsBackground.gameObject.SetActive(false);
             }
 
-            // Setup Showcase ngay truoc Camera giup sung luon o chinh giua man hinh khong bi che khuat
-            Camera cam = CameraController.MainCamera != null ? CameraController.MainCamera : Camera.main;
-            if (cam != null)
+            // Xoay nhan vat doi dien camera va kich hoat camera bay can canh chinh giua giong UI Characters
+            CharacterBehaviour characterBehaviour = CharacterBehaviour.GetBehaviour();
+            if (characterBehaviour != null)
             {
-                showcaseWorldPosition = cam.transform.position + cam.transform.forward * 1.55f - cam.transform.up * 0.04f;
-            }
-            else
-            {
-                showcaseWorldPosition = new Vector3(0f, 1.15f, 0f);
+                characterBehaviour.gameObject.SetActive(true);
+                originalPlayerRotation = characterBehaviour.transform.rotation;
+
+                Vector3 playerPos = characterBehaviour.transform.position;
+                Camera cam = CameraController.MainCamera != null ? CameraController.MainCamera : Camera.main;
+                if (cam != null)
+                {
+                    Vector3 defaultCamPos = cam.transform.position;
+                    Vector3 dirToCam = defaultCamPos - playerPos;
+                    dirToCam.y = 0;
+                    if (dirToCam.sqrMagnitude > 0.01f)
+                    {
+                        Vector3 lookDir = dirToCam.normalized;
+                        characterBehaviour.transform.rotation = Quaternion.LookRotation(lookDir);
+
+                        // Kich hoat camera bay den vi tri phia truoc (horizontalOffset = 0f giup nhan vat dung chinh giua man hinh)
+                        Vector3 right = Vector3.Cross(Vector3.up, lookDir).normalized;
+                        CameraController.EnterCharacterSelection(playerPos, lookDir, right, Vector3.up, 0f);
+                    }
+                }
+
+                // Tat di chuyen va agent de tranh nguoi choi dieu khien nhan vat trong khi mo UI
+                Control.DisableMovementControl();
+                characterBehaviour.DisableAgent();
+
+                // An drone
+                if (characterBehaviour.CurrentDrone != null)
+                {
+                    characterBehaviour.CurrentDrone.gameObject.SetActive(false);
+                }
+
+                // An UI mau tren dau nhan vat
+                if (characterBehaviour.HealthbarBehaviour != null)
+                {
+                    characterBehaviour.HealthbarBehaviour.ForceDisable();
+                }
             }
 
-            if (showcaseBehaviour == null)
+            // An Showcase cu neu co
+            if (showcaseBehaviour != null)
             {
-                GameObject scObj = new GameObject("[Weapon 3D Showcase]", typeof(WeaponShowcaseBehaviour));
-                showcaseBehaviour = scObj.GetComponent<WeaponShowcaseBehaviour>();
-            }
-            showcaseBehaviour.gameObject.SetActive(true);
-            if (cam != null)
-            {
-                showcaseBehaviour.SetShowcaseTransform(showcaseWorldPosition, cam.transform.rotation);
-            }
-            else
-            {
-                showcaseBehaviour.SetBasePosition(showcaseWorldPosition);
+                showcaseBehaviour.Clear();
+                showcaseBehaviour.gameObject.SetActive(false);
             }
 
-            // Preview sung mac dinh dang chon
+            // Preview sung mac dinh dang chon tren tay nhan vat
             SelectWeaponForPreview(previewWeaponIndex);
 
             Tween.DelayedCall(0.5f, () =>
@@ -217,23 +241,35 @@ namespace Watermelon.SquadShooter
             // Slide out Left Panel
             if (leftPanelRectTransform != null)
             {
-                leftPanelRectTransform.DOAnchoredPosition(new Vector2(-600f, 0f), 0.25f)
+                leftPanelRectTransform.DOAnchoredPosition(new Vector2(-700f, 0f), 0.25f)
                     .SetEasing(Ease.Type.CubicIn);
             }
 
-            // An / Clear Showcase
+            // An / Clear Showcase neu co
             if (showcaseBehaviour != null)
             {
                 showcaseBehaviour.Clear();
                 showcaseBehaviour.gameObject.SetActive(false);
             }
 
-            // Khoi phuc nhan vat sanh voi sung da trang bi
+            // Khoi phuc nhan vat sanh voi sung da trang bi va tra camera ve goc nhin sanh
             CharacterBehaviour characterBehaviour = CharacterBehaviour.GetBehaviour();
             if (characterBehaviour != null)
             {
-                characterBehaviour.gameObject.SetActive(true);
+                characterBehaviour.transform.rotation = originalPlayerRotation;
                 characterBehaviour.SetGun(WeaponsController.GetCurrentWeapon(), true);
+                Control.EnableMovementControl();
+                characterBehaviour.ActivateAgent();
+
+                if (characterBehaviour.CurrentDrone != null)
+                {
+                    characterBehaviour.CurrentDrone.gameObject.SetActive(true);
+                }
+
+                if (characterBehaviour.HealthbarBehaviour != null)
+                {
+                    characterBehaviour.HealthbarBehaviour.EnableBar(true);
+                }
             }
 
             // Tra camera ve goc nhin sanh
@@ -242,7 +278,7 @@ namespace Watermelon.SquadShooter
             // Slide out Right Panel
             if (backgroundPanelRectTransform != null)
             {
-                backgroundPanelRectTransform.DOAnchoredPosition(new Vector2(600f, 0f), 0.25f)
+                backgroundPanelRectTransform.DOAnchoredPosition(new Vector2(700f, 0f), 0.25f)
                     .SetEasing(Ease.Type.CubicIn).OnComplete(delegate
                     {
                         UIController.OnPageClosed(this);
@@ -283,10 +319,18 @@ namespace Watermelon.SquadShooter
                 detailsPanel.DisplayWeapon(weaponData, upgrade, weaponIndex);
             }
 
-            // Cap nhat sung 3D bay lo lung o giua
+            // Thay doi sung tren tay nhan vat ngay lap tuc de xem truoc trong khong gian 3D
+            CharacterBehaviour characterBehaviour = CharacterBehaviour.GetBehaviour();
+            if (characterBehaviour != null)
+            {
+                characterBehaviour.SetGun(weaponData, true);
+            }
+
+            // An showcase bay lo lung cu neu co
             if (showcaseBehaviour != null)
             {
-                showcaseBehaviour.DisplayWeapon(weaponData, upgrade);
+                showcaseBehaviour.Clear();
+                showcaseBehaviour.gameObject.SetActive(false);
             }
 
             // Cap nhat vien highlight tren the cot phai
@@ -302,6 +346,13 @@ namespace Watermelon.SquadShooter
             weaponController.OnWeaponSelected(weaponIndex);
             AudioController.PlaySound(AudioController.Sounds.buttonSound);
 
+            var weaponData = WeaponsController.Database.Weapons[weaponIndex];
+            CharacterBehaviour characterBehaviour = CharacterBehaviour.GetBehaviour();
+            if (characterBehaviour != null && weaponData != null)
+            {
+                characterBehaviour.SetGun(weaponData, true);
+            }
+
             for (int i = 0; i < itemPanels.Count; i++)
             {
                 itemPanels[i].UpdateSelectionState();
@@ -309,7 +360,6 @@ namespace Watermelon.SquadShooter
 
             if (detailsPanel != null)
             {
-                var weaponData = WeaponsController.Database.Weapons[weaponIndex];
                 var upgrade = UpgradesController.GetUpgrade<BaseWeaponUpgrade>(weaponData.UpgradeType);
                 detailsPanel.UpdateEquipButton(upgrade.UpgradeLevel > 0);
             }

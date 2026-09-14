@@ -317,7 +317,12 @@ namespace Watermelon.SquadShooter
 
         private void UpdateLockedState()
         {
-            if (lockedStateObject != null) lockedStateObject.SetActive(true);
+            if (lockedStateObject != null)
+            {
+                lockedStateObject.SetActive(true);
+                Image lockedBg = lockedStateObject.GetComponent<Image>();
+                if (lockedBg != null) lockedBg.color = Color.clear;
+            }
             if (upgradeStateObject != null) upgradeStateObject.SetActive(false);
 
             if (Data != null && Upgrade != null && Upgrade.NextStage != null)
@@ -325,7 +330,7 @@ namespace Watermelon.SquadShooter
                 int currentAmount = Data.CardsAmount;
                 int target = Upgrade.NextStage.Price;
 
-                if (cardsFillImage != null) cardsFillImage.fillAmount = (float)currentAmount / target;
+                if (cardsFillImage != null) cardsFillImage.gameObject.SetActive(false);
                 if (cardsAmountText != null)
                 {
                     cardsAmountText.text = currentAmount + "/" + target;
@@ -333,8 +338,8 @@ namespace Watermelon.SquadShooter
                     cardAmtRt.anchorMin = new Vector2(1f, 0.5f);
                     cardAmtRt.anchorMax = new Vector2(1f, 0.5f);
                     cardAmtRt.pivot = new Vector2(1f, 0.5f);
-                    cardAmtRt.anchoredPosition = new Vector2(-10f, 0f);
-                    cardAmtRt.sizeDelta = new Vector2(75f, 22f);
+                    cardAmtRt.anchoredPosition = new Vector2(-12f, 0f);
+                    cardAmtRt.sizeDelta = new Vector2(80f, 22f);
                     cardsAmountText.fontSize = 12f;
                     cardsAmountText.alignment = TextAlignmentOptions.Right;
                     cardsAmountText.color = new Color(1f, 0.85f, 0.3f);
@@ -343,57 +348,34 @@ namespace Watermelon.SquadShooter
 
             if (powerObject != null) powerObject.SetActive(false);
             if (powerText != null) powerText.gameObject.SetActive(false);
+            if (upgradesMaxObject != null) upgradesMaxObject.SetActive(false);
+            if (upgradesBuyButton != null) upgradesBuyButton.gameObject.SetActive(false);
         }
 
         private void UpdateUpgradeState()
         {
             if (lockedStateObject != null) lockedStateObject.SetActive(false);
-            if (upgradeStateObject != null) upgradeStateObject.SetActive(true);
+            if (upgradeStateObject != null) upgradeStateObject.SetActive(false);
 
-            if (Upgrade.NextStage != null)
-            {
-                if (upgradePriceText != null) upgradePriceText.text = Upgrade.NextStage.Price.ToString();
-                if (upgradeCurrencyImage != null)
-                {
-                    upgradeCurrencyImage.gameObject.SetActive(true);
-                    upgradeCurrencyImage.sprite = CurrenciesController.GetCurrency(Upgrade.NextStage.CurrencyType).Icon;
-                }
-            }
-            else
-            {
-                if (upgradePriceText != null) upgradePriceText.text = "MAX";
-                if (upgradeCurrencyImage != null) upgradeCurrencyImage.gameObject.SetActive(false);
-            }
-
-            if (powerObject != null) powerObject.SetActive(true);
-            if (powerText != null)
-            {
-                powerText.gameObject.SetActive(true);
-
-                float bonusDmg = 0f;
-                if (Application.isPlaying)
-                {
-                    bonusDmg = EquipmentController.GetTotalBonusStats().bonusDamagePercent;
-                }
-                int finalPower = Mathf.RoundToInt(Upgrade.GetCurrentStage().Power * (1f + bonusDmg / 100f));
-                powerText.text = finalPower.ToString();
-            }
+            if (powerObject != null) powerObject.SetActive(false);
+            if (powerText != null) powerText.gameObject.SetActive(false);
+            if (upgradesMaxObject != null) upgradesMaxObject.SetActive(false);
+            if (upgradesBuyButton != null) upgradesBuyButton.gameObject.SetActive(false);
 
             RedrawUpgradeElements();
         }
 
         private void RedrawUpgradeElements()
         {
-            if (levelText != null) levelText.text = "CẤP " + Upgrade.UpgradeLevel;
+            if (levelText != null && Upgrade != null) levelText.text = "CẤP " + Upgrade.UpgradeLevel;
 
             if (upgradesMaxObject != null)
             {
-                upgradesMaxObject.SetActive(Upgrade.IsMaxedOut);
+                upgradesMaxObject.SetActive(false);
             }
 
             if (upgradesBuyButton != null)
             {
-                // Luon an nut buy trong the danh sach vi cot trai da dam nhan
                 upgradesBuyButton.gameObject.SetActive(false);
             }
         }

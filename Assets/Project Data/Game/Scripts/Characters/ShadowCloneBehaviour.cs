@@ -34,6 +34,12 @@ namespace Watermelon.SquadShooter
         private bool hasDetonated = false;
         private readonly HashSet<BaseEnemyBehavior> tauntedEnemies = new HashSet<BaseEnemyBehavior>();
 
+        // Chỉ thị phạm vi dưới mặt đất (Ground Indicators)
+        private Transform shockAuraTransform;
+        private Transform explosionTelegraphTransform;
+        private Transform expandingFillTransform;
+        private MeshRenderer outerExplosionRenderer;
+
         public void Initialise(float tauntRadius, float explosionRadius, float explosionDamage, float duration, float stunDuration, GameObject explosionVfxPrefab, float shockDamagePerTick = 25f)
         {
             this.tauntRadius = tauntRadius;
@@ -50,8 +56,81 @@ namespace Watermelon.SquadShooter
             this.isInitialised = true;
             this.hasDetonated = false;
 
+            // Khởi tạo các vòng tròn chỉ thị trực quan dưới mặt đất (Vòng tròn sét + Vòng tròn nổ đếm ngược)
+            CreateGroundIndicators();
+
             // Quét và khiêu khích quái vật xung quanh ngay lập tức
             ScanAndTauntEnemies();
+        }
+
+        private void CreateGroundIndicators()
+        {
+            try
+            {
+                // 1. Vòng tròn phạm vi sấm sét dưới chân phân thân (Shock Aura Ground Ring)
+                GameObject shockObj = new GameObject("ShockAuraRing");
+                shockObj.transform.SetParent(transform, false);
+                shockObj.transform.localPosition = new Vector3(0, 0.02f, 0);
+                shockAuraTransform = shockObj.transform;
+
+                // Vành đai ngoài màu xanh Lôi điện (Cyan Neon)
+                var shockRingObj = new GameObject("Ring");
+                shockRingObj.transform.SetParent(shockObj.transform, false);
+                var shockRingFilter = shockRingObj.AddComponent<MeshFilter>();
+                var shockRingRenderer = shockRingObj.AddComponent<MeshRenderer>();
+                Color shockRingColor = new Color(0.1f, 0.9f, 1f, 0.85f);
+                shockRingRenderer.material = AoECircleMeshUtility.CreateIndicatorMaterial(shockRingColor);
+                shockRingRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+                shockRingRenderer.receiveShadows = false;
+                shockRingFilter.mesh = AoECircleMeshUtility.CreateRingMesh(shockRadius, 0.12f, 48);
+
+                // Vùng phủ mờ bên trong màu xanh Cyan
+                var shockFillObj = new GameObject("Fill");
+                shockFillObj.transform.SetParent(shockObj.transform, false);
+                var shockFillFilter = shockFillObj.AddComponent<MeshFilter>();
+                var shockFillRenderer = shockFillObj.AddComponent<MeshRenderer>();
+                Color shockFillColor = new Color(0.1f, 0.9f, 1f, 0.08f);
+                shockFillRenderer.material = AoECircleMeshUtility.CreateIndicatorMaterial(shockFillColor);
+                shockFillRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+                shockFillRenderer.receiveShadows = false;
+                shockFillFilter.mesh = AoECircleMeshUtility.CreateDiscMesh(shockRadius, 48);
+
+                // 2. Vòng tròn cảnh báo phát nổ đếm ngược (Explosion Telegraph Countdown)
+                GameObject explosionObj = new GameObject("ExplosionTelegraph");
+                explosionObj.transform.SetParent(transform, false);
+                explosionObj.transform.localPosition = new Vector3(0, 0.03f, 0);
+                explosionTelegraphTransform = explosionObj.transform;
+
+                // Vòng tròn lớn viền đỏ bên ngoài thể hiện phạm vi nổ cực đại
+                var outerRingObj = new GameObject("OuterExplosionRing");
+                outerRingObj.transform.SetParent(explosionObj.transform, false);
+                var outerRingFilter = outerRingObj.AddComponent<MeshFilter>();
+                outerExplosionRenderer = outerRingObj.AddComponent<MeshRenderer>();
+                Color outerRedColor = new Color(1f, 0.15f, 0.15f, 0.95f);
+                outerExplosionRenderer.material = AoECircleMeshUtility.CreateIndicatorMaterial(outerRedColor);
+                outerExplosionRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+                outerExplosionRenderer.receiveShadows = false;
+                outerRingFilter.mesh = AoECircleMeshUtility.CreateRingMesh(explosionRadius, 0.15f, 64);
+
+                // Vòng tròn nhỏ màu đỏ bên trong tràn dần từ tâm ra ngoài
+                var expandingObj = new GameObject("ExpandingFill");
+                expandingObj.transform.SetParent(explosionObj.transform, false);
+                expandingObj.transform.localPosition = Vector3.zero;
+                expandingFillTransform = expandingObj.transform;
+                expandingFillTransform.localScale = new Vector3(0f, 1f, 0f); // Bắt đầu từ tâm (scale = 0)
+
+                var expandingFilter = expandingObj.AddComponent<MeshFilter>();
+                var expandingRenderer = expandingObj.AddComponent<MeshRenderer>();
+                Color expandingRedColor = new Color(1f, 0.15f, 0.15f, 0.35f);
+                expandingRenderer.material = AoECircleMeshUtility.CreateIndicatorMaterial(expandingRedColor);
+                expandingRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+                expandingRenderer.receiveShadows = false;
+                expandingFilter.mesh = AoECircleMeshUtility.CreateDiscMesh(explosionRadius, 64);
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogWarning("[ShadowCloneBehaviour] Không thể tạo ground indicators: " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -136,7 +215,20 @@ namespace Watermelon.SquadShooter
                 ShockNearbyEnemies();
             }
 
-            // 3. Tự phát nổ khi hết thời gian tồn tại
+            // 3. Cập nhật vòng tròn đếm ngược phát nổ: Tràn từ tâm ra chạm đúng mép vòng tròn ngoài (0 -> 100%)
+            if (expandingFillTransform != null && duration > 0f)
+            {
+                float progress = Mathf.Clamp01(lifetime / duration);
+                expandingFillTransform.localScale = new Vector3(progress, 1f, progress);
+            }
+
+            // Xoay nhẹ vòng tròn sét để tạo hiệu ứng điện quang năng động
+            if (shockAuraTransform != null)
+            {
+                shockAuraTransform.Rotate(0f, 45f * Time.deltaTime, 0f);
+            }
+
+            // 4. Tự phát nổ khi hết thời gian tồn tại (vòng tròn bên trong vừa chạm khít vòng tròn lớn ngoài)
             if (lifetime >= duration)
             {
                 Detonate();
