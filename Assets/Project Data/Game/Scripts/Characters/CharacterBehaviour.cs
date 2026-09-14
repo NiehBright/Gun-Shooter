@@ -1185,7 +1185,7 @@ namespace Watermelon.SquadShooter
             AudioController.PlaySound(AudioController.Sounds.buttonSound);
         }
 
-        public void ActivateSkill()
+        public void ActivateSkill(Vector3? customTargetPos = null)
         {
             var character = CharactersController.SelectedCharacter;
             if (character == null || character.SkillData == null || character.SkillData.VFXPrefab == null || !IsSkillReady) return;
@@ -1227,9 +1227,13 @@ namespace Watermelon.SquadShooter
 
                 case SkillType.OrbitalLaser:
                     {
-                        // Định vị tại quái vật gần nhất nếu có, hoặc đặt tại chân người chơi
+                        // Định vị tại vị trí chỉ định nếu có (người chơi kéo ngắm), hoặc quái vật gần nhất, hoặc chân người chơi
                         Vector3 targetPos = spawnPos;
-                        if (closestEnemyBehaviour != null && !closestEnemyBehaviour.IsDead)
+                        if (customTargetPos.HasValue)
+                        {
+                            targetPos = customTargetPos.Value;
+                        }
+                        else if (closestEnemyBehaviour != null && !closestEnemyBehaviour.IsDead)
                         {
                             targetPos = closestEnemyBehaviour.transform.position;
                         }

@@ -358,7 +358,7 @@ namespace Watermelon.SquadShooter
             Image maxLvlBg = maxLvlObj.GetComponent<Image>();
             if (bgSprite != null) { maxLvlBg.sprite = bgSprite; maxLvlBg.type = Image.Type.Sliced; }
             maxLvlBg.color = new Color(0.2f, 0.25f, 0.35f, 0.9f);
-            CreateTMP(maxLvlObj.transform, "MaxLevelText", "★ ĐẠT CẤP TỐI ĐA ★", 22, font, FontStyles.Bold, new Color(1f, 0.85f, 0.2f), TextAlignmentOptions.Center);
+            CreateTMP(maxLvlObj.transform, "MaxLevelText", "ĐẠT CẤP TỐI ĐA", 22, font, FontStyles.Bold, new Color(1f, 0.85f, 0.2f), TextAlignmentOptions.Center);
             maxLvlObj.SetActive(false);
 
             // Locked Object

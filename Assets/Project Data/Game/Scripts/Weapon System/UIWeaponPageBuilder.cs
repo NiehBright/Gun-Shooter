@@ -48,10 +48,10 @@ namespace Watermelon.SquadShooter
                 backPanelRect.anchorMin = new Vector2(1f, 0f);
                 backPanelRect.anchorMax = new Vector2(1f, 1f);
                 backPanelRect.pivot = new Vector2(1f, 0.5f);
-                backPanelRect.anchoredPosition = Vector2.zero;
-                backPanelRect.sizeDelta = new Vector2(320f, 0f);
-                backPanelRect.offsetMin = new Vector2(-320f, 0f);
-                backPanelRect.offsetMax = new Vector2(0f, 0f);
+                backPanelRect.anchoredPosition = new Vector2(-65f, 0f);
+                backPanelRect.sizeDelta = new Vector2(310f, 0f);
+                backPanelRect.offsetMin = new Vector2(-375f, 0f);
+                backPanelRect.offsetMax = new Vector2(-65f, 0f);
 
                 Image bgImg = backPanelRect.GetComponent<Image>();
                 if (bgImg != null)
@@ -170,31 +170,35 @@ namespace Watermelon.SquadShooter
                     HorizontalLayoutGroup oldHlg = containerTr.GetComponent<HorizontalLayoutGroup>();
                     if (oldHlg != null)
                     {
-                        if (Application.isPlaying) Object.Destroy(oldHlg);
-                        else Object.DestroyImmediate(oldHlg);
+                        Object.DestroyImmediate(oldHlg);
                     }
 
                     GridLayoutGroup oldGlg = containerTr.GetComponent<GridLayoutGroup>();
                     if (oldGlg != null)
                     {
-                        if (Application.isPlaying) Object.Destroy(oldGlg);
-                        else Object.DestroyImmediate(oldGlg);
+                        Object.DestroyImmediate(oldGlg);
                     }
 
                     VerticalLayoutGroup vlg = containerTr.GetComponent<VerticalLayoutGroup>();
                     if (vlg == null) vlg = containerTr.gameObject.AddComponent<VerticalLayoutGroup>();
-                    vlg.spacing = 8f;
-                    vlg.padding = new RectOffset(6, 6, 8, 8);
-                    vlg.childAlignment = TextAnchor.UpperCenter;
-                    vlg.childControlWidth = true;
-                    vlg.childControlHeight = false;
-                    vlg.childForceExpandWidth = true;
-                    vlg.childForceExpandHeight = false;
+                    if (vlg != null)
+                    {
+                        vlg.spacing = 8f;
+                        vlg.padding = new RectOffset(6, 6, 8, 8);
+                        vlg.childAlignment = TextAnchor.UpperCenter;
+                        vlg.childControlWidth = true;
+                        vlg.childControlHeight = false;
+                        vlg.childForceExpandWidth = true;
+                        vlg.childForceExpandHeight = false;
+                    }
 
                     ContentSizeFitter fitter = containerTr.GetComponent<ContentSizeFitter>();
                     if (fitter == null) fitter = containerTr.gameObject.AddComponent<ContentSizeFitter>();
-                    fitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
-                    fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+                    if (fitter != null)
+                    {
+                        fitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+                        fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+                    }
                 }
 
                 if (scrollView.horizontalScrollbar != null)
@@ -241,10 +245,10 @@ namespace Watermelon.SquadShooter
             rootRect.anchorMin = new Vector2(0f, 0f);
             rootRect.anchorMax = new Vector2(0f, 1f);
             rootRect.pivot = new Vector2(0f, 0.5f);
-            rootRect.anchoredPosition = Vector2.zero;
-            rootRect.sizeDelta = new Vector2(360f, 0f);
-            rootRect.offsetMin = new Vector2(0f, 0f);
-            rootRect.offsetMax = new Vector2(360f, 0f);
+            rootRect.anchoredPosition = new Vector2(75f, 0f);
+            rootRect.sizeDelta = new Vector2(350f, 0f);
+            rootRect.offsetMin = new Vector2(75f, 0f);
+            rootRect.offsetMax = new Vector2(425f, 0f);
 
             Image bgImage = detailsObj.GetComponent<Image>();
             if (bgSprite != null)
@@ -409,7 +413,7 @@ namespace Watermelon.SquadShooter
             Image maxBg = maxBanner.GetComponent<Image>();
             if (bgSprite != null) { maxBg.sprite = bgSprite; maxBg.type = Image.Type.Sliced; }
             maxBg.color = new Color(0.2f, 0.24f, 0.35f, 0.95f);
-            CreateTMP(maxBanner.transform, "MaxText", "★ ĐẠT CẤP TỐI ĐA ★", 16, font, FontStyles.Bold, new Color(1f, 0.85f, 0.2f), TextAlignmentOptions.Center);
+            CreateTMP(maxBanner.transform, "MaxText", "ĐẠT CẤP TỐI ĐA", 16, font, FontStyles.Bold, new Color(1f, 0.85f, 0.2f), TextAlignmentOptions.Center);
             maxBanner.SetActive(false);
 
             // --- EQUIP BUTTON ("TRANG BỊ") ---

@@ -130,8 +130,12 @@ namespace Watermelon
 
             if (skillButton != null)
             {
-                skillButton.onClick.AddListener(OnSkillButtonClicked);
-                Debug.Log("[UIGame] Found and registered click listener for Skill Button.");
+                var skillBehavior = skillButton.GetComponent<SkillButtonBehavior>();
+                if (skillBehavior == null)
+                {
+                    skillButton.gameObject.AddComponent<SkillButtonBehavior>();
+                }
+                Debug.Log("[UIGame] Attached SkillButtonBehavior to Skill Button.");
             }
         }
 
