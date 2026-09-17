@@ -116,18 +116,18 @@ namespace Watermelon.SquadShooter
 
             previewWeaponIndex = SelectedIndex;
 
-            // Slide in Left Panel (-700 -> 75f)
+            // Slide in Left Panel (-800 -> 85f)
             if (leftPanelRectTransform != null)
             {
-                leftPanelRectTransform.anchoredPosition = new Vector2(-700f, 0f);
-                leftPanelRectTransform.DOAnchoredPosition(new Vector2(75f, 0f), 0.35f)
+                leftPanelRectTransform.anchoredPosition = new Vector2(-800f, 0f);
+                leftPanelRectTransform.DOAnchoredPosition(new Vector2(85f, 0f), 0.35f)
                     .SetCustomEasing(Ease.GetCustomEasingFunction("BackOutLight"));
             }
 
-            // Slide in Right Panel (700 -> -65f)
+            // Slide in Right Panel (800 -> -65f)
             if (backgroundPanelRectTransform != null)
             {
-                backgroundPanelRectTransform.anchoredPosition = new Vector2(700f, 0f);
+                backgroundPanelRectTransform.anchoredPosition = new Vector2(800f, 0f);
                 backgroundPanelRectTransform.DOAnchoredPosition(new Vector2(-65f, 0f), 0.35f)
                     .SetCustomEasing(Ease.GetCustomEasingFunction("BackOutLight"));
             }
@@ -241,7 +241,7 @@ namespace Watermelon.SquadShooter
             // Slide out Left Panel
             if (leftPanelRectTransform != null)
             {
-                leftPanelRectTransform.DOAnchoredPosition(new Vector2(-700f, 0f), 0.25f)
+                leftPanelRectTransform.DOAnchoredPosition(new Vector2(-800f, 0f), 0.25f)
                     .SetEasing(Ease.Type.CubicIn);
             }
 
@@ -278,7 +278,7 @@ namespace Watermelon.SquadShooter
             // Slide out Right Panel
             if (backgroundPanelRectTransform != null)
             {
-                backgroundPanelRectTransform.DOAnchoredPosition(new Vector2(700f, 0f), 0.25f)
+                backgroundPanelRectTransform.DOAnchoredPosition(new Vector2(800f, 0f), 0.25f)
                     .SetEasing(Ease.Type.CubicIn).OnComplete(delegate
                     {
                         UIController.OnPageClosed(this);

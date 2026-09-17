@@ -15,42 +15,42 @@ namespace Watermelon.SquadShooter
         private int currentWeaponIndex;
 
         // UI Element References
-        private TextMeshProUGUI weaponNameText;
-        private TextMeshProUGUI rarityText;
-        private Image rarityBadgeImage;
-        private TextMeshProUGUI levelText;
+        [SerializeField] private TextMeshProUGUI weaponNameText;
+        [SerializeField] private TextMeshProUGUI rarityText;
+        [SerializeField] private Image rarityBadgeImage;
+        [SerializeField] private TextMeshProUGUI levelText;
 
         // Cards Progress
-        private Image cardsFillImage;
-        private TextMeshProUGUI cardsAmountText;
-        private TextMeshProUGUI cardsStatusText;
-        private GameObject cardsContainer;
+        [SerializeField] private Image cardsFillImage;
+        [SerializeField] private TextMeshProUGUI cardsAmountText;
+        [SerializeField] private TextMeshProUGUI cardsStatusText;
+        [SerializeField] private GameObject cardsContainer;
 
         // Stats HUD
-        private TextMeshProUGUI powerValueText;
-        private TextMeshProUGUI powerBonusText;
-        private TextMeshProUGUI dmgValueText;
-        private TextMeshProUGUI dmgDeltaText;
-        private TextMeshProUGUI fireRateValueText;
-        private TextMeshProUGUI fireRateDeltaText;
-        private TextMeshProUGUI rangeValueText;
-        private TextMeshProUGUI spreadValueText;
-        private TextMeshProUGUI bulletsValueText;
+        [SerializeField] private TextMeshProUGUI powerValueText;
+        [SerializeField] private TextMeshProUGUI powerBonusText;
+        [SerializeField] private TextMeshProUGUI dmgValueText;
+        [SerializeField] private TextMeshProUGUI dmgDeltaText;
+        [SerializeField] private TextMeshProUGUI fireRateValueText;
+        [SerializeField] private TextMeshProUGUI fireRateDeltaText;
+        [SerializeField] private TextMeshProUGUI rangeValueText;
+        [SerializeField] private TextMeshProUGUI spreadValueText;
+        [SerializeField] private TextMeshProUGUI bulletsValueText;
 
         // Actions: Upgrades
-        private GameObject upgradeSectionContainer;
-        private Button coinUpgradeButton;
-        private Image coinUpgradeButtonImage;
-        private TextMeshProUGUI coinUpgradePriceText;
-        private Button cardUnlockButton;
-        private Image cardUnlockButtonImage;
-        private TextMeshProUGUI cardUnlockButtonText;
-        private GameObject maxLevelBanner;
+        [SerializeField] private GameObject upgradeSectionContainer;
+        [SerializeField] private Button coinUpgradeButton;
+        [SerializeField] private Image coinUpgradeButtonImage;
+        [SerializeField] private TextMeshProUGUI coinUpgradePriceText;
+        [SerializeField] private Button cardUnlockButton;
+        [SerializeField] private Image cardUnlockButtonImage;
+        [SerializeField] private TextMeshProUGUI cardUnlockButtonText;
+        [SerializeField] private GameObject maxLevelBanner;
 
         // Actions: Equip
-        private Button equipButton;
-        private Image equipButtonImage;
-        private TextMeshProUGUI equipButtonText;
+        [SerializeField] private Button equipButton;
+        [SerializeField] private Image equipButtonImage;
+        [SerializeField] private TextMeshProUGUI equipButtonText;
 
         public void BindReferences(
             TextMeshProUGUI weaponNameText,

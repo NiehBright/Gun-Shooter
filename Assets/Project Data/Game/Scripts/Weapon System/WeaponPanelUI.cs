@@ -99,16 +99,16 @@ namespace Watermelon.SquadShooter
 
         private void FormatCardLayout(WeaponData data)
         {
-            // Set kích thước card theo dạng thanh ngang gọn gàng (88px height)
+            // Set kích thước card theo dạng thanh ngang rộng rãi (108px height)
             if (panelRectTransform != null)
             {
-                panelRectTransform.sizeDelta = new Vector2(0f, 88f);
+                panelRectTransform.sizeDelta = new Vector2(0f, 108f);
             }
 
             LayoutElement le = GetComponent<LayoutElement>();
             if (le == null) le = gameObject.AddComponent<LayoutElement>();
-            le.minHeight = 88f;
-            le.preferredHeight = 88f;
+            le.minHeight = 108f;
+            le.preferredHeight = 108f;
             le.flexibleWidth = 1f;
 
             // Background nền thẻ
@@ -150,8 +150,8 @@ namespace Watermelon.SquadShooter
                 backRt.anchorMin = new Vector2(0f, 0.5f);
                 backRt.anchorMax = new Vector2(0f, 0.5f);
                 backRt.pivot = new Vector2(0f, 0.5f);
-                backRt.anchoredPosition = new Vector2(10f, 0f);
-                backRt.sizeDelta = new Vector2(68f, 68f);
+                backRt.anchoredPosition = new Vector2(14f, 0f);
+                backRt.sizeDelta = new Vector2(86f, 86f);
             }
 
             // Icon súng bên trái
@@ -162,7 +162,7 @@ namespace Watermelon.SquadShooter
                 imgRt.anchorMax = new Vector2(0.5f, 0.5f);
                 imgRt.pivot = new Vector2(0.5f, 0.5f);
                 imgRt.anchoredPosition = Vector2.zero;
-                imgRt.sizeDelta = new Vector2(60f, 60f);
+                imgRt.sizeDelta = new Vector2(76f, 76f);
                 weaponImage.preserveAspect = true;
                 weaponImage.color = Color.white;
             }
@@ -174,9 +174,9 @@ namespace Watermelon.SquadShooter
                 nameRt.anchorMin = new Vector2(0f, 1f);
                 nameRt.anchorMax = new Vector2(0f, 1f);
                 nameRt.pivot = new Vector2(0f, 1f);
-                nameRt.anchoredPosition = new Vector2(86f, -12f);
-                nameRt.sizeDelta = new Vector2(120f, 22f);
-                weaponName.fontSize = 16f;
+                nameRt.anchoredPosition = new Vector2(112f, -14f);
+                nameRt.sizeDelta = new Vector2(180f, 28f);
+                weaponName.fontSize = 20f;
                 weaponName.fontStyle = FontStyles.Bold;
                 weaponName.alignment = TextAlignmentOptions.Left;
                 weaponName.color = Color.white;
@@ -189,9 +189,9 @@ namespace Watermelon.SquadShooter
                 rarRt.anchorMin = new Vector2(0f, 1f);
                 rarRt.anchorMax = new Vector2(0f, 1f);
                 rarRt.pivot = new Vector2(0f, 1f);
-                rarRt.anchoredPosition = new Vector2(86f, -36f);
-                rarRt.sizeDelta = new Vector2(100f, 18f);
-                rarityText.fontSize = 12f;
+                rarRt.anchoredPosition = new Vector2(112f, -44f);
+                rarRt.sizeDelta = new Vector2(140f, 22f);
+                rarityText.fontSize = 14f;
                 rarityText.fontStyle = FontStyles.Bold;
                 rarityText.alignment = TextAlignmentOptions.Left;
             }
@@ -203,9 +203,9 @@ namespace Watermelon.SquadShooter
                 lvlRt.anchorMin = new Vector2(0f, 0f);
                 lvlRt.anchorMax = new Vector2(0f, 0f);
                 lvlRt.pivot = new Vector2(0f, 0f);
-                lvlRt.anchoredPosition = new Vector2(86f, 10f);
-                lvlRt.sizeDelta = new Vector2(90f, 18f);
-                levelText.fontSize = 12f;
+                lvlRt.anchoredPosition = new Vector2(112f, 14f);
+                lvlRt.sizeDelta = new Vector2(130f, 22f);
+                levelText.fontSize = 15f;
                 levelText.fontStyle = FontStyles.Normal;
                 levelText.alignment = TextAlignmentOptions.Left;
                 levelText.color = new Color(0.4f, 0.85f, 1f);
@@ -286,8 +286,8 @@ namespace Watermelon.SquadShooter
                     rt.anchorMin = new Vector2(1f, 0.5f);
                     rt.anchorMax = new Vector2(1f, 0.5f);
                     rt.pivot = new Vector2(1f, 0.5f);
-                    rt.anchoredPosition = new Vector2(-10f, 0f);
-                    rt.sizeDelta = new Vector2(85f, 26f);
+                    rt.anchoredPosition = new Vector2(-14f, 0f);
+                    rt.sizeDelta = new Vector2(105f, 32f);
 
                     Image badgeImg = equippedBadgeObject.GetComponent<Image>();
                     badgeImg.color = new Color(0.12f, 0.65f, 0.35f, 0.95f);
@@ -302,7 +302,7 @@ namespace Watermelon.SquadShooter
                     TextMeshProUGUI tmp = textObj.GetComponent<TextMeshProUGUI>();
                     if (weaponName != null) tmp.font = weaponName.font;
                     tmp.text = "ĐANG DÙNG";
-                    tmp.fontSize = 11f;
+                    tmp.fontSize = 13f;
                     tmp.fontStyle = FontStyles.Bold;
                     tmp.color = Color.white;
                     tmp.alignment = TextAlignmentOptions.Center;
@@ -338,9 +338,9 @@ namespace Watermelon.SquadShooter
                     cardAmtRt.anchorMin = new Vector2(1f, 0.5f);
                     cardAmtRt.anchorMax = new Vector2(1f, 0.5f);
                     cardAmtRt.pivot = new Vector2(1f, 0.5f);
-                    cardAmtRt.anchoredPosition = new Vector2(-12f, 0f);
-                    cardAmtRt.sizeDelta = new Vector2(80f, 22f);
-                    cardsAmountText.fontSize = 12f;
+                    cardAmtRt.anchoredPosition = new Vector2(-14f, 0f);
+                    cardAmtRt.sizeDelta = new Vector2(100f, 28f);
+                    cardsAmountText.fontSize = 16f;
                     cardsAmountText.alignment = TextAlignmentOptions.Right;
                     cardsAmountText.color = new Color(1f, 0.85f, 0.3f);
                 }
