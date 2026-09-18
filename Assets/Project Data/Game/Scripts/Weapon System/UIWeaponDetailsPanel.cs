@@ -164,7 +164,7 @@ namespace Watermelon.SquadShooter
             if (levelText != null)
             {
                 levelText.text = isUnlocked ? $"CẤP {upgrade.UpgradeLevel}" : "CHƯA MỞ KHÓA";
-                levelText.color = isUnlocked ? new Color(0.4f, 0.9f, 1f) : new Color(1f, 0.5f, 0.5f);
+                levelText.color = isUnlocked ? new Color(0f, 0.85f, 1f) : new Color(1f, 0.45f, 0.45f);
             }
 
             // 2. CARDS PROGRESS

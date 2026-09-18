@@ -77,13 +77,25 @@ namespace Watermelon.SquadShooter
 
         #region UI Page
 
+        private float defaultLeftPanelX = 85f;
+        private float defaultRightPanelX = -65f;
+
         public override void Initialise()
         {
             if (canvas == null) CacheComponents();
             base.Initialise();
 
-            // Xay dung bo cuc tran vien bam goc chuan iPhone 12
-            UIWeaponPageBuilder.BuildLayout(this);
+            // Chỉ xây dựng layout nếu chưa có sẵn trong prefab
+            if (detailsPanel == null)
+            {
+                UIWeaponPageBuilder.BuildLayout(this);
+            }
+
+            // Ghi nhớ toạ độ X mà người dùng căn chỉnh trong Editor
+            if (leftPanelRectTransform != null)
+                defaultLeftPanelX = leftPanelRectTransform.anchoredPosition.x;
+            if (backgroundPanelRectTransform != null)
+                defaultRightPanelX = backgroundPanelRectTransform.anchoredPosition.x;
 
             if (detailsPanel != null)
             {
@@ -116,19 +128,19 @@ namespace Watermelon.SquadShooter
 
             previewWeaponIndex = SelectedIndex;
 
-            // Slide in Left Panel (-800 -> 85f)
+            // Slide in Left Panel (-800 -> toạ độ Editor đã chỉnh)
             if (leftPanelRectTransform != null)
             {
                 leftPanelRectTransform.anchoredPosition = new Vector2(-800f, 0f);
-                leftPanelRectTransform.DOAnchoredPosition(new Vector2(85f, 0f), 0.35f)
+                leftPanelRectTransform.DOAnchoredPosition(new Vector2(defaultLeftPanelX, 0f), 0.35f)
                     .SetCustomEasing(Ease.GetCustomEasingFunction("BackOutLight"));
             }
 
-            // Slide in Right Panel (800 -> -65f)
+            // Slide in Right Panel (800 -> toạ độ Editor đã chỉnh)
             if (backgroundPanelRectTransform != null)
             {
                 backgroundPanelRectTransform.anchoredPosition = new Vector2(800f, 0f);
-                backgroundPanelRectTransform.DOAnchoredPosition(new Vector2(-65f, 0f), 0.35f)
+                backgroundPanelRectTransform.DOAnchoredPosition(new Vector2(defaultRightPanelX, 0f), 0.35f)
                     .SetCustomEasing(Ease.GetCustomEasingFunction("BackOutLight"));
             }
 
