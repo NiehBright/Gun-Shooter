@@ -39,6 +39,20 @@ namespace Watermelon.SquadShooter
         {
             this.characterBehaviour = characterBehaviour;
             this.data = data;
+
+            ApplyOutline();
+        }
+
+        public void ApplyOutline()
+        {
+            var outline = GetComponent<Outline>();
+            if (outline == null)
+            {
+                outline = gameObject.AddComponent<Outline>();
+            }
+            outline.OutlineMode = Outline.Mode.OutlineVisible;
+            outline.OutlineColor = new Color(0.9f, 0.92f, 0.95f, 1f);
+            outline.OutlineWidth = 1.9f;
         }
 
         protected virtual void OnEnable()

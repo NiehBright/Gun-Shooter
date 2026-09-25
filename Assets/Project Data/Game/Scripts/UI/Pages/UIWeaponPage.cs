@@ -29,6 +29,17 @@ namespace Watermelon.SquadShooter
         private Vector3 showcaseWorldPosition;
         private Quaternion originalPlayerRotation;
 
+        [Header("3D Weapon Showcase Camera Settings")]
+        [SerializeField] private float cameraDistance = 3.0f;
+        [SerializeField] private float cameraHeight = 0.85f;
+        [SerializeField] private float lookAtHeight = 1.15f;
+        [SerializeField] private float cameraAngleOffset = 15f;    // Góc lệch của camera sang góc bên kia (+15°)
+        [SerializeField] private float characterYawAngle = -30f;   // Góc xoay của nhân vật sang phía đối diện (-30°)
+        [SerializeField] private float weaponFocusForward = 0.15f; // Dời tiêu điểm nhìn hướng về phía thân súng
+
+        private Quaternion showcasePlayerRotation;
+        private TweenCase resetPlayerRotationTweenCase;
+
         protected override int SelectedIndex => Mathf.Clamp(WeaponsController.SelectedWeaponIndex, 0, int.MaxValue);
 
         public void SetWeaponsController(WeaponsController weaponController)
@@ -102,6 +113,16 @@ namespace Watermelon.SquadShooter
                 detailsPanel.Initialise(this);
             }
 
+            // Xóa sạch mọi thẻ cũ hoặc dummy trong panelsContainer để không bao giờ bị nhân đôi
+            if (panelsContainer != null)
+            {
+                for (int i = panelsContainer.childCount - 1; i >= 0; i--)
+                {
+                    Destroy(panelsContainer.GetChild(i).gameObject);
+                }
+            }
+            itemPanels.Clear();
+
             for (int i = 0; i < WeaponsController.Database.Weapons.Length; i++)
             {
                 var weapon = WeaponsController.Database.Weapons[i];
@@ -171,7 +192,15 @@ namespace Watermelon.SquadShooter
                 UIMainMenu.DotsBackground.gameObject.SetActive(false);
             }
 
-            // Xoay nhan vat doi dien camera va kich hoat camera bay can canh chinh giua giong UI Characters
+            // Cap nhat thong so goc nhin moi nhat (nhin tu goc ben kia va nang cao cam)
+            characterYawAngle = -35f;
+            cameraAngleOffset = 20f;
+            cameraHeight = 0.85f;
+            lookAtHeight = 1.15f;
+            cameraDistance = 3.0f;
+            weaponFocusForward = 0.15f;
+
+            // Xoay nhan vat va kich hoat camera goc nhin phia doi dien tu duoi len de show vu khi
             CharacterBehaviour characterBehaviour = CharacterBehaviour.GetBehaviour();
             if (characterBehaviour != null)
             {
@@ -179,26 +208,41 @@ namespace Watermelon.SquadShooter
                 originalPlayerRotation = characterBehaviour.transform.rotation;
 
                 Vector3 playerPos = characterBehaviour.transform.position;
-                Camera cam = CameraController.MainCamera != null ? CameraController.MainCamera : Camera.main;
-                if (cam != null)
+                Vector3 defaultCamPos = CameraController.OriginalCameraPosition;
+                if (defaultCamPos == Vector3.zero)
                 {
-                    Vector3 defaultCamPos = cam.transform.position;
-                    Vector3 dirToCam = defaultCamPos - playerPos;
-                    dirToCam.y = 0;
-                    if (dirToCam.sqrMagnitude > 0.01f)
-                    {
-                        Vector3 lookDir = dirToCam.normalized;
-                        characterBehaviour.transform.rotation = Quaternion.LookRotation(lookDir);
+                    Camera cam = CameraController.MainCamera != null ? CameraController.MainCamera : Camera.main;
+                    if (cam != null) defaultCamPos = cam.transform.position;
+                }
 
-                        // Kich hoat camera bay den vi tri phia truoc (horizontalOffset = 0f giup nhan vat dung chinh giua man hinh)
-                        Vector3 right = Vector3.Cross(Vector3.up, lookDir).normalized;
-                        CameraController.EnterCharacterSelection(playerPos, lookDir, right, Vector3.up, 0f);
-                    }
+                Vector3 dirToCam = defaultCamPos - playerPos;
+                dirToCam.y = 0;
+                if (dirToCam.sqrMagnitude > 0.01f)
+                {
+                    Vector3 baseCamDir = dirToCam.normalized;
+
+                    // Xoay nhan vat huong phan suon va cay sung ve phia camera (goc ben kia)
+                    Vector3 charForward = Quaternion.AngleAxis(characterYawAngle, Vector3.up) * baseCamDir;
+                    characterBehaviour.transform.rotation = Quaternion.LookRotation(charForward);
+                    showcasePlayerRotation = characterBehaviour.transform.rotation;
+
+                    // Camera dat lech sang goc ben kia (+20°) va o do cao ngang that lung (0.85m) ngung nhe len nguc & vu khi
+                    Vector3 camDir = Quaternion.AngleAxis(cameraAngleOffset, Vector3.up) * baseCamDir;
+                    Vector3 targetCamPos = playerPos + camDir * cameraDistance + Vector3.up * cameraHeight;
+                    Vector3 lookAtTarget = playerPos + Vector3.up * lookAtHeight + charForward * weaponFocusForward;
+
+                    Quaternion targetCamRot = Quaternion.LookRotation((lookAtTarget - targetCamPos).normalized);
+                    CameraController.MoveCameraTo(targetCamPos, targetCamRot, 0.5f);
+
+                    Debug.Log($"<color=cyan>[UIWeaponPage] 3D Camera Active: Yaw={characterYawAngle}°, CamOffset={cameraAngleOffset}°, CamHeight={cameraHeight}m, CamPos={targetCamPos}</color>");
                 }
 
                 // Tat di chuyen va agent de tranh nguoi choi dieu khien nhan vat trong khi mo UI
                 Control.DisableMovementControl();
                 characterBehaviour.DisableAgent();
+
+                // An vong tam danh duoi chan nhan vat trong UI chon vu khi
+                characterBehaviour.HideAimRing();
 
                 // An drone
                 if (characterBehaviour.CurrentDrone != null)
@@ -264,6 +308,8 @@ namespace Watermelon.SquadShooter
                 showcaseBehaviour.gameObject.SetActive(false);
             }
 
+            resetPlayerRotationTweenCase.KillActive();
+
             // Khoi phuc nhan vat sanh voi sung da trang bi va tra camera ve goc nhin sanh
             CharacterBehaviour characterBehaviour = CharacterBehaviour.GetBehaviour();
             if (characterBehaviour != null)
@@ -272,6 +318,9 @@ namespace Watermelon.SquadShooter
                 characterBehaviour.SetGun(WeaponsController.GetCurrentWeapon(), true);
                 Control.EnableMovementControl();
                 characterBehaviour.ActivateAgent();
+
+                // Mo lai vong tam danh duoi chan nhan vat khi tat UI chon vu khi
+                characterBehaviour.ShowAimRing();
 
                 if (characterBehaviour.CurrentDrone != null)
                 {
@@ -336,6 +385,8 @@ namespace Watermelon.SquadShooter
             if (characterBehaviour != null)
             {
                 characterBehaviour.SetGun(weaponData, true);
+                characterBehaviour.HideAimRing();
+                characterBehaviour.Weapon?.ApplyOutline();
             }
 
             // An showcase bay lo lung cu neu co
@@ -419,17 +470,29 @@ namespace Watermelon.SquadShooter
 
         public void OnDrag(PointerEventData eventData)
         {
-            if (showcaseBehaviour != null)
+            CharacterBehaviour characterBehaviour = CharacterBehaviour.GetBehaviour();
+            if (characterBehaviour != null)
             {
-                showcaseBehaviour.OnDrag(eventData.delta);
+                resetPlayerRotationTweenCase.KillActive();
+                float rotationSpeed = -0.5f;
+                characterBehaviour.transform.Rotate(Vector3.up, eventData.delta.x * rotationSpeed, Space.World);
             }
         }
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            if (showcaseBehaviour != null)
+            CharacterBehaviour characterBehaviour = CharacterBehaviour.GetBehaviour();
+            if (characterBehaviour != null)
             {
-                showcaseBehaviour.OnEndDrag();
+                Quaternion startRot = characterBehaviour.transform.rotation;
+                resetPlayerRotationTweenCase.KillActive();
+                resetPlayerRotationTweenCase = Tween.DoFloat(0f, 1f, 0.4f, (float t) =>
+                {
+                    if (characterBehaviour != null)
+                    {
+                        characterBehaviour.transform.rotation = Quaternion.Slerp(startRot, showcasePlayerRotation, t);
+                    }
+                }).SetEasing(Ease.Type.QuadOut);
             }
         }
 

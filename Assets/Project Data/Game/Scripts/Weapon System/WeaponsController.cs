@@ -47,6 +47,11 @@ namespace Watermelon.SquadShooter
             weaponsLink = new Dictionary<WeaponType, int>();
             weapons = database.Weapons;
 
+            if (save.selectedWeaponIndex >= weapons.Length || save.selectedWeaponIndex < 0)
+            {
+                save.selectedWeaponIndex = 0;
+            }
+
             for (int i = 0; i < weapons.Length; i++)
             {
                 weapons[i].Initialise();

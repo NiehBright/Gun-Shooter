@@ -31,7 +31,6 @@ namespace Watermelon.SquadShooter
         [SerializeField] Image[] upgradesStatesImages;
 
         public WeaponData Data { get; private set; }
-
         private BaseWeaponUpgrade Upgrade { get; set; }
 
         [Space]
@@ -51,11 +50,22 @@ namespace Watermelon.SquadShooter
         private UIGamepadButton gamepadButton;
         public UIGamepadButton GamepadButton => gamepadButton;
 
-        public Transform UpgradeButtonTransform => upgradesBuyButton != null ? upgradesBuyButton.transform : transform;
+        // Cho Tutorial: Con trỏ chỉ dẫn trỏ thẳng vào nút Upgrade ở Cột Thông Số Bên Trái
+        public Transform UpgradeButtonTransform
+        {
+            get
+            {
+                if (weaponPage != null && weaponPage.DetailsPanel != null && weaponPage.DetailsPanel.CoinUpgradeButton != null && weaponPage.DetailsPanel.CoinUpgradeButton.gameObject.activeInHierarchy)
+                {
+                    return weaponPage.DetailsPanel.CoinUpgradeButton.transform;
+                }
+                return upgradesBuyButton != null ? upgradesBuyButton.transform : transform;
+            }
+        }
 
         private WeaponsController weaponController;
         private UIWeaponPage weaponPage;
-        private GameObject equippedBadgeObject;
+        private GameObject equipActionObject;
 
         public void Init(WeaponsController weaponController, BaseWeaponUpgrade upgrade, WeaponData data, int weaponIndex)
         {
@@ -84,12 +94,6 @@ namespace Watermelon.SquadShooter
                 rarityText.color = data.RarityData.TextColor;
             }
 
-            // An nut nang cap trong the vi thao tac da chuyen sang Cot Trai
-            if (upgradesBuyButton != null)
-            {
-                upgradesBuyButton.gameObject.SetActive(false);
-            }
-
             UpdateUI();
             UpdateSelectionState();
 
@@ -102,13 +106,13 @@ namespace Watermelon.SquadShooter
             if (panelRectTransform == null) panelRectTransform = (RectTransform)transform;
             if (panelRectTransform != null)
             {
-                panelRectTransform.sizeDelta = new Vector2(0f, 165f);
+                panelRectTransform.sizeDelta = new Vector2(0f, 155f);
             }
 
             LayoutElement le = GetComponent<LayoutElement>();
             if (le == null) le = gameObject.AddComponent<LayoutElement>();
-            le.minHeight = 165f;
-            le.preferredHeight = 165f;
+            le.minHeight = 155f;
+            le.preferredHeight = 155f;
             le.flexibleWidth = 1f;
 
             Color rarityColor = (data != null && data.RarityData != null) ? data.RarityData.MainColor : new Color(0f, 0.85f, 1f);
@@ -171,44 +175,51 @@ namespace Watermelon.SquadShooter
             {
                 if (font != null) weaponName.font = font;
                 RectTransform nameRt = weaponName.rectTransform;
-                nameRt.anchorMin = new Vector2(0f, 1f);
-                nameRt.anchorMax = new Vector2(0f, 1f);
-                nameRt.pivot = new Vector2(0f, 1f);
-                nameRt.anchoredPosition = new Vector2(164f, -14f);
-                nameRt.sizeDelta = new Vector2(290f, 58f);
-                weaponName.fontSize = 54f;
+                nameRt.anchorMin = new Vector2(0f, 0.5f);
+                nameRt.anchorMax = new Vector2(0f, 0.5f);
+                nameRt.pivot = new Vector2(0f, 0.5f);
+                nameRt.anchoredPosition = new Vector2(155f, 18f);
+                nameRt.sizeDelta = new Vector2(280f, 48f);
+                weaponName.fontSize = 46f;
                 weaponName.fontStyle = FontStyles.Bold;
                 weaponName.alignment = TextAlignmentOptions.Left;
                 weaponName.color = Color.white;
                 weaponName.enableAutoSizing = true;
-                weaponName.fontSizeMin = 34f;
-                weaponName.fontSizeMax = 54f;
+                weaponName.fontSizeMin = 30f;
+                weaponName.fontSizeMax = 46f;
             }
 
             // Rarity Badge Pill Tag
             SetupRarityBadge(data, font, rarityColor);
 
-            // Level Text — Cyan Neon
-            if (levelText != null)
-            {
-                if (font != null) levelText.font = font;
-                RectTransform lvlRt = levelText.rectTransform;
-                lvlRt.anchorMin = new Vector2(0f, 0f);
-                lvlRt.anchorMax = new Vector2(0f, 0f);
-                lvlRt.pivot = new Vector2(0f, 0f);
-                lvlRt.anchoredPosition = new Vector2(164f, 16f);
-                lvlRt.sizeDelta = new Vector2(200f, 42f);
-                levelText.fontSize = 40f;
-                levelText.fontStyle = FontStyles.Bold;
-                levelText.alignment = TextAlignmentOptions.Left;
-                levelText.color = new Color(0f, 0.85f, 1f);
-            }
+            // 6. TUYỆT ĐỐI ẨN TẤT CẢ CÁC NÚT VÀ ELEMENT UPGRADE/POWER TRÊN THẺ
+            HideAllUpgradeAndStatsElements();
 
-            // Hide old upgrade elements
+            // 7. Cập nhật Nút mang vũ khí bên phải
+            UpdateEquipAction();
+        }
+
+        private void HideAllUpgradeAndStatsElements()
+        {
+            if (levelText != null) levelText.gameObject.SetActive(false);
+            if (upgradeStateObject != null) upgradeStateObject.SetActive(false);
+            if (upgradesBuyButton != null) upgradesBuyButton.gameObject.SetActive(false);
             if (powerObject != null) powerObject.SetActive(false);
             if (powerText != null) powerText.gameObject.SetActive(false);
             if (upgradesMaxObject != null) upgradesMaxObject.SetActive(false);
-            if (upgradesBuyButton != null) upgradesBuyButton.gameObject.SetActive(false);
+            if (lockedStateObject != null) lockedStateObject.SetActive(false);
+            if (cardsFillImage != null) cardsFillImage.gameObject.SetActive(false);
+            if (cardsAmountText != null) cardsAmountText.gameObject.SetActive(false);
+
+            Transform parent = backgroundTransform != null ? backgroundTransform : transform;
+            string[] toHide = { "Power Panel", "Upgrade State", "Max Panel", "Lock State", "Level Text" };
+            foreach (var name in toHide)
+            {
+                Transform t = parent.Find(name);
+                if (t != null) t.gameObject.SetActive(false);
+                Transform tRoot = transform.Find(name);
+                if (tRoot != null) tRoot.gameObject.SetActive(false);
+            }
         }
 
         private void SetupRarityStripe(Color rarityColor)
@@ -230,7 +241,7 @@ namespace Watermelon.SquadShooter
             rt.anchorMax = new Vector2(0f, 0.5f);
             rt.pivot = new Vector2(0f, 0.5f);
             rt.anchoredPosition = new Vector2(5f, 0f);
-            rt.sizeDelta = new Vector2(5f, 153f);
+            rt.sizeDelta = new Vector2(5f, 145f);
 
             Image img = stripeObj.GetComponent<Image>();
             if (img != null)
@@ -261,7 +272,7 @@ namespace Watermelon.SquadShooter
                 slotRt.anchorMax = new Vector2(0f, 0.5f);
                 slotRt.pivot = new Vector2(0f, 0.5f);
                 slotRt.anchoredPosition = new Vector2(20f, 0f);
-                slotRt.sizeDelta = new Vector2(128f, 128f);
+                slotRt.sizeDelta = new Vector2(120f, 120f);
 
                 // Slot Inner BG (dark sci-fi backdrop)
                 Transform slotBgTr = iconBgTr.Find("Slot BG");
@@ -308,7 +319,7 @@ namespace Watermelon.SquadShooter
                     imgRt.anchorMax = new Vector2(0.5f, 0.5f);
                     imgRt.pivot = new Vector2(0.5f, 0.5f);
                     imgRt.anchoredPosition = Vector2.zero;
-                    imgRt.sizeDelta = new Vector2(104f, 104f);
+                    imgRt.sizeDelta = new Vector2(96f, 96f);
                     weaponImage.preserveAspect = true;
                     weaponImage.color = Color.white;
                 }
@@ -356,11 +367,11 @@ namespace Watermelon.SquadShooter
             }
 
             RectTransform badgeRt = badgeObj.GetComponent<RectTransform>();
-            badgeRt.anchorMin = new Vector2(0f, 1f);
-            badgeRt.anchorMax = new Vector2(0f, 1f);
-            badgeRt.pivot = new Vector2(0f, 1f);
-            badgeRt.anchoredPosition = new Vector2(164f, -74f);
-            badgeRt.sizeDelta = new Vector2(140f, 34f);
+            badgeRt.anchorMin = new Vector2(0f, 0.5f);
+            badgeRt.anchorMax = new Vector2(0f, 0.5f);
+            badgeRt.pivot = new Vector2(0f, 0.5f);
+            badgeRt.anchoredPosition = new Vector2(155f, -22f);
+            badgeRt.sizeDelta = new Vector2(130f, 28f);
 
             Image badgeImg = badgeObj.GetComponent<Image>();
             if (badgeImg != null)
@@ -387,10 +398,10 @@ namespace Watermelon.SquadShooter
                 rarRt.anchoredPosition = Vector2.zero;
 
                 if (font != null) rarityText.font = font;
-                rarityText.fontSize = 24f;
+                rarityText.fontSize = 20f;
                 rarityText.fontStyle = FontStyles.Bold;
                 rarityText.alignment = TextAlignmentOptions.Center;
-                rarityText.color = Color.Lerp(rarityColor, Color.white, 0.6f);
+                rarityText.color = Color.Lerp(rarityColor, Color.white, 0.65f);
             }
         }
 
@@ -410,18 +421,8 @@ namespace Watermelon.SquadShooter
 
         public void UpdateUI()
         {
-            if (Upgrade == null) return;
-
-            if (IsUnlocked)
-            {
-                UpdateUpgradeState();
-            }
-            else
-            {
-                UpdateLockedState();
-            }
-
-            UpdateEquippedBadge();
+            HideAllUpgradeAndStatsElements();
+            UpdateEquipAction();
         }
 
         public void UpdateSelectionState()
@@ -441,75 +442,68 @@ namespace Watermelon.SquadShooter
                 backgroundTransform.localScale = Vector3.one;
             }
 
-            UpdateEquippedBadge();
+            UpdateEquipAction();
         }
 
-        private void UpdateEquippedBadge()
+        private void UpdateEquipAction()
         {
             bool isEquipped = (weaponIndex == WeaponsController.SelectedWeaponIndex);
+            bool isUnlocked = IsUnlocked;
 
-            if (equippedBadgeObject == null)
+            if (equipActionObject == null)
             {
-                Transform badgeTr = transform.Find("Equipped Badge");
+                Transform badgeTr = transform.Find("Equip Action");
+                if (badgeTr == null) badgeTr = transform.Find("Equipped Badge");
                 if (badgeTr != null)
                 {
-                    equippedBadgeObject = badgeTr.gameObject;
+                    equipActionObject = badgeTr.gameObject;
+                    equipActionObject.name = "Equip Action";
                 }
                 else
                 {
-                    equippedBadgeObject = UIWeaponPageBuilder.CreateUIObject("Equipped Badge", transform, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+                    equipActionObject = UIWeaponPageBuilder.CreateUIObject("Equip Action", transform, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button));
                 }
             }
 
-            if (equippedBadgeObject != null)
+            if (equipActionObject != null)
             {
-                RectTransform rt = equippedBadgeObject.GetComponent<RectTransform>();
+                RectTransform rt = equipActionObject.GetComponent<RectTransform>();
                 rt.anchorMin = new Vector2(1f, 0.5f);
                 rt.anchorMax = new Vector2(1f, 0.5f);
                 rt.pivot = new Vector2(1f, 0.5f);
                 rt.anchoredPosition = new Vector2(-18f, 0f);
-                rt.sizeDelta = new Vector2(195f, 54f);
+                rt.sizeDelta = new Vector2(175f, 52f);
 
-                Image badgeImg = equippedBadgeObject.GetComponent<Image>();
-                if (badgeImg != null)
-                {
-                    Sprite badgeSp = UIWeaponPageBuilder.GetSurvivalCleanSprite("Label_Label01_White1");
-                    if (badgeSp != null)
-                    {
-                        badgeImg.sprite = badgeSp;
-                        badgeImg.type = Image.Type.Sliced;
-                    }
-                    badgeImg.color = new Color(0.12f, 0.65f, 0.33f, 0.95f);
-                }
+                Image badgeImg = equipActionObject.GetComponent<Image>();
+                Button equipBtn = equipActionObject.GetComponent<Button>();
+                if (equipBtn == null) equipBtn = equipActionObject.AddComponent<Button>();
 
-                // Check Icon
-                Transform checkTr = equippedBadgeObject.transform.Find("Check Icon");
-                GameObject checkObj;
-                if (checkTr != null)
+                equipBtn.onClick.RemoveAllListeners();
+
+                // Icon (Checkmark or Lock)
+                Transform iconTr = equipActionObject.transform.Find("Action Icon");
+                if (iconTr == null) iconTr = equipActionObject.transform.Find("Check Icon");
+                GameObject iconObj;
+                if (iconTr != null)
                 {
-                    checkObj = checkTr.gameObject;
+                    iconObj = iconTr.gameObject;
+                    iconObj.name = "Action Icon";
                 }
                 else
                 {
-                    checkObj = UIWeaponPageBuilder.CreateUIObject("Check Icon", equippedBadgeObject.transform, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+                    iconObj = UIWeaponPageBuilder.CreateUIObject("Action Icon", equipActionObject.transform, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
                 }
-                RectTransform checkRt = checkObj.GetComponent<RectTransform>();
-                checkRt.anchorMin = new Vector2(0f, 0.5f);
-                checkRt.anchorMax = new Vector2(0f, 0.5f);
-                checkRt.pivot = new Vector2(0.5f, 0.5f);
-                checkRt.anchoredPosition = new Vector2(26f, 0f);
-                checkRt.sizeDelta = new Vector2(26f, 26f);
-                Image checkImg = checkObj.GetComponent<Image>();
-                if (checkImg != null)
-                {
-                    Sprite checkSp = UIWeaponPageBuilder.GetSurvivalCleanSprite("Icon_Check");
-                    if (checkSp != null) checkImg.sprite = checkSp;
-                    checkImg.color = Color.white;
-                    checkImg.raycastTarget = false;
-                }
+                RectTransform iconRt = iconObj.GetComponent<RectTransform>();
+                iconRt.anchorMin = new Vector2(0f, 0.5f);
+                iconRt.anchorMax = new Vector2(0f, 0.5f);
+                iconRt.pivot = new Vector2(0.5f, 0.5f);
+                iconRt.anchoredPosition = new Vector2(24f, 0f);
+                iconRt.sizeDelta = new Vector2(24f, 24f);
+                Image iconImg = iconObj.GetComponent<Image>();
+                if (iconImg != null) iconImg.raycastTarget = false;
 
                 // Text
-                Transform textTr = equippedBadgeObject.transform.Find("Text");
+                Transform textTr = equipActionObject.transform.Find("Text");
                 GameObject textObj;
                 if (textTr != null)
                 {
@@ -517,214 +511,121 @@ namespace Watermelon.SquadShooter
                 }
                 else
                 {
-                    textObj = UIWeaponPageBuilder.CreateUIObject("Text", equippedBadgeObject.transform, typeof(RectTransform), typeof(TextMeshProUGUI));
+                    textObj = UIWeaponPageBuilder.CreateUIObject("Text", equipActionObject.transform, typeof(RectTransform), typeof(TextMeshProUGUI));
                 }
                 RectTransform textRt = textObj.GetComponent<RectTransform>();
                 textRt.anchorMin = Vector2.zero;
                 textRt.anchorMax = Vector2.one;
-                textRt.offsetMin = new Vector2(44f, 0f);
-                textRt.offsetMax = new Vector2(-10f, 0f);
 
                 TextMeshProUGUI tmp = textObj.GetComponent<TextMeshProUGUI>();
-                if (tmp != null)
-                {
-                    TMP_FontAsset font = UIWeaponPageBuilder.GetFont();
-                    if (font != null) tmp.font = font;
-                    else if (weaponName != null) tmp.font = weaponName.font;
-                    tmp.text = "ĐANG DÙNG";
-                    tmp.fontSize = 28f;
-                    tmp.fontStyle = FontStyles.Bold;
-                    tmp.color = Color.white;
-                    tmp.alignment = TextAlignmentOptions.Center;
-                }
+                TMP_FontAsset font = UIWeaponPageBuilder.GetFont();
+                if (font != null && tmp != null) tmp.font = font;
 
-                equippedBadgeObject.SetActive(isEquipped);
-            }
-        }
-
-        private void UpdateLockedState()
-        {
-            if (lockedStateObject != null)
-            {
-                lockedStateObject.SetActive(true);
-                Image lockedBg = lockedStateObject.GetComponent<Image>();
-                if (lockedBg != null) lockedBg.color = Color.clear;
-
-                RectTransform lockRt = lockedStateObject.GetComponent<RectTransform>();
-                if (lockRt != null)
+                if (isEquipped)
                 {
-                    lockRt.anchorMin = new Vector2(1f, 0.5f);
-                    lockRt.anchorMax = new Vector2(1f, 0.5f);
-                    lockRt.pivot = new Vector2(1f, 0.5f);
-                    lockRt.anchoredPosition = new Vector2(-18f, 0f);
-                    lockRt.sizeDelta = new Vector2(195f, 65f);
-                    lockRt.localScale = Vector3.one;
-                }
-
-                // Lock Icon
-                Transform lockIconTr = lockedStateObject.transform.Find("Lock Icon");
-                GameObject lockIconObj;
-                if (lockIconTr != null)
-                {
-                    lockIconObj = lockIconTr.gameObject;
-                }
-                else
-                {
-                    lockIconObj = UIWeaponPageBuilder.CreateUIObject("Lock Icon", lockedStateObject.transform, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
-                }
-                RectTransform liRt = lockIconObj.GetComponent<RectTransform>();
-                liRt.anchorMin = new Vector2(0f, 1f);
-                liRt.anchorMax = new Vector2(0f, 1f);
-                liRt.pivot = new Vector2(0f, 1f);
-                liRt.anchoredPosition = new Vector2(6f, -4f);
-                liRt.sizeDelta = new Vector2(26f, 26f);
-                Image liImg = lockIconObj.GetComponent<Image>();
-                if (liImg != null)
-                {
-                    Sprite lockSp = UIWeaponPageBuilder.GetSurvivalCleanSprite("Icon_Lock");
-                    if (lockSp != null) liImg.sprite = lockSp;
-                    liImg.color = new Color(1f, 0.78f, 0.25f, 1f);
-                    liImg.raycastTarget = false;
-                }
-
-                int currentAmount = 0;
-                int target = 1;
-                if (Data != null && Upgrade != null && Upgrade.NextStage != null)
-                {
-                    currentAmount = Data.CardsAmount;
-                    target = Upgrade.NextStage.Price;
-                }
-
-                // cardsAmountText
-                if (cardsAmountText != null)
-                {
-                    cardsAmountText.text = $"{currentAmount}/{target}";
-                    RectTransform cardAmtRt = cardsAmountText.rectTransform;
-                    cardAmtRt.anchorMin = new Vector2(0f, 1f);
-                    cardAmtRt.anchorMax = new Vector2(1f, 1f);
-                    cardAmtRt.pivot = new Vector2(1f, 1f);
-                    cardAmtRt.anchoredPosition = new Vector2(0f, 0f);
-                    cardAmtRt.sizeDelta = new Vector2(0f, 32f);
-                    TMP_FontAsset font = UIWeaponPageBuilder.GetFont();
-                    if (font != null) cardsAmountText.font = font;
-                    cardsAmountText.fontSize = 32f;
-                    cardsAmountText.fontStyle = FontStyles.Bold;
-                    cardsAmountText.alignment = TextAlignmentOptions.Right;
-                    cardsAmountText.color = new Color(1f, 0.78f, 0.25f, 1f);
-                }
-
-                // Progress Bar Frame + Fill
-                Transform barFrameTr = lockedStateObject.transform.Find("Progress Bar");
-                GameObject barFrameObj;
-                if (barFrameTr != null)
-                {
-                    barFrameObj = barFrameTr.gameObject;
-                }
-                else
-                {
-                    barFrameObj = UIWeaponPageBuilder.CreateUIObject("Progress Bar", lockedStateObject.transform, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
-                }
-                RectTransform bfRt = barFrameObj.GetComponent<RectTransform>();
-                bfRt.anchorMin = new Vector2(0f, 0f);
-                bfRt.anchorMax = new Vector2(1f, 0f);
-                bfRt.pivot = new Vector2(0.5f, 0f);
-                bfRt.anchoredPosition = new Vector2(0f, 6f);
-                bfRt.sizeDelta = new Vector2(0f, 14f);
-                Image bfImg = barFrameObj.GetComponent<Image>();
-                if (bfImg != null)
-                {
-                    Sprite barFrameSp = UIWeaponPageBuilder.GetSurvivalCleanSprite("Slider06_White1_Frame");
-                    if (barFrameSp != null)
+                    // TRẠNG THÁI 1: ĐANG DÙNG (Equipped)
+                    if (badgeImg != null)
                     {
-                        bfImg.sprite = barFrameSp;
-                        bfImg.type = Image.Type.Sliced;
+                        Sprite badgeSp = UIWeaponPageBuilder.GetSurvivalCleanSprite("Label_Label01_White1");
+                        if (badgeSp != null) { badgeImg.sprite = badgeSp; badgeImg.type = Image.Type.Sliced; }
+                        badgeImg.color = new Color(0.12f, 0.65f, 0.33f, 0.95f);
                     }
-                    bfImg.color = new Color(0.20f, 0.25f, 0.35f, 0.95f);
-                    bfImg.raycastTarget = false;
-                }
+                    if (iconImg != null)
+                    {
+                        iconObj.SetActive(true);
+                        Sprite checkSp = UIWeaponPageBuilder.GetSurvivalCleanSprite("Icon_Check");
+                        if (checkSp != null) iconImg.sprite = checkSp;
+                        iconImg.color = Color.white;
+                    }
+                    if (tmp != null)
+                    {
+                        tmp.text = "ĐANG DÙNG";
+                        tmp.fontSize = 24f;
+                        tmp.fontStyle = FontStyles.Bold;
+                        tmp.color = Color.white;
+                        tmp.alignment = TextAlignmentOptions.Center;
+                    }
+                    textRt.offsetMin = new Vector2(36f, 0f);
+                    textRt.offsetMax = new Vector2(-8f, 0f);
 
-                Transform barFillTr = barFrameObj.transform.Find("Fill");
-                GameObject barFillObj;
-                if (barFillTr != null)
+                    equipBtn.interactable = false;
+                }
+                else if (isUnlocked)
                 {
-                    barFillObj = barFillTr.gameObject;
+                    // TRẠNG THÁI 2: ĐÃ MỞ KHÓA -> NÚT "MANG" (Equip)
+                    if (badgeImg != null)
+                    {
+                        Sprite btnSp = UIWeaponPageBuilder.GetSurvivalCleanSprite("Label_Label01_White1");
+                        if (btnSp != null) { badgeImg.sprite = btnSp; badgeImg.type = Image.Type.Sliced; }
+                        badgeImg.color = new Color(0f, 0.62f, 0.88f, 1f);
+                    }
+                    if (iconObj != null) iconObj.SetActive(false);
+
+                    if (tmp != null)
+                    {
+                        tmp.text = "MANG";
+                        tmp.fontSize = 26f;
+                        tmp.fontStyle = FontStyles.Bold;
+                        tmp.color = Color.white;
+                        tmp.alignment = TextAlignmentOptions.Center;
+                    }
+                    textRt.offsetMin = Vector2.zero;
+                    textRt.offsetMax = Vector2.zero;
+
+                    equipBtn.interactable = true;
+                    equipBtn.onClick.AddListener(() =>
+                    {
+                        EquipThisWeapon();
+                    });
                 }
                 else
                 {
-                    barFillObj = UIWeaponPageBuilder.CreateUIObject("Fill", barFrameObj.transform, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
-                }
-                RectTransform fillRt = barFillObj.GetComponent<RectTransform>();
-                fillRt.anchorMin = Vector2.zero;
-                fillRt.anchorMax = Vector2.one;
-                fillRt.offsetMin = new Vector2(2f, 2f);
-                fillRt.offsetMax = new Vector2(-2f, -2f);
-                Image fillImg = barFillObj.GetComponent<Image>();
-                if (fillImg != null)
-                {
-                    Sprite barFillSp = UIWeaponPageBuilder.GetSurvivalCleanSprite("Slider06_White3_Fill1");
-                    if (barFillSp != null)
+                    // TRẠNG THÁI 3: CHƯA MỞ KHÓA (Locked)
+                    if (badgeImg != null)
                     {
-                        fillImg.sprite = barFillSp;
-                        fillImg.type = Image.Type.Filled;
-                        fillImg.fillMethod = Image.FillMethod.Horizontal;
-                        fillImg.fillOrigin = 0;
+                        Sprite badgeSp = UIWeaponPageBuilder.GetSurvivalCleanSprite("Label_Label01_White1");
+                        if (badgeSp != null) { badgeImg.sprite = badgeSp; badgeImg.type = Image.Type.Sliced; }
+                        badgeImg.color = new Color(0.18f, 0.22f, 0.3f, 0.85f);
                     }
-                    fillImg.color = new Color(0f, 0.85f, 1f, 1f);
-                    fillImg.fillAmount = target > 0 ? Mathf.Clamp01((float)currentAmount / target) : 0f;
-                    fillImg.raycastTarget = false;
+                    if (iconImg != null)
+                    {
+                        iconObj.SetActive(true);
+                        Sprite lockSp = UIWeaponPageBuilder.GetSurvivalCleanSprite("Icon_Lock");
+                        if (lockSp != null) iconImg.sprite = lockSp;
+                        iconImg.color = new Color(0.95f, 0.75f, 0.2f, 1f);
+                    }
+                    if (tmp != null)
+                    {
+                        int currentCards = (Data != null) ? Data.CardsAmount : 0;
+                        int targetCards = (Upgrade != null && Upgrade.NextStage != null) ? Upgrade.NextStage.Price : 10;
+                        tmp.text = currentCards > 0 ? $"{currentCards}/{targetCards}" : "CHƯA MỞ";
+                        tmp.fontSize = 24f;
+                        tmp.fontStyle = FontStyles.Bold;
+                        tmp.color = new Color(0.85f, 0.88f, 0.95f, 1f);
+                        tmp.alignment = TextAlignmentOptions.Center;
+                    }
+                    textRt.offsetMin = new Vector2(36f, 0f);
+                    textRt.offsetMax = new Vector2(-8f, 0f);
+
+                    equipBtn.interactable = false;
                 }
 
-                if (cardsFillImage != null) cardsFillImage.gameObject.SetActive(false);
-            }
-
-            if (upgradeStateObject != null) upgradeStateObject.SetActive(false);
-            if (powerObject != null) powerObject.SetActive(false);
-            if (powerText != null) powerText.gameObject.SetActive(false);
-            if (upgradesMaxObject != null) upgradesMaxObject.SetActive(false);
-            if (upgradesBuyButton != null) upgradesBuyButton.gameObject.SetActive(false);
-        }
-
-        private void UpdateUpgradeState()
-        {
-            if (lockedStateObject != null) lockedStateObject.SetActive(false);
-            if (upgradeStateObject != null) upgradeStateObject.SetActive(false);
-
-            if (powerObject != null) powerObject.SetActive(false);
-            if (powerText != null) powerText.gameObject.SetActive(false);
-            if (upgradesMaxObject != null) upgradesMaxObject.SetActive(false);
-            if (upgradesBuyButton != null) upgradesBuyButton.gameObject.SetActive(false);
-
-            RedrawUpgradeElements();
-        }
-
-        private void RedrawUpgradeElements()
-        {
-            if (levelText != null && Upgrade != null)
-            {
-                levelText.gameObject.SetActive(true);
-                levelText.text = "CẤP " + Upgrade.UpgradeLevel;
-            }
-
-            if (upgradesMaxObject != null)
-            {
-                upgradesMaxObject.SetActive(false);
-            }
-
-            if (upgradesBuyButton != null)
-            {
-                upgradesBuyButton.gameObject.SetActive(false);
+                equipActionObject.SetActive(true);
             }
         }
 
-        protected override void RedrawUpgradeButton()
+        public void EquipThisWeapon()
         {
-            // Redundant for cards in preview list
+            if (weaponPage == null) weaponPage = UIController.GetPage<UIWeaponPage>();
+            if (weaponPage != null)
+            {
+                weaponPage.EquipWeapon(weaponIndex);
+            }
         }
 
         public override void Select()
         {
-            // Pure Preview Only: Cap nhat xem truoc o man hinh 3D va cot trai!
-            // Nhan vat ben ngoai chi trang bi khi nguoi choi an "TRANG BI" o cot trai.
+            // Preview on 3D character and Left Details Panel
             if (weaponPage == null) weaponPage = UIController.GetPage<UIWeaponPage>();
             if (weaponPage != null)
             {
@@ -735,7 +636,7 @@ namespace Watermelon.SquadShooter
 
         public void UpgradeButton()
         {
-            // Forwarded to left panel
+            // Forwarded to left details panel
         }
 
         private void OnDisable()

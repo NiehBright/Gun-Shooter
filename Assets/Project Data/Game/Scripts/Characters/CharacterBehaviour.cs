@@ -30,6 +30,19 @@ namespace Watermelon.SquadShooter
 
         [Space(5)]
         [SerializeField] AimRingBehavior aimRingBehavior;
+        public AimRingBehavior AimRingBehavior => aimRingBehavior;
+
+        public void ShowAimRing()
+        {
+            if (aimRingBehavior != null)
+                aimRingBehavior.Show();
+        }
+
+        public void HideAimRing()
+        {
+            if (aimRingBehavior != null)
+                aimRingBehavior.Hide();
+        }
 
         // Character Graphics
         private BaseCharacterGraphics graphics;
@@ -505,6 +518,7 @@ namespace Watermelon.SquadShooter
                         graphics.SetShootingAnimation(gunBehaviour.GetShootAnimationClip());
 
                         gunBehaviour.UpdateHandRig();
+                        gunBehaviour.ApplyOutline();
                     }
                 }
             }
@@ -530,8 +544,9 @@ namespace Watermelon.SquadShooter
                     gunBehaviour.PlayUpgradeParticle();
             }
 
-            enemyDetector.SetRadius(currentStage.RangeRadius);
-            aimRingBehavior.SetRadius(currentStage.RangeRadius);
+            float safeRange = currentStage.RangeRadius > 0 ? currentStage.RangeRadius : 2f;
+            enemyDetector.SetRadius(safeRange);
+            aimRingBehavior.SetRadius(safeRange);
         }
 
         public void OnGunShooted()
@@ -702,22 +717,6 @@ namespace Watermelon.SquadShooter
                 gunBehaviour.UpdateHandRig();
 
 #if UNITY_EDITOR
-            // Cheat test nhanh: Nhấn phím I để tự động mở khóa và trang bị Kiếm (Sword)
-            if (UnityEngine.InputSystem.Keyboard.current != null && UnityEngine.InputSystem.Keyboard.current.iKey.wasPressedThisFrame)
-            {
-                var swordData = WeaponsController.Database.GetWeapon(WeaponType.Sword);
-                if (swordData != null)
-                {
-                    var upgrade = Watermelon.UpgradesController.GetUpgrade<Watermelon.Upgrades.BaseUpgrade>(swordData.UpgradeType);
-                    if (upgrade != null && upgrade.UpgradeLevel == 0)
-                    {
-                        upgrade.UpgradeStage();
-                    }
-                    WeaponsController.SelectWeapon(WeaponType.Sword);
-                    Debug.Log("[Cheat] Da mo khoa va trang bi Kiem (Sword) thanh cong!");
-                }
-            }
-
             // Keyboard Dash Test for PC Editor
             if (UnityEngine.InputSystem.Keyboard.current != null)
             {

@@ -59,6 +59,9 @@ namespace Watermelon
         private Quaternion originalCameraRotation;
         private bool isZoomedIn = false;
 
+        public static Vector3 OriginalCameraPosition => (cameraController != null && cameraController.isZoomedIn) ? cameraController.originalCameraPosition : (mainCamera != null ? mainCamera.transform.position : Vector3.zero);
+        public static bool IsZoomedIn => cameraController != null && cameraController.isZoomedIn;
+
         private void Awake()
         {
             cameraController = this;
