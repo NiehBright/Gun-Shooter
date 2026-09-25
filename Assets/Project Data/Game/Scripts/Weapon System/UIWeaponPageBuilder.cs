@@ -45,6 +45,7 @@ namespace Watermelon.SquadShooter
         private const string SP_LOCK             = SC_BASE + "Icon_PictoIcons(x2)/128/Icon_Lock.Png";
 
         // Font
+        private const string FONT_BEVIETNAM      = "Assets/Project Data/Game/Fonts/BeVietnamPro-Bold SDF.asset";
         private const string FONT_OXANIUM        = SC_FONT + "Oxanium-ExtraBold_Extended ASCII SDF.asset";
         private const string FONT_NEXON_B        = SC_FONT + "NEXON Football Gothic B SDF.asset";
 
@@ -151,7 +152,9 @@ namespace Watermelon.SquadShooter
             if (_cachedFont != null) return _cachedFont;
 
 #if UNITY_EDITOR
-            _cachedFont = UnityEditor.AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(FONT_OXANIUM);
+            _cachedFont = UnityEditor.AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(FONT_BEVIETNAM);
+            if (_cachedFont == null)
+                _cachedFont = UnityEditor.AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(FONT_OXANIUM);
             if (_cachedFont == null)
                 _cachedFont = UnityEditor.AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(FONT_NEXON_B);
 #endif
@@ -185,7 +188,9 @@ namespace Watermelon.SquadShooter
             LoadEditorSprite(SP_LOCK);
 
             // Font
-            _cachedFont = UnityEditor.AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(FONT_OXANIUM);
+            _cachedFont = UnityEditor.AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(FONT_BEVIETNAM);
+            if (_cachedFont == null)
+                _cachedFont = UnityEditor.AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(FONT_OXANIUM);
             if (_cachedFont == null)
                 _cachedFont = UnityEditor.AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(FONT_NEXON_B);
         }

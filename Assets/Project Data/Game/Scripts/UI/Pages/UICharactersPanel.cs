@@ -278,6 +278,9 @@ namespace Watermelon.SquadShooter
                 Control.DisableMovementControl();
                 characterBehaviour.DisableAgent();
 
+                // An vong tam danh duoi chan nhan vat trong UI chon nhan vat
+                characterBehaviour.HideAimRing();
+
                 // An drone
                 if (characterBehaviour.CurrentDrone != null)
                 {
@@ -320,6 +323,9 @@ namespace Watermelon.SquadShooter
                 characterBehaviour.transform.rotation = originalPlayerRotation;
                 Control.EnableMovementControl();
                 characterBehaviour.ActivateAgent();
+
+                // Mo lai vong tam danh duoi chan nhan vat khi dong UI
+                characterBehaviour.ShowAimRing();
 
                 if (characterBehaviour.CurrentDrone != null)
                 {

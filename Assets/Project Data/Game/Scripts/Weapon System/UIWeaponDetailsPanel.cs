@@ -40,6 +40,7 @@ namespace Watermelon.SquadShooter
         // Actions: Upgrades
         [SerializeField] private GameObject upgradeSectionContainer;
         [SerializeField] private Button coinUpgradeButton;
+        public Button CoinUpgradeButton => coinUpgradeButton;
         [SerializeField] private Image coinUpgradeButtonImage;
         [SerializeField] private TextMeshProUGUI coinUpgradePriceText;
         [SerializeField] private Button cardUnlockButton;
@@ -49,6 +50,7 @@ namespace Watermelon.SquadShooter
 
         // Actions: Equip
         [SerializeField] private Button equipButton;
+        public Button EquipButton => equipButton;
         [SerializeField] private Image equipButtonImage;
         [SerializeField] private TextMeshProUGUI equipButtonText;
 

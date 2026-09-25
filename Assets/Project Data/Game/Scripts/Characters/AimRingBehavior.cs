@@ -40,9 +40,9 @@ namespace Watermelon.SquadShooter
 
         public void SetRadius(float radius)
         {
-            if (radius == 0)
+            if (radius <= 0)
             {
-                Debug.LogError("Aiming radius can't be 0!");
+                radius = 1f;
             }
 
             this.radius = Mathf.Clamp(radius, 1, float.MaxValue);
@@ -57,12 +57,14 @@ namespace Watermelon.SquadShooter
 
         public void Show()
         {
-            meshRenderer.enabled = true;
+            if (meshRenderer != null)
+                meshRenderer.enabled = true;
         }
 
         public void Hide()
         {
-            meshRenderer.enabled = false;
+            if (meshRenderer != null)
+                meshRenderer.enabled = false;
         }
 
         private void GenerateMesh()
