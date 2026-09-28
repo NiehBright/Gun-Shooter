@@ -23,7 +23,7 @@ namespace Watermelon.SquadShooter
         [Header("Character Stats Area")]
         [SerializeField] Image charPreviewImage;
         [SerializeField] TMPro.TMP_Text charNameText;
-        [SerializeField] UnityEngine.UI.Text charStarsText;
+        [SerializeField] TMPro.TMP_Text charStarsText;
         [SerializeField] TMPro.TMP_Text charHpValueText;
         [SerializeField] TMPro.TMP_Text charDmgValueText;
         [SerializeField] TMPro.TMP_Text coinsText; // Ô hiển thị vàng ở góc phải
@@ -59,6 +59,8 @@ namespace Watermelon.SquadShooter
 
             panelCanvas = GetComponent<Canvas>();
             if (panelCanvas == null) panelCanvas = gameObject.AddComponent<Canvas>();
+            panelCanvas.overrideSorting = true;
+            panelCanvas.sortingOrder = 1100;
 
             panelRaycaster = GetComponent<GraphicRaycaster>();
             if (panelRaycaster == null) panelRaycaster = gameObject.AddComponent<GraphicRaycaster>();
@@ -137,22 +139,32 @@ namespace Watermelon.SquadShooter
             }
         }
 
+        public static bool IsOpen => instance != null && instance.panelCanvas != null && instance.panelCanvas.enabled;
+
         private void OnEnable()
         {
-            EquipmentController.OnEquipmentChanged += RefreshUI;
+            EquipmentController.OnEquipmentChanged += OnEquipmentChanged;
             CharactersController.OnCharacterSelectedEvent += OnCharacterSelected;
         }
 
         private void OnDisable()
         {
-            EquipmentController.OnEquipmentChanged -= RefreshUI;
+            EquipmentController.OnEquipmentChanged -= OnEquipmentChanged;
             CharactersController.OnCharacterSelectedEvent -= OnCharacterSelected;
+        }
+
+        private void OnEquipmentChanged()
+        {
+            if (IsOpen) RefreshUI();
         }
 
         private void OnCharacterSelected(CharacterType type, Character character)
         {
-            Debug.Log("[EquipmentPanelUI] Character selected changed: " + type);
-            RefreshUI();
+            if (IsOpen)
+            {
+                Debug.Log("[EquipmentPanelUI] Character selected changed: " + type);
+                RefreshUI();
+            }
         }
 
         private void BindFilterButtons()
@@ -173,14 +185,27 @@ namespace Watermelon.SquadShooter
 
         private void UpdateFilterBtnColors()
         {
-            Color selectedCol = new Color(0.9f, 0.7f, 0.2f, 1f);
-            Color normalCol = new Color(0.25f, 0.25f, 0.35f, 1f);
+            Color selectedCol = new Color(0f, 0.85f, 1f, 1f); // SurvivalClean Cyan Accent
+            Color normalCol = new Color(0.10f, 0.14f, 0.22f, 0.95f); // SurvivalClean Slate Navy
 
-            if (filterAllBtn != null) filterAllBtn.GetComponent<Image>().color = currentFilter == null ? selectedCol : normalCol;
-            if (filterHatBtn != null) filterHatBtn.GetComponent<Image>().color = currentFilter == EquipmentType.Hat ? selectedCol : normalCol;
-            if (filterArmorBtn != null) filterArmorBtn.GetComponent<Image>().color = currentFilter == EquipmentType.Armor ? selectedCol : normalCol;
-            if (filterGlovesBtn != null) filterGlovesBtn.GetComponent<Image>().color = currentFilter == EquipmentType.Gloves ? selectedCol : normalCol;
-            if (filterShoesBtn != null) filterShoesBtn.GetComponent<Image>().color = currentFilter == EquipmentType.Shoes ? selectedCol : normalCol;
+            SetFilterBtnVisual(filterAllBtn, currentFilter == null, selectedCol, normalCol);
+            SetFilterBtnVisual(filterHatBtn, currentFilter == EquipmentType.Hat, selectedCol, normalCol);
+            SetFilterBtnVisual(filterArmorBtn, currentFilter == EquipmentType.Armor, selectedCol, normalCol);
+            SetFilterBtnVisual(filterGlovesBtn, currentFilter == EquipmentType.Gloves, selectedCol, normalCol);
+            SetFilterBtnVisual(filterShoesBtn, currentFilter == EquipmentType.Shoes, selectedCol, normalCol);
+        }
+
+        private void SetFilterBtnVisual(Button btn, bool isSelected, Color selCol, Color normCol)
+        {
+            if (btn == null) return;
+            var img = btn.GetComponent<Image>();
+            if (img != null) img.color = isSelected ? selCol : normCol;
+
+            var tmp = btn.GetComponentInChildren<TMPro.TMP_Text>();
+            if (tmp != null) tmp.color = isSelected ? new Color(0.04f, 0.07f, 0.12f, 1f) : new Color(0.72f, 0.78f, 0.88f, 1f);
+
+            var txt = btn.GetComponentInChildren<Text>();
+            if (txt != null) txt.color = isSelected ? new Color(0.04f, 0.07f, 0.12f, 1f) : new Color(0.72f, 0.78f, 0.88f, 1f);
         }
 
         public static void Show()
@@ -204,22 +229,15 @@ namespace Watermelon.SquadShooter
                     return;
                 }
 
-                // Activate the panel and all of its parent hierarchy to ensure it's active in the scene
-                try
+                // Ensure the panel and all ancestors (including EquipmentSystem) are active in hierarchy
+                Transform curr = instance.transform;
+                while (curr != null)
                 {
-                    Transform currentTransform = instance.transform;
-                    while (currentTransform != null)
+                    if (!curr.gameObject.activeSelf)
                     {
-                        if (currentTransform.gameObject != null && !currentTransform.gameObject.activeSelf)
-                        {
-                            currentTransform.gameObject.SetActive(true);
-                        }
-                        currentTransform = currentTransform.parent;
+                        curr.gameObject.SetActive(true);
                     }
-                }
-                catch (System.Exception ex)
-                {
-                    Debug.LogWarning("[EquipmentPanelUI] Parent activation warning: " + ex.Message);
+                    curr = curr.parent;
                 }
 
                 // Bulletproof dynamic retrieval of UI components
@@ -232,18 +250,26 @@ namespace Watermelon.SquadShooter
                 if (instance.panelCanvasGroup == null) instance.panelCanvasGroup = instance.GetComponent<CanvasGroup>();
                 if (instance.panelCanvasGroup == null) instance.panelCanvasGroup = instance.gameObject.AddComponent<CanvasGroup>();
 
+                // Set sorting order higher than UI Canvas (999) to guarantee it's rendered on top
+                instance.panelCanvas.overrideSorting = true;
+                instance.panelCanvas.sortingOrder = 1100;
                 instance.panelCanvas.enabled = true;
                 instance.panelRaycaster.enabled = true;
+
                 instance.panelCanvasGroup.alpha = 1f;
                 instance.panelCanvasGroup.blocksRaycasts = true;
                 instance.panelCanvasGroup.interactable = true;
 
+                // Bring to front in hierarchy
+                instance.transform.SetAsLastSibling();
+                if (instance.transform.parent != null)
+                {
+                    instance.transform.parent.SetAsLastSibling();
+                }
+
                 instance.currentFilter = null;
                 instance.RefreshUI();
                 instance.UpdateFilterBtnColors();
-
-                // Force layout update immediately to prevent first-frame ScrollRect AABB warnings
-                Canvas.ForceUpdateCanvases();
             }
             finally
             {
@@ -271,7 +297,7 @@ namespace Watermelon.SquadShooter
                 panelCanvasGroup.blocksRaycasts = false;
                 panelCanvasGroup.interactable = false;
             }
-            gameObject.SetActive(false);
+            // Không tắt gameObject.SetActive(false) để tránh hủy và tái tạo toàn bộ Canvas hierarchy
         }
 
         public void RefreshUI()
@@ -304,13 +330,6 @@ namespace Watermelon.SquadShooter
 
         private void RefreshInventory()
         {
-            foreach (var item in inventoryItems)
-            {
-                if (item != null)
-                    Destroy(item.gameObject);
-            }
-            inventoryItems.Clear();
-
             if (EquipmentController.SaveData == null || inventoryItemPrefab == null || inventoryContainer == null) return;
 
             var sortedItems = new List<EquipmentSaveItem>(EquipmentController.SaveData.OwnedItems);
@@ -331,6 +350,7 @@ namespace Watermelon.SquadShooter
                 return b.level.CompareTo(a.level);
             });
 
+            int displayIndex = 0;
             foreach (var saveItem in sortedItems)
             {
                 var data = EquipmentController.Database?.GetEquipmentByID(saveItem.itemID);
@@ -354,16 +374,49 @@ namespace Watermelon.SquadShooter
                     continue; // Ẩn hoàn toàn khỏi kho đồ nếu không còn dư chiếc nào
                 }
 
-                GameObject itemObj = Instantiate(inventoryItemPrefab, inventoryContainer);
-                itemObj.SetActive(true);
+                EquipmentItemUI itemUI;
+                if (displayIndex < inventoryItems.Count && inventoryItems[displayIndex] != null)
+                {
+                    itemUI = inventoryItems[displayIndex];
+                    if (!itemUI.gameObject.activeSelf)
+                    {
+                        itemUI.gameObject.SetActive(true);
+                    }
+                }
+                else
+                {
+                    GameObject itemObj = Instantiate(inventoryItemPrefab, inventoryContainer);
+                    itemUI = itemObj.GetComponent<EquipmentItemUI>();
+                    if (displayIndex < inventoryItems.Count)
+                    {
+                        inventoryItems[displayIndex] = itemUI;
+                    }
+                    else
+                    {
+                        inventoryItems.Add(itemUI);
+                    }
+                }
 
-                var itemUI = itemObj.GetComponent<EquipmentItemUI>();
                 if (itemUI != null)
                 {
-                    // Các vật phẩm hiển thị trong kho đồ lúc này chắc chắn là chưa mặc
                     itemUI.Setup(data, saveItem.level, false, OnInventoryItemClicked);
-                    inventoryItems.Add(itemUI);
                 }
+                displayIndex++;
+            }
+
+            // Tắt các item thừa trong pool thay vì Destroy
+            for (int i = displayIndex; i < inventoryItems.Count; i++)
+            {
+                if (inventoryItems[i] != null && inventoryItems[i].gameObject.activeSelf)
+                {
+                    inventoryItems[i].gameObject.SetActive(false);
+                }
+            }
+
+            // Cập nhật lại layout của riêng inventoryContainer (rất nhẹ, không làm chậm toàn scene)
+            if (inventoryContainer is RectTransform containerRect)
+            {
+                LayoutRebuilder.ForceRebuildLayoutImmediate(containerRect);
             }
         }
 
@@ -380,10 +433,8 @@ namespace Watermelon.SquadShooter
             if (charNameText != null) charNameText.text = character.Name;
             if (charStarsText != null)
             {
-                string stars = "";
                 int count = Mathf.Clamp(character.Save != null ? character.Save.UpgradeLevel + 1 : 1, 1, 5);
-                for (int i = 0; i < count; i++) stars += "★";
-                charStarsText.text = stars;
+                charStarsText.text = count >= 5 ? "CẤP 5 / 5 (MAX)" : $"CẤP {count} / 5";
             }
 
             if (charPreviewImage != null && character.GetCurrentStage() != null)

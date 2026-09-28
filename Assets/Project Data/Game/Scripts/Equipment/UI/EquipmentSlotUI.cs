@@ -42,27 +42,20 @@ namespace Watermelon.SquadShooter
             slotType = type;
             onClickCallback = callback;
 
-            // Xóa bỏ đối tượng đã spawn cũ trước khi thiết lập lại
-            if (spawnedItemInstance != null)
-            {
-                Destroy(spawnedItemInstance);
-                spawnedItemInstance = null;
-            }
-
             // Tên slot
             if (slotNameText != null)
                 slotNameText.text = SLOT_NAMES[(int)type];
 
             if (item != null)
             {
-                // Có trang bị -> Bật iconImage làm vùng chứa cha và spawn prefab của vật phẩm vào trong
+                // Có trang bị -> Bật iconImage làm vùng chứa cha và kích hoạt/spawn prefab của vật phẩm vào trong
                 if (iconImage != null)
                 {
                     iconImage.sprite = null;
                     iconImage.enabled = true; // Bật lên làm cha chứa RectTransform con
                     iconImage.color = new Color(1, 1, 1, 0); // Ẩn hình ảnh gốc của iconImage nhưng giữ nó hoạt động
 
-                    if (activeItemPrefab != null)
+                    if (spawnedItemInstance == null && activeItemPrefab != null)
                     {
                         spawnedItemInstance = Instantiate(activeItemPrefab, iconImage.transform);
                         RectTransform rect = spawnedItemInstance.GetComponent<RectTransform>();
@@ -73,8 +66,12 @@ namespace Watermelon.SquadShooter
                             rect.offsetMin = Vector2.zero;
                             rect.offsetMax = Vector2.zero;
                         }
+                    }
 
-                        // Cấu hình vật phẩm hoạt động vừa spawn
+                    if (spawnedItemInstance != null)
+                    {
+                        spawnedItemInstance.SetActive(true);
+                        // Cấu hình vật phẩm hoạt động
                         EquipmentItemUI activeItemUI = spawnedItemInstance.GetComponent<EquipmentItemUI>();
                         if (activeItemUI != null)
                         {
@@ -95,7 +92,12 @@ namespace Watermelon.SquadShooter
             }
             else
             {
-                // Slot trống -> Ẩn iconImage gốc
+                // Slot trống -> Ẩn item đã spawn nếu có thay vì destroy
+                if (spawnedItemInstance != null)
+                {
+                    spawnedItemInstance.SetActive(false);
+                }
+
                 if (iconImage != null)
                 {
                     iconImage.sprite = null;

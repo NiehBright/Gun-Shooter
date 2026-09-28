@@ -13,6 +13,7 @@ namespace Watermelon.SquadShooter
         [SerializeField] TMPro.TMP_Text itemStatsText;
         [SerializeField] Image rarityBgImage;
         [SerializeField] Button blockerButton; // Nút nền để đóng khi ấn ra ngoài
+        [SerializeField] Button closeButton; // Nút X đóng popup
 
         [Header("Equip Elements")]
         [SerializeField] GameObject equipGroup;
@@ -38,6 +39,9 @@ namespace Watermelon.SquadShooter
 
             if (blockerButton != null)
                 blockerButton.onClick.AddListener(Hide);
+
+            if (closeButton != null)
+                closeButton.onClick.AddListener(Hide);
 
             if (equipButton != null)
                 equipButton.onClick.AddListener(OnEquipClicked);
@@ -114,25 +118,25 @@ namespace Watermelon.SquadShooter
             if (stats.bonusHP > 0)
             {
                 statsStr = level < item.MaxLevel 
-                    ? $"Mau: +{stats.bonusHP} \u2794 +{nextStats.bonusHP}" 
+                    ? $"Mau: +{stats.bonusHP} -> +{nextStats.bonusHP}" 
                     : $"Mau: +{stats.bonusHP} (Max)";
             }
             else if (stats.bonusDamagePercent > 0)
             {
                 statsStr = level < item.MaxLevel 
-                    ? $"Sat thuong: +{stats.bonusDamagePercent}% \u2794 +{nextStats.bonusDamagePercent}%" 
+                    ? $"Sat thuong: +{stats.bonusDamagePercent}% -> +{nextStats.bonusDamagePercent}%" 
                     : $"Sat thuong: +{stats.bonusDamagePercent}% (Max)";
             }
             else if (stats.bonusArmor > 0)
             {
                 statsStr = level < item.MaxLevel 
-                    ? $"Giap: +{stats.bonusArmor}% \u2794 +{nextStats.bonusArmor}%" 
+                    ? $"Giap: +{stats.bonusArmor}% -> +{nextStats.bonusArmor}%" 
                     : $"Giap: +{stats.bonusArmor}% (Max)";
             }
             else if (stats.bonusMoveSpeed > 0)
             {
                 statsStr = level < item.MaxLevel 
-                    ? $"Toc do: +{stats.bonusMoveSpeed}% \u2794 +{nextStats.bonusMoveSpeed}%" 
+                    ? $"Toc do: +{stats.bonusMoveSpeed}% -> +{nextStats.bonusMoveSpeed}%" 
                     : $"Toc do: +{stats.bonusMoveSpeed}% (Max)";
             }
 
