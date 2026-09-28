@@ -6,21 +6,8 @@ using TMPro;
 
 namespace Watermelon.SquadShooter
 {
-    [InitializeOnLoad]
     public static class UIWeaponPageEditorTool
     {
-        static UIWeaponPageEditorTool()
-        {
-            EditorApplication.delayCall += AutoRunOnce;
-        }
-
-        private static void AutoRunOnce()
-        {
-            if (SessionState.GetBool("UIWeaponPanel_Bake_CleanEquip_Done", false)) return;
-            SessionState.SetBool("UIWeaponPanel_Bake_CleanEquip_Done", true);
-            SetupUIWeaponPanel();
-        }
-
         private const string PREFAB_PATH = "Assets/Project Data/Game/Prefabs/UI/Pages/UI Weapon Panel.prefab";
         private const string CARD_PREFAB_PATH = "Assets/Project Data/Game/Prefabs/UI/Weapon Panel UI.prefab";
 
@@ -364,65 +351,39 @@ namespace Watermelon.SquadShooter
 
         public static void SetupWeaponPagePrefab()
         {
-            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(PREFAB_PATH);
-            if (prefab == null)
+            GameObject contents = PrefabUtility.LoadPrefabContents(PREFAB_PATH);
+            if (contents == null)
             {
-                Debug.LogError($"[UIWeaponPageEditorTool] Cannot find prefab at {PREFAB_PATH}");
+                Debug.LogError($"[UIWeaponPageEditorTool] Cannot load prefab contents at {PREFAB_PATH}");
                 return;
             }
 
-            GameObject instance = PrefabUtility.InstantiatePrefab(prefab) as GameObject;
-            if (instance == null)
+            try
             {
-                Debug.LogError("[UIWeaponPageEditorTool] Failed to instantiate prefab.");
-                return;
-            }
+                contents.transform.localScale = Vector3.one;
+                contents.layer = 5;
 
-            // Root scale (1, 1, 1) and layer 5
-            instance.transform.localScale = Vector3.one;
-            instance.layer = 5;
-
-            UIWeaponPage page = instance.GetComponent<UIWeaponPage>();
-            if (page != null)
-            {
-                UIWeaponPageBuilder.BuildLayout(page);
-
-                // XÓA SẠCH MỌI THẺ DUMMY TRONG PANELS CONTAINER!
-                // Container phải để trống hoàn toàn để khi Runtime chạy, Initialise() sẽ spawn đúng các vũ khí thực tế.
-                Transform containerTr = page.PanelsContainer;
-                if (containerTr == null && page.ScrollView != null)
-                    containerTr = page.ScrollView.content;
-                if (containerTr != null)
+                UIWeaponPage page = contents.GetComponent<UIWeaponPage>();
+                if (page != null)
                 {
-                    for (int i = containerTr.childCount - 1; i >= 0; i--)
-                    {
-                        Object.DestroyImmediate(containerTr.GetChild(i).gameObject);
-                    }
-                }
+                    UIWeaponPageBuilder.BuildLayout(page);
 
-                // Ensure all descendants are on Layer 5 (UI) and scale is Vector3.one
-                UIWeaponPageBuilder.SetLayerRecursively(instance, 5);
-                instance.transform.localScale = Vector3.one;
-
-                EditorUtility.SetDirty(instance);
-                bool success = false;
-                PrefabUtility.SaveAsPrefabAsset(instance, PREFAB_PATH, out success);
-
-                if (success)
-                {
-                    Debug.Log("<color=green>[UIWeaponPageEditorTool] ✅ Successfully baked UI Weapon Panel page prefab (Clean Container, No Dummy Cards)!</color>");
+                    // Ensure all descendants are on Layer 5 (UI) and scale is Vector3.one
+                    UIWeaponPageBuilder.SetLayerRecursively(contents, 5);
+                    contents.transform.localScale = Vector3.one;
                 }
                 else
                 {
-                    Debug.LogError("[UIWeaponPageEditorTool] ❌ Failed to save page prefab!");
+                    Debug.LogError("[UIWeaponPageEditorTool] UIWeaponPage component not found on prefab.");
                 }
-            }
-            else
-            {
-                Debug.LogError("[UIWeaponPageEditorTool] UIWeaponPage component not found on prefab.");
-            }
 
-            Object.DestroyImmediate(instance);
+                PrefabUtility.SaveAsPrefabAsset(contents, PREFAB_PATH);
+                Debug.Log("<color=green>[UIWeaponPageEditorTool] ✅ Successfully baked UI Weapon Panel page prefab (Scale 1,1,1 preserved)!</color>");
+            }
+            finally
+            {
+                PrefabUtility.UnloadPrefabContents(contents);
+            }
         }
     }
 }
