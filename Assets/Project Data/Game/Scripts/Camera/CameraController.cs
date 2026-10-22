@@ -1,4 +1,4 @@
-using Cinemachine;
+
 using System.Collections.Generic;
 using UnityEngine;
 using Watermelon.SquadShooter;
@@ -13,7 +13,7 @@ namespace Watermelon
 
         private static CameraController cameraController;
 
-        [SerializeField] CinemachineBrain cameraBrain;
+        [SerializeField] Unity.Cinemachine.CinemachineBrain cameraBrain;
         [SerializeField] CameraType firstCamera = CameraType.Main;
 
         [Space]

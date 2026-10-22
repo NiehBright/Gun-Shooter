@@ -583,6 +583,10 @@ namespace Watermelon
 		float ILayoutElement.minHeight { get { return 0; } }
 		float ILayoutElement.flexibleWidth { get { return -1; } }
 		float ILayoutElement.flexibleHeight { get { return -1; } }
+#if UNITY_2023_1_OR_NEWER || UNITY_6000_0_OR_NEWER
+		float ILayoutElement.maxWidth { get { return -1; } }
+		float ILayoutElement.maxHeight { get { return -1; } }
+#endif
 
 		float ILayoutElement.preferredWidth
 		{

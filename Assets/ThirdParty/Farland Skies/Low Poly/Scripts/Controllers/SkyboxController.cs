@@ -1,4 +1,5 @@
-﻿using Borodar.FarlandSkies.Core.Helpers;
+#pragma warning disable 0618
+using Borodar.FarlandSkies.Core.Helpers;
 using UnityEngine;
 
 namespace Borodar.FarlandSkies.LowPoly

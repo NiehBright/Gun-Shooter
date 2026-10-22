@@ -929,7 +929,7 @@ namespace VFavorites
                             }
                             else if (firstParamType == typeof(int))
                             {
-                                showFolderMethod.Invoke(browser, new object[] { folderAsset.GetInstanceID(), false });
+                                showFolderMethod.Invoke(browser, new object[] { folderAsset.GetId(), false });
                                 success = true;
                             }
                         }
@@ -987,7 +987,7 @@ namespace VFavorites
                                 }
                                 else
                                 {
-                                    folderArray = new[] { folderAsset.GetInstanceID() };
+                                    folderArray = new[] { folderAsset.GetId() };
                                 }
 
                                 var paramCount = setFolderMethod.GetParameters().Length;
@@ -1015,7 +1015,22 @@ namespace VFavorites
                 {
                     Selection.activeObject = folderAsset;
 
+#if UNITY_6000_0_OR_NEWER
+                    try
+                    {
+                        browser.GetMemberValue("m_AssetTree")?.GetPropertyValue("data")?.InvokeMethod("SetExpanded", folderAsset.GetEntityId(), true);
+                    }
+                    catch
+                    {
+                        try
+                        {
+                            browser.GetMemberValue("m_AssetTree")?.GetPropertyValue("data")?.InvokeMethod("SetExpanded", folderAsset.GetId(), true);
+                        }
+                        catch {}
+                    }
+#else
                     browser.GetMemberValue("m_AssetTree")?.GetPropertyValue("data")?.InvokeMethod("SetExpanded", folderAsset.GetInstanceID(), true);
+#endif
 
                 }
 
@@ -1701,7 +1716,7 @@ namespace VFavorites
                 lockedBrowser = wrappedBrowser;
 
                 EditorPrefs.SetInt("vFavorites-lockedBrowserHash", lockedBrowser.GetHashCode());
-                EditorPrefs.SetInt("vFavorites-lockedBrowserDockAreaInstanceId", lockedBrowser.GetMemberValue<Object>("m_Parent").GetInstanceID());
+                EditorPrefs.SetInt("vFavorites-lockedBrowserDockAreaInstanceId", lockedBrowser.GetMemberValue<Object>("m_Parent").GetId());
 
                 curEvent.Use();
 
@@ -1758,7 +1773,7 @@ namespace VFavorites
 
 
 
-                var window = Resources.InstanceIDToObject(lockedBrowserInstanceId) as EditorWindow;
+                var window = IdToObject(lockedBrowserInstanceId) as EditorWindow;
 
                 if (window && window.GetType() == t_BrowserWindow) // prevents iid collisions
                     _lockedBrowser = window;
@@ -1792,7 +1807,7 @@ namespace VFavorites
                 }
                 else
                 {
-                    EditorPrefs.SetInt("vFavorites-lockedBrowserInstanceId", value.GetInstanceID());
+                    EditorPrefs.SetInt("vFavorites-lockedBrowserInstanceId", value.GetId());
 
                     MarkAsLocked(value);
 
