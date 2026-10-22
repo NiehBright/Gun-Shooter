@@ -1,4 +1,4 @@
-using Cinemachine;
+
 using UnityEngine;
 
 namespace Watermelon
@@ -9,11 +9,13 @@ namespace Watermelon
         [SerializeField] CameraType cameraType;
         public CameraType CameraType => cameraType;
 
-        [SerializeField] CinemachineVirtualCamera virtualCamera;
-        public CinemachineVirtualCamera VirtualCamera => virtualCamera;
+#pragma warning disable 0618
+        [SerializeField] Unity.Cinemachine.CinemachineVirtualCamera virtualCamera;
+        public Unity.Cinemachine.CinemachineVirtualCamera VirtualCamera => virtualCamera;
 
-        private CinemachineBasicMultiChannelPerlin cinemachineBasicMultiChannelPerlin;
-        public CinemachineBasicMultiChannelPerlin CinemachineBasicMultiChannelPerlin => cinemachineBasicMultiChannelPerlin;
+        private Unity.Cinemachine.CinemachineBasicMultiChannelPerlin cinemachineBasicMultiChannelPerlin;
+        public Unity.Cinemachine.CinemachineBasicMultiChannelPerlin CinemachineBasicMultiChannelPerlin => cinemachineBasicMultiChannelPerlin;
+#pragma warning restore 0618
 
         private TweenCase shakeTweenCase;
 

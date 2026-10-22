@@ -746,7 +746,9 @@ namespace VFavorites.Libs
 
         public static Object[] FindObjects(Type type)
         {
-#if UNITY_2023_1_OR_NEWER
+#if UNITY_6000_0_OR_NEWER
+            return Object.FindObjectsByType(type, FindObjectsInactive.Exclude);
+#elif UNITY_2023_1_OR_NEWER
             return Object.FindObjectsByType(type, FindObjectsSortMode.None);
 #else
             return Object.FindObjectsOfType(type);
@@ -754,10 +756,32 @@ namespace VFavorites.Libs
         }
         public static T[] FindObjects<T>() where T : Object
         {
-#if UNITY_2023_1_OR_NEWER
+#if UNITY_6000_0_OR_NEWER
+            return Object.FindObjectsByType<T>(FindObjectsInactive.Exclude);
+#elif UNITY_2023_1_OR_NEWER
             return Object.FindObjectsByType<T>(FindObjectsSortMode.None);
 #else
             return Object.FindObjectsOfType<T>();
+#endif
+        }
+
+        public static int GetId(this Object o)
+        {
+            if (!o) return 0;
+#if UNITY_6000_0_OR_NEWER
+            return unchecked((int)EntityId.ToULong(o.GetEntityId()));
+#else
+            return o.GetInstanceID();
+#endif
+        }
+
+        public static Object IdToObject(int id)
+        {
+            if (id == 0) return null;
+#if UNITY_6000_0_OR_NEWER
+            return Resources.EntityIdToObject(EntityId.FromULong((ulong)(uint)id));
+#else
+            return Resources.InstanceIDToObject(id);
 #endif
         }
 
@@ -786,7 +810,11 @@ namespace VFavorites.Libs
         public struct GlobalID : System.IEquatable<GlobalID>
         {
             public Object GetObject() => GlobalObjectId.GlobalObjectIdentifierToObjectSlow(globalObjectId);
+#if UNITY_6000_0_OR_NEWER
+            public int GetObjectInstanceId() => unchecked((int)EntityId.ToULong(GlobalObjectId.GlobalObjectIdentifierToEntityIdSlow(globalObjectId)));
+#else
             public int GetObjectInstanceId() => GlobalObjectId.GlobalObjectIdentifierToInstanceIDSlow(globalObjectId);
+#endif
 
 
             public string guid => globalObjectId.assetGUID.ToString();
@@ -827,7 +855,14 @@ namespace VFavorites.Libs
 
             var iids = new int[goids.Length];
 
+#if UNITY_6000_0_OR_NEWER
+            var entityIds = new EntityId[goids.Length];
+            GlobalObjectId.GlobalObjectIdentifiersToEntityIdsSlow(goids, entityIds);
+            for (int i = 0; i < entityIds.Length; i++)
+                iids[i] = unchecked((int)EntityId.ToULong(entityIds[i]));
+#else
             GlobalObjectId.GlobalObjectIdentifiersToInstanceIDsSlow(goids, iids);
+#endif
 
             return iids;
         }
@@ -1055,7 +1090,20 @@ namespace VFavorites.Libs
 
             var m_ListAreaState = t.GetField("m_ListAreaState", maxBindingFlags).GetValue(w);
 
-            m_ListAreaState.GetType().GetField("m_SelectedInstanceIDs").SetValue(m_ListAreaState, new List<int> { folder.GetInstanceID() });
+            var field = m_ListAreaState.GetType().GetField("m_SelectedInstanceIDs", maxBindingFlags)
+                     ?? m_ListAreaState.GetType().GetField("m_SelectedEntityIDs", maxBindingFlags);
+            if (field != null)
+            {
+                int id = folder.GetId();
+                if (field.FieldType == typeof(List<int>))
+                    field.SetValue(m_ListAreaState, new List<int> { id });
+#if UNITY_6000_0_OR_NEWER
+                else if (field.FieldType == typeof(List<EntityId>))
+                    field.SetValue(m_ListAreaState, new List<EntityId> { folder.GetEntityId() });
+#endif
+                else if (field.FieldType == typeof(int[]))
+                    field.SetValue(m_ListAreaState, new[] { id });
+            }
 
             t.GetMethod("OpenSelectedFolders", maxBindingFlags).Invoke(null, null);
 
@@ -1100,8 +1148,8 @@ namespace VFavorites.Libs
 
 
 
-        public static void RemoveEditorErrors() => removeEditorErrorsMethod.Invoke(null, new object[] { 1 });
-        static MethodInfo removeEditorErrorsMethod = System.AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(r => r.GetName().ToString().Contains("UnityEditor.CoreModule")).GetTypes().First(r => r.Name.Contains("LogEntry")).GetMethod("RemoveLogEntriesByMode", BindingFlags.Static | BindingFlags.NonPublic);
+        public static void RemoveEditorErrors() => removeEditorErrorsMethod?.Invoke(null, new object[] { 1 });
+        static MethodInfo removeEditorErrorsMethod = typeof(Editor).Assembly.GetTypes().FirstOrDefault(r => r.Name.Contains("LogEntry"))?.GetMethod("RemoveLogEntriesByMode", BindingFlags.Static | BindingFlags.NonPublic);
 
 
 #endif
