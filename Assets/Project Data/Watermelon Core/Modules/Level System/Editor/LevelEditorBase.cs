@@ -1,4 +1,4 @@
-#pragma warning disable 649
+#pragma warning disable 649, UAC0005
 
 using UnityEngine;
 using UnityEditor;

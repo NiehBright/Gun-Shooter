@@ -1,4 +1,4 @@
-﻿#pragma warning disable 649
+#pragma warning disable 649
 
 using System.Collections.Generic;
 using UnityEngine;
@@ -373,7 +373,7 @@ namespace Watermelon
             private const string DEFAULT_LABEL = "target element #";
             public int elementOrinialIndex;
             public int arraySize;
-            public LevelsHandler levelsHandler;
+            [System.NonSerialized] public LevelsHandler levelsHandler;
             private string label;
             private int newPositionNumber;
 

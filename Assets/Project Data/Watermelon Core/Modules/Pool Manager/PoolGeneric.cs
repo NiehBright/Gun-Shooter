@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Watermelon
@@ -11,8 +11,8 @@ namespace Watermelon
     [System.Serializable]
     public class PoolGeneric<T> : Pool where T : Component
     {
-        public List<T> pooledComponents = new List<T>();
-        public List<List<T>> multiPooledComponents = new List<List<T>>();
+        [System.NonSerialized] public List<T> pooledComponents = new List<T>();
+        [System.NonSerialized] public List<List<T>> multiPooledComponents = new List<List<T>>();
 
         public delegate void TCallback(T value);
 

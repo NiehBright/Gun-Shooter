@@ -1,5 +1,5 @@
-
 using UnityEngine;
+using Unity.Cinemachine;
 
 namespace Watermelon
 {
@@ -21,25 +21,31 @@ namespace Watermelon
 
         public void Initialise()
         {
-            cinemachineBasicMultiChannelPerlin = virtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+#pragma warning disable 0618
+            if (virtualCamera != null)
+                cinemachineBasicMultiChannelPerlin = virtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+#pragma warning restore 0618
         }
 
         public void Shake(float fadeInTime, float fadeOutTime, float duration, float gain)
         {
             shakeTweenCase.KillActive();
 
+            if (cinemachineBasicMultiChannelPerlin == null)
+                return;
+
             gain *= 2;
 
             shakeTweenCase = Tween.DoFloat(0.0f, gain, fadeInTime, (float fadeInValue) =>
             {
-                cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = fadeInValue;
+                cinemachineBasicMultiChannelPerlin.AmplitudeGain = fadeInValue;
             }).OnComplete(delegate
             {
                 shakeTweenCase = Tween.DelayedCall(duration, delegate
                 {
                     shakeTweenCase = Tween.DoFloat(gain, 0.0f, fadeOutTime, (float fadeOutValue) =>
                     {
-                        cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = fadeOutValue;
+                        cinemachineBasicMultiChannelPerlin.AmplitudeGain = fadeOutValue;
                     });
                 });
             });
