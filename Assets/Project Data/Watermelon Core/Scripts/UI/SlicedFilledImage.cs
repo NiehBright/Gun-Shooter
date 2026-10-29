@@ -236,7 +236,9 @@ namespace Watermelon
 
 		protected SlicedFilledImage()
 		{
+#pragma warning disable 0618
 			useLegacyMeshGeneration = false;
+#pragma warning restore 0618
 		}
 
 		protected override void OnEnable()

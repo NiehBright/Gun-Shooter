@@ -24,6 +24,7 @@ MonoBehaviour:
         m_AssetGUID: 0dbf0192706e97b459bd1d7422a170b6
         m_SubObjectName: 
         m_SubObjectType: 
+        m_SubObjectGUID: 
         m_EditorAssetChanged: 0
       healthBarOffset: {x: 0, y: 2.34375, z: 0}
     upgrades:
@@ -91,8 +92,8 @@ MonoBehaviour:
       pullSpeed: 4
       damageMultiplier: 1.5
       tickInterval: 0.5
-      vfxPrefab: {fileID: 8006868825615935993, guid: 48399e95aef27d443acb3336c499be70,
-        type: 3}
+      vfxPrefab: {fileID: 8006868825615935993, guid: 48399e95aef27d443acb3336c499be70, type: 3}
+      description: 
   - type: 1
     name: Nieh
     requiredLevel: 2
@@ -104,6 +105,7 @@ MonoBehaviour:
         m_AssetGUID: e7ada6aba0ba3de49b2cb73cdcb9659d
         m_SubObjectName: 
         m_SubObjectType: 
+        m_SubObjectGUID: 
         m_EditorAssetChanged: 0
       healthBarOffset: {x: 0, y: 2.8125, z: 0}
     upgrades:
@@ -171,8 +173,8 @@ MonoBehaviour:
       pullSpeed: 0
       damageMultiplier: 2
       tickInterval: 0.5
-      vfxPrefab: {fileID: 7478731271839673279, guid: 4d3c8045dd8857a4b8d34c2361c61045,
-        type: 3}
+      vfxPrefab: {fileID: 7478731271839673279, guid: 4d3c8045dd8857a4b8d34c2361c61045, type: 3}
+      description: 
   - type: 2
     name: NinNin
     requiredLevel: 3
@@ -184,6 +186,7 @@ MonoBehaviour:
         m_AssetGUID: 9b5eb08d300f7ee4da6cb1c619d4ed03
         m_SubObjectName: 
         m_SubObjectType: 
+        m_SubObjectGUID: 
         m_EditorAssetChanged: 0
       healthBarOffset: {x: 0, y: 2.34375, z: 0}
     upgrades:
@@ -251,5 +254,5 @@ MonoBehaviour:
       pullSpeed: 0
       damageMultiplier: 2.5
       tickInterval: 0.5
-      vfxPrefab: {fileID: 8006868825615935993, guid: d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9,
-        type: 3}
+      vfxPrefab: {fileID: 8006868825615935993, guid: d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9, type: 3}
+      description: 

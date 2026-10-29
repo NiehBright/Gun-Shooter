@@ -522,11 +522,7 @@ namespace Borodar.FarlandSkies.LowPoly
 
         private void UpdateSkyboxProperties()
         {
-            if (SkyboxMaterial == null)
-            {
-                Debug.LogWarning("SkyboxController: Skybox material is not assigned.");
-                return;
-            }            
+            if (SkyboxMaterial == null) return;            
 
             // Sky
 

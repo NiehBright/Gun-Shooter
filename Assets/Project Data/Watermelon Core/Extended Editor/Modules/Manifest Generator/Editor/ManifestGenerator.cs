@@ -1,3 +1,4 @@
+#pragma warning disable CS0414
 using UnityEngine;
 using UnityEditor;
 using System.IO;
@@ -10,7 +11,7 @@ namespace Watermelon
         private const string TEMPLATE_FILE_NAME = "AndroidManifestTemplate";
 
         private static readonly string MANIFEST_PATH = Application.dataPath + @"/Plugins/Android/";
-        private static readonly string MANIFEST_FILE_NAME = "AndroidManifest.xml";
+        private const string MANIFEST_FILE_NAME = "AndroidManifest.xml";
 
         private const string PERMISSION_TEMPLATE = "    <uses-permission android:name=\"{0}\" />";
         private static readonly string[] PERMISSIONS = new string[]

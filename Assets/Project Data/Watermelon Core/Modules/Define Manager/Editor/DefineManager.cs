@@ -1,3 +1,4 @@
+#pragma warning disable UAC0005
 using UnityEngine;
 using UnityEditor;
 using System;

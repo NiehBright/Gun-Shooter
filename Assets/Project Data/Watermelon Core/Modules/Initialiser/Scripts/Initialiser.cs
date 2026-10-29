@@ -44,7 +44,7 @@ namespace Watermelon
 
                 DontDestroyOnLoad(gameObject);
 
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
+#if UNITY_EDITOR || DEBUG
                 // Đã tắt FPSCounter vì script gốc xài GUI.Label tạo ra lượng Rác bộ nhớ (Garbage) khổng lồ mỗi frame, 
                 // gây ra hiện tượng khựng game (Lag spike) mỗi 10-20 giây.
                 // gameObject.AddComponent<SquadShooter.FPSCounter>();
